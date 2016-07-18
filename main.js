@@ -10,3 +10,10 @@ var i = setInterval(function(){
         counter = 0;
       }
   }, 2000);
+// Develop code for change "class " in header onScroll()
+
+var header = document.getElementById("header");
+
+function ScrollClassChange(){
+      header.className += "navbar-fixed";
+}

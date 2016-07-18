@@ -3,6 +3,13 @@ body{
   font-family:'Open Sans', sans-serif;;
   /* In general make look nicer/ work on aesthtic latter */
 }
+h1 {
+  font-weight: bold;
+}
+h4{
+  font-weight: normal;
+
+}
 header{
   list-style-type: none;
   margin:0;
@@ -11,14 +18,6 @@ header{
   overflow:hidden;
   position: relative;
 }
-section{
-  width:auto;
-  margin: 0 auto;
-  position: relative;
-  height: 90vh;  /* Need to fix this line */
-}
-
-
 li {
   float: left;
   text-decoration: none;
@@ -27,18 +26,24 @@ li {
 
 li a {
   display: block;
-  padding-left: 5vh;
-  padding-bottom: 1vh;
+  padding-left: 2.5vh;
+  padding-bottom: 0.9vh;
   text-align:right;
   text-decoration: none;
 }
-#backtohome {
-  padding-left:0;
+section{
+  width:95vw;
+  position: relative;
+  height: 90vh;  /* Need to fix this line */
 }
 
+
+
 #home {
-  background:url("assets/header.jpg");
+  background:url("assets/header_backgroun.jpg");
   background-size: cover;
   width:auto;
-
+}
+.navbar_fixed{
+  position: fixed;
 }
