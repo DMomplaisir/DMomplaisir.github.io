@@ -1,42 +1,61 @@
-body{
-  font-family:'Open Sans', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
-  /* In general make look nicer/ work on aesthtic latter */
-}
-h1 {
-  color: #95a5a6;
-  font-weight: bold;
-}
-h4{
-  color: #95a5a6;
-  font-weight: normal;
+body {
+  width: 100vw;
+  height: 100vh;
+
+
 
 }
-/*header{
-  list-style-type: none;
-  background-color: #2c3e50;
+
+header{
+  width: 100%;
   position:fixed;
+  top: 0;
+  bottom:auto;
+  background: #34495e;
+  z-index: 20;
+}
+section{
+  height:95%;
+}
+ul{
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
 }
 li {
-  float: left;
-  text-decoration: none;
-  list-style-type: none;
+  padding: 10px;
+  display: inline-block;
 }
 
-li a {
-  display: block;
-  padding-left: 20px;
-  padding-bottom: 10px;
-  text-align:right;
-  text-decoration: none;
-}*/
-section{
-  height: 90vh;  /* Need to fix this line */
-  background-color: #34495e;
-}
-
-#home {
-  background;
+.hero-image{
+  background-image: url("assets/hero-image.jpg");
+  /*-webkit-filter:blur(1px);
+  filter: blur(1px);*/
+  margin:0;
+  top:15%;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
   background-size: cover;
+}
+
+
+.hero_text{
+  padding-left: 10px;
+  display: flex;
+  justify-content: center; /* perhaps remove it */
+  align-items: center;
+  height: 100vh;
+  color:white;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.hero_text h1{
+  padding-right: 10px;
+}
+
+#about_text{
+  width: 50%;
 }

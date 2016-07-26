@@ -5,18 +5,24 @@
     <link rel="stylesheet" type="text/css" href="stylesheet.css">
   </head>
   <body>
-    
-    <section class = "body_piece" id="home">
-      <h1>Hi I'm Dylan Momplaisir,</h1>
-      <h4 id="text_change"></h4>
-      <!-- <h4>I'm interested in Computer Science, typography, Middle Eastern politics, and the unusualness of our world.
-        Check below to see more about me, and my portfolio.</h4> -->
-      <!-- make letters appear to be being typed via a javascript script + img as a background -->
+    <header>
+      <nav>
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Portfolio</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+    <section class="hero-image">
+      <div class = "hero_text">
+        <h1>DYLAN MOMPLAISIR</h1>
+        <p id = "text_change"></p>
+      </div>
     </section>
-
-
-    <section class = "body" id ="about">
-      <div class = "body_type">
+    <section class = "about">
+      <div id = "about_text">
         <h2>Dylan Momplaisir</h2>
         <p>Dylan Momplaisir is a high school junior at the HS of Economics and Finance, who is currently participating in the
           All Star Code Summer Intensive.</p>
@@ -29,34 +35,10 @@
         <p>Aside from technology, he's a huge fan of the show House of Cards, and loves to help his community out either by interning
           at the Jewish Museum, or representing his classmates as a Class President</p>
       </div>
-    </section>
-    <section class = "body_piece" id = "portfolio">
-      <h2>Portfolio</h2>
-      <table>
-        <tr>
-          <td><img src = ""></td>
-          <td><img src = ""></td>
-          <td><img src = ""></td>
-        </tr>
-        <tr>
-          <td><img src = ""></td>
-          <td><img src = ""></td>
-          <td><img src = ""></td>
-        </tr>
-      </table>
-    </section>
-    <!-- add images to work, and description  -->
-    <section class = "body_piece" id = "contact">
-      <h2>Contact Me!</h2>
-      <form>
-        <input type = "text" placeholder="text">
-        <input type="email" placeholder="Email">
-        <textarea placeholder="Leave your message."></textarea>
-        <input type = "submit"> <!--- Don't know how to implement this yet --->
-      </form>
+      
     </section>
   </body>
     <script src="main.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700" rel="stylesheet">
-  </html>
+    <script src="headroom.min.js"></script>
+</html>
 <!-- might just make website into one-pager + depends? -->
