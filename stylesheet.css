@@ -1,22 +1,22 @@
 body{
-  background-color: #EEEEEE;
-  font-family:'Open Sans', sans-serif;;
+  font-family:'Open Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
   /* In general make look nicer/ work on aesthtic latter */
 }
 h1 {
+  color: #95a5a6;
   font-weight: bold;
 }
 h4{
+  color: #95a5a6;
   font-weight: normal;
 
 }
-header{
+/*header{
   list-style-type: none;
-  margin:0;
   background-color: #2c3e50;
-  width: 100vh;
-  overflow:hidden;
-  position: relative;
+  position:fixed;
 }
 li {
   float: left;
@@ -26,24 +26,17 @@ li {
 
 li a {
   display: block;
-  padding-left: 2.5vh;
-  padding-bottom: 0.9vh;
+  padding-left: 20px;
+  padding-bottom: 10px;
   text-align:right;
   text-decoration: none;
-}
+}*/
 section{
-  width:95vw;
-  position: relative;
   height: 90vh;  /* Need to fix this line */
+  background-color: #34495e;
 }
-
-
 
 #home {
-  background:url("assets/header_backgroun.jpg");
+  background;
   background-size: cover;
-  width:auto;
-}
-.navbar_fixed{
-  position: fixed;
 }
