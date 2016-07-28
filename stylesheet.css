@@ -1,9 +1,6 @@
 body {
   width: 100vw;
   height: 100vh;
-
-
-
 }
 
 header{
@@ -11,7 +8,7 @@ header{
   position:fixed;
   top: 0;
   bottom:auto;
-  background: #34495e;
+  background: Transparent;
   z-index: 20;
 }
 section{
@@ -33,7 +30,6 @@ li {
   /*-webkit-filter:blur(1px);
   filter: blur(1px);*/
   margin:0;
-  top:15%;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -57,5 +53,5 @@ li {
 }
 
 #about_text{
-  width: 50%;
+  width: 45%;
 }
