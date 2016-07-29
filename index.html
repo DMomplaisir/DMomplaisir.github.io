@@ -2,67 +2,68 @@
 <html>
   <head>
     <title>Dylan Momplaisir</title>
-
+    <script src="https://use.fontawesome.com/b864a73a3c.js"></script>
     <link rel="stylesheet" type="text/css" href="stylesheet.css">
   </head>
   <body>
     <header>
-      <ul>
-        <!-- Add an circular image right next to name -->
-        <li id = "backtohome"><a href="url">Dylan Momplaisir</a></li>
-        <li><a href="#home">Home</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="url">Portfolio</a></li>
-        <li><a href="url">Contact</a></li>
-      </ul>
+      <nav>
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="work.html">Portfolio</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
     </header>
-    <section class = "body_piece" id="home">
-      <h1>Hi I'm Dylan Momplaisir, <h1 id="text_change"></h1></h1>
-      <h4>I'm interested in Computer Science, typography, Middle Eastern politics, and the unusualness of our world.
-        Check below to see more about me, and my portfolio.</h4>
-      <!-- make letters appear to be being typed via a javascript script + img as a background -->
-    </section>
-    <section class = "body_piece" id ="about">
-      <img src="assets/.jpg">
-      <h2>Dylan Momplaisir</h2>
-      <p>Dylan Momplaisir is a high school junior at the HS of Economics and Finance, who is currently participating in the
-        All Star Code Summer Intensive.</p>
 
-      <P>Prior to AllStarCode, he co-founded a startup called  <a href = "#VOCAP"> VOCAP </a> with five other NYC students in a
-        startup incubator called Generation Tech. VOCAP was a foriegn language learning application which allowed users to
-        watch their favorite movies, or tv shows and learn a new language at the same time via subtitles, and consistent
-        testing of new terms.This application won second place in the Generation Tech My City, My School Competition's Demo Day.</p>
+    <section class="hero">
+      <div class = "videowrapper">
+      <video autoplay id="bg_vid" loop muted>
+        <source src="hero_video.webm" type="video/webm">
+        <source src="assets/hero_video.ogv" type="video/ogg">
+        <source src="assets/hero-video.mp4" type="video.mp4">
+      </video>
+    </div>
+      <div class="overlay">
+        <div class="hero-text">
+          <h1>Hi, I'm Dylan,</h1>
+          <h1 id="text_change">.</h1>
+          <i class="fa fa-linkedin" aria-hidden="true"></i>
+        </div>
+      </div>
+    </section>
 
-      <p>Aside from technology, he's a huge fan of the show House of Cards, and loves to help his community out either by interning
-        at the Jewish Museum, or representing his classmates as a Class President</p>
+    <section class="aboutme" id="about">
+        <img src="assets/aboutme_img.jpg" alt="Image of Dylan Momplaisir" />
+      <div class = "aboutme_text">
+        <h1>so, about me</h1>
+        <p>There isn't an Apple Store in the Amazon, and you can't wait for
+          Customer Service when you're trying to save lives. I believe that a
+          combination of programming prowess, and understanding of user experience
+          will allow us to build platforms for the next billion Internet users to
+          speak their mind, build buisnesses, and live in a more interconnected
+          world. </p>
+
+        <p> When I'm not blabbing about User Experience, I intern at the Jewish
+          Museum, teaching the public about the arts (mostly children) via art
+          projects, tours, and physical lesssons. I'm also Editor in Chief of
+          a magazine called LitMag, a literary magazine with a fifteen person team.
+          Half of the hours in my week go to LitMag because I feel a duty to show
+          the literary and artistic talents of teens. Click here to view our most
+          recent magazine.</p>
+
+        <p> Some odd hobbies are <em>attempting</em> to learn Arabic, being fluent
+          in Haitian Creole, binge watching House of Cards, occasional acting, and
+          loving jazz music. </p>
+      </div>
     </section>
-    <section class = "body_piece" id = "portfolio">
-      <h2>Portfolio</h2>
-      <table>
-        <tr>
-          <td><img src = ""></td>
-          <td><img src = ""></td>
-          <td><img src = ""></td>
-        </tr>
-        <tr>
-          <td><img src = ""></td>
-          <td><img src = ""></td>
-          <td><img src = ""></td>
-        </tr>
-      </table>
-    </section>
-    <!-- add images to work, and description  -->
-    <section class = "body_piece" id = "contact">
-      <h2>Contact Me!</h2>
-      <form>
-        <input type = "text" placeholder="text">
-        <input type="email" placeholder="Email">
-        <textarea placeholder="Leave your message."></textarea>
-        <input type = "submit"> <!--- Don't know how to implement this yet --->
-      </form>
+
+    <section class="table">
+      <h1>portfolio</h1>
     </section>
   </body>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700" rel="stylesheet">
     <script src="main.js"></script>
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,600' rel='stylesheet' type='text/css'>
-  </html>
+</html>
 <!-- might just make website into one-pager + depends? -->
