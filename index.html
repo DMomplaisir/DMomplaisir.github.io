@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Dylan Momplaisir</title>
+    <script src="https://use.fontawesome.com/b864a73a3c.js"></script>
     <link rel="stylesheet" type="text/css" href="stylesheet.css">
   </head>
   <body>
@@ -9,36 +10,60 @@
       <nav>
         <ul>
           <li><a href="#">Home</a></li>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Portfolio</a></li>
-          <li><a href="#">Contact</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="work.html">Portfolio</a></li>
+          <li><a href="contact.html">Contact</a></li>
         </ul>
       </nav>
     </header>
-    <section class="hero-image">
-      <div class = "hero_text">
-        <h1>DYLAN MOMPLAISIR</h1>
-        <p id = "text_change"></p>
+
+    <section class="hero">
+      <div class = "videowrapper">
+      <video autoplay id="bg_vid" loop muted>
+        <source src="hero_video.webm" type="video/webm">
+        <source src="assets/hero_video.ogv" type="video/ogg">
+        <source src="assets/hero-video.mp4" type="video.mp4">
+      </video>
+    </div>
+      <div class="overlay">
+        <div class="hero-text">
+          <h1>Hi, I'm Dylan,</h1>
+          <h1 id="text_change">.</h1>
+          <i class="fa fa-linkedin" aria-hidden="true"></i>
+        </div>
       </div>
     </section>
-    <section class = "about">
-      <div id = "about_text">
-        <h2>Dylan Momplaisir</h2>
-        <p>Dylan Momplaisir is a high school senior at the HS of Economics and Finance, who is currently participating in the
-          All Star Code Summer Intensive.</p>
 
-        <P>Prior to AllStarCode, he co-founded a startup called  <a href = "#VOCAP"> VOCAP </a> with five other NYC students in a
-          startup incubator called Generation Tech. VOCAP was a foriegn language learning application which allowed users to
-          watch their favorite movies, or tv shows and learn a new language at the same time via subtitles, and consistent
-          testing of new terms.This application won second place in the Generation Tech My City, My School Competition's Demo Day.</p>
+    <section class="aboutme" id="about">
+        <img src="assets/aboutme_img.jpg" alt="Image of Dylan Momplaisir" />
+      <div class = "aboutme_text">
+        <h1>so, about me</h1>
+        <p>There isn't an Apple Store in the Amazon, and you can't wait for
+          Customer Service when you're trying to save lives. I believe that a
+          combination of programming prowess, and understanding of user experience
+          will allow us to build platforms for the next billion Internet users to
+          speak their mind, build buisnesses, and live in a more interconnected
+          world. </p>
 
-        <p>Aside from technology, he's a huge fan of the show House of Cards, and loves to help his community out either by interning
-          at the Jewish Museum, or representing his classmates as a Class President</p>
+        <p> When I'm not blabbing about User Experience, I intern at the Jewish
+          Museum, teaching the public about the arts (mostly children) via art
+          projects, tours, and physical lesssons. I'm also Editor in Chief of
+          a magazine called LitMag, a literary magazine with a fifteen person team.
+          Half of the hours in my week go to LitMag because I feel a duty to show
+          the literary and artistic talents of teens. Click here to view our most
+          recent magazine.</p>
+
+        <p> Some odd hobbies are <em>attempting</em> to learn Arabic, being fluent
+          in Haitian Creole, binge watching House of Cards, occasional acting, and
+          loving jazz music. </p>
       </div>
+    </section>
 
+    <section class="table">
+      <h1>portfolio</h1>
     </section>
   </body>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700" rel="stylesheet">
     <script src="main.js"></script>
-    <script src="headroom.min.js"></script>
 </html>
 <!-- might just make website into one-pager + depends? -->
