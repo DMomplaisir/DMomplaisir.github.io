@@ -1,0 +1,97 @@
+/** Master CSS stylesheet for
+Dylan Momplaisir's new portfolio
+site **/
+
+/** import fonts into the CSS **/
+@import url('https://fonts.googleapis.com/css?family=Josefin+Sans:400,600,700|Space+Mono:400,700');
+
+/** Base styles **/
+*, *:before, *:after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+h1 {
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 700;
+  font-size: 3rem;
+}
+h2 {
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 700;
+  font-size:2.5rem;
+}
+/* h3{
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 400;
+} */
+h5 {
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+p {
+  font-family: 'Space Mono', monospace;
+  font-weight: 400;
+
+  font-size: 0.90rem;
+}
+p a {
+  text-decoration: none;
+  font-weight:700;
+  color:grey;
+}
+
+
+/** style the nav woot, woot **/
+nav {
+  width: 100%;
+  position:fixed;
+  height: 10vh;
+  top:0;
+}
+
+ul {
+  display: flex;
+  text-decoration: none;
+  list-style: none;
+  -webkit-padding-start:1px;
+  margin-bottom:4px;
+}
+li{
+  flex:1;
+  font-family:'Space Mono', monospace;
+}
+li a {
+  text-decoration:none;
+  color: black;
+}
+
+#name{
+  font-weight: 700;
+}
+
+.block {
+  align-self:flex-end;
+  display:flex;
+  align-items: stretch;
+  width:45%;
+}
+
+/** body-components **/
+main {
+  margin-top:5%;
+  display:grid;
+  grid-template-columns: 1fr;
+}
+
+section{
+  
+  overflow: hidden;
+}
+
+footer p{
+  text-align: center;
+  font-size: 0.25em;
+  line-height: 0.25em;
+}
