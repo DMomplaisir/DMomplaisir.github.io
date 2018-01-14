@@ -14,12 +14,12 @@ site **/
 h1 {
   font-family: 'Josefin Sans', sans-serif;
   font-weight: 700;
-  font-size: 3rem;
+  font-size: 3em;
 }
 h2 {
   font-family: 'Josefin Sans', sans-serif;
   font-weight: 700;
-  font-size:2.5rem;
+  font-size:2.5em;
 }
 /* h3{
   font-family: 'Josefin Sans', sans-serif;
@@ -28,55 +28,18 @@ h2 {
 h5 {
   font-family: 'Josefin Sans', sans-serif;
   font-weight: 600;
-  font-size: 1.2rem;
+  font-size: 1.2em;
 }
 p {
   font-family: 'Space Mono', monospace;
   font-weight: 400;
 
-  font-size: 0.90rem;
+  font-size: 0.90em;
 }
 p a {
   text-decoration: none;
   font-weight:700;
   color:grey;
-}
-
-
-/** style the nav woot, woot **/
-nav {
-  width: 100%;
-  position: fixed;
-  height: 10vh;
-  top:0;
-}
-
-ul {
-  display: flex;
-  text-decoration: none;
-  list-style: none;
-  -webkit-padding-start:1px;
-  margin-bottom:4px;
-}
-li{
-  flex:1;
-  font-family:'Space Mono', monospace;
-  text-size: 0.90rem;
-}
-li a {
-  text-decoration:none;
-  color: black;
-}
-
-#name{
-  font-weight: 700;
-}
-
-.block {
-  align-self:flex-end;
-  display:flex;
-  align-items: stretch;
-  width:45%;
 }
 
 /** body-components **/
@@ -99,13 +62,100 @@ footer p{
   line-height: 0.25em;
 }
 
-/** sections **/
+
+/** style the nav woot, woot **/
+nav {
+  width: 100%;
+  position: fixed;
+  height: 9.5vh;
+  top:0;
+  /** perhaps put a color overlay for this , opaque **/
+}
+
+ul {
+  display: flex;
+  text-decoration: none;
+  list-style: none;
+  -webkit-padding-start:1px;
+  margin-bottom:4px;
+}
+li{
+  flex:1;
+  font-family:'Space Mono', monospace;
+  text-size: 0.90em;
+}
+li a {
+  text-decoration:none;
+  color: black;
+}
+
+#name{
+  font-weight: 700;
+}
+
+.block {
+  align-self:flex-end;
+  display:flex;
+  align-items: stretch;
+  width:45%;
+}
+
+
+
+/** hero **/
+
+#hero {
+  background: url('hero_img.jpeg');
+  background-size: cover;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0.25em;
+  width: 100vw;
+  margin: 0 !important;
+}
+.header_text{
+  background: rgba(0, 0, 0, 0.5);
+  padding:10px;
+  color:#fefefe;
+  text-shadow: 0.5px 0.5px 1px #0a0a0a;
+  text-align: center;
+}
+
+.header_text h5{
+  font-family: 'Space Mono', monospace;
+  font-weight: 400;
+  font-size: 0.8em;
+}
+/** section for about me ( add media querys later)**/
+
+#about_me{
+  display: flex;
+  flex-direction: row;
+
+}
+#about_me aside {
+  width:45%;
+  object-fit: cover;
+}
+
+#about_me aside img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+#about_me article {
+  width:50%;
+  padding-left: 2.5%;
+}
+
+/** portfolio section **/
 
 .container{
   display:flex;
   flex-flow: row wrap;
-  justify-content: space-between;
-  width: 90vw;
+  justify-content: space-around;
+  width: 100vw;
   margin: auto;   /*center */
 }
 
@@ -121,10 +171,10 @@ footer p{
 }
 .design_type {
   font-weight: 400;
-  font-size: 0.6rem;
+  font-size: 0.6em;
 }
 .lower_text h5{
-  line-height: 0.45rem;
+  line-height: 0.45em;
   margin-bottom:0;
 }
 .lower_text {
@@ -133,10 +183,58 @@ footer p{
   margin-top: auto;
 }
 .lower_text p {
-  font-size: 0.8rem;
+  font-size: 0.8em;
 }
 
-/* img{
-  position:relative;
-  width:100%;
-} */
+/* contact_me section */
+
+#contact {
+  display: flex;
+  flex-flow: column wrap;
+  margin-left: 10px;
+}
+
+#contact label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.80em;
+  display:block;
+  padding-top:2vh;
+}
+
+#contact p {
+  width: 55%;
+}
+
+#contact input, select, textarea {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85em;
+}
+
+#contact input[type="text"] {
+  height:5vh;
+  width: 30vw;
+}
+
+#contact input[type="email"]{
+  height:5vh;
+  width: 30vw;
+}
+
+#contact textarea {
+  height:15vh;
+  width: 30vw;
+  font-size: 0.75em;
+}
+#contact select {
+  height: 5vh;
+  width: 30vw;
+  font-family: 'Space Mono', monospace;
+  padding: 20px;
+}
+
+#contact input[type="submit"] {
+  display: block;
+  height: 5vh;
+  width: 15vw;
+  border:0;
+}
