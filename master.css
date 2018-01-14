@@ -11,8 +11,10 @@ site **/
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
+
 body {
   margin: 0;
+  font-size: 2.30vh;
 }
 h1 {
   font-family: 'Josefin Sans', sans-serif;
@@ -47,7 +49,7 @@ p a {
 
 /** body-components **/
 main {
-  margin-top: 5%;
+  margin-top: 7.3vh;
   display: flex;
   flex-flow: column;
 
@@ -56,13 +58,13 @@ main {
 section{
   overflow: hidden;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 footer p{
   text-align: center;
-  font-size: 0.25em;
-  line-height: 0.25em;
+  font-size: 0.75em;
+  line-height: 0.50em;
 }
 
 
@@ -70,22 +72,27 @@ footer p{
 nav {
   width: 100%;
   position: fixed;
-  height: 9.5vh;
+  height: 7.5vh;
   top:0;
+  background: rgba(255, 255, 255, 0.5);
+
   /** perhaps put a color overlay for this , opaque **/
 }
-
+.navonscroll{
+  height:5vh;
+}
 ul {
   display: flex;
   text-decoration: none;
   list-style: none;
   -webkit-padding-start:1px;
-  margin-bottom:4px;
+  justify-content: center;
+
 }
 li{
   flex:1;
   font-family:'Space Mono', monospace;
-  text-size: 0.90em;
+  font-size: 0.90em;
 }
 
 li a {
@@ -121,7 +128,7 @@ li a {
 }
 .header_text{
   background: rgba(0, 0, 0, 0.5);
-  padding:10px;
+  padding:1em;
   color:#fefefe;
   text-shadow: 0.5px 0.5px 1px #0a0a0a;
   text-align: center;
@@ -137,8 +144,8 @@ li a {
 #about_me{
   display: flex;
   flex-direction: row;
-
 }
+
 #about_me aside {
   width:45%;
   object-fit: cover;
@@ -167,8 +174,8 @@ li a {
 }
 
 .item {
-  height: 500px;
-  width: 300px;
+  height: 75vh;
+  width: 24vw;
   /* border: 1px solid black; */
   display: flex;
   flex-direction: column;
@@ -215,6 +222,7 @@ li a {
 #contact input, select, textarea {
   font-family: 'Space Mono', monospace;
   font-size: 0.85em;
+  border: 1px solid black;
 }
 
 #contact input[type="text"] {
@@ -247,3 +255,22 @@ li a {
   background: white;
   margin-top:4px;
 }
+
+/** Media queries **/
+
+/* @media (max-width: 950px) {
+  body { background: rgba(0,0,0, 0.5);}
+  #aboutme {
+    display:flex;
+    flex-direction: column-reverse;
+  }
+  #about_me aside {
+    width:100%;
+    height:50%;
+    object-fit:cover;
+  }
+  #about_me article {
+    width:100%;
+    padding-left: 2.5%;
+  }
+} */
