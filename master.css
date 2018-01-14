@@ -11,6 +11,9 @@ site **/
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
+body {
+  margin: 0;
+}
 h1 {
   font-family: 'Josefin Sans', sans-serif;
   font-weight: 700;
@@ -84,6 +87,7 @@ li{
   font-family:'Space Mono', monospace;
   text-size: 0.90em;
 }
+
 li a {
   text-decoration:none;
   color: black;
@@ -91,6 +95,7 @@ li a {
 
 #name{
   font-weight: 700;
+  margin-left: 1vw;
 }
 
 .block {
@@ -150,7 +155,9 @@ li a {
 }
 
 /** portfolio section **/
-
+#portfolio {
+  margin-left:10px;
+}
 .container{
   display:flex;
   flex-flow: row wrap;
@@ -212,22 +219,22 @@ li a {
 
 #contact input[type="text"] {
   height:5vh;
-  width: 30vw;
+  width: 45vw;
 }
 
 #contact input[type="email"]{
   height:5vh;
-  width: 30vw;
+  width: 45vw;
 }
 
 #contact textarea {
   height:15vh;
-  width: 30vw;
+  width: 45vw;
   font-size: 0.75em;
 }
 #contact select {
   height: 5vh;
-  width: 30vw;
+  width: 45vw;
   font-family: 'Space Mono', monospace;
   padding: 20px;
 }
@@ -235,6 +242,8 @@ li a {
 #contact input[type="submit"] {
   display: block;
   height: 5vh;
-  width: 15vw;
-  border:0;
+  width: 45vw;
+  border: 1px solid black;
+  background: white;
+  margin-top:4px;
 }
