@@ -58,7 +58,7 @@ main {
 section{
   overflow: hidden;
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
 }
 
 footer p{
@@ -74,22 +74,23 @@ nav {
   position: fixed;
   height: 7.5vh;
   top:0;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.75);
 
   /** perhaps put a color overlay for this , opaque **/
 }
 .navonscroll{
   height:5vh;
 }
+
 ul {
   display: flex;
   text-decoration: none;
   list-style: none;
   -webkit-padding-start:1px;
   justify-content: center;
-
 }
-li{
+
+li {
   flex:1;
   font-family:'Space Mono', monospace;
   font-size: 0.90em;
@@ -258,19 +259,80 @@ li a {
 
 /** Media queries **/
 
-/* @media (max-width: 950px) {
-  body { background: rgba(0,0,0, 0.5);}
-  #aboutme {
-    display:flex;
-    flex-direction: column-reverse;
+@media (max-width: 950px) {
+  /* body { background: rgba(0,0,0, 0.5);} */
+  /* .header_text {
+    height: 20%;
+    width: 40%;
+  } */
+
+  h1{
+    font-size: 2em;
+  }
+
+  .header_text h5{
+    font-size: 0.895em;
+    line-height: 0.95em;
+  }
+  section {
+    width: 100%;
+  }
+  #about_me {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 160vh;
+
   }
   #about_me aside {
-    width:100%;
-    height:50%;
-    object-fit:cover;
+    max-height:40%;
+    width: 100%;
   }
   #about_me article {
     width:100%;
-    padding-left: 2.5%;
+    min-height:50%;
+    padding-left: 1.5%;
+    background: rgba(66, 66, 66,0.8);
   }
-} */
+  #about_me h2 {
+    color:#ecf0f1;
+    margin-bottom: 1vh;
+  }
+  #about_me p {
+    font-size: 0.85em;
+    color: #ecf0f1;
+  }
+  #portfolio {
+    height:100%;
+  }
+  .container {
+    width: 100%;
+    flex-flow: row wrap;
+    margin:auto;
+  }
+  .item {
+    height:40%;
+  }
+  .item * {
+    margin-left: 0px;
+  }
+  .container > * {
+    flex-basis:35vh;
+
+  }
+
+  #contact p {
+    width: 80%;
+  }
+  #contact input[type="text"], #contact input[type="email"]{
+    width:80%;
+  }
+
+  #contact form > * {
+    width: 80%;
+  }
+  #contact input[type="submit"]{
+    width:80%;
+  }
+
+}
