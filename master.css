@@ -265,7 +265,9 @@ li a {
     height: 20%;
     width: 40%;
   } */
-
+  .hero{
+    background-position: center;
+  }
   h1{
     font-size: 2em;
   }
@@ -292,14 +294,14 @@ li a {
     width:100%;
     min-height:50%;
     padding-left: 1.5%;
-    background: rgba(66, 66, 66,0.8);
+    background: rgba(0,0,0,0.8);
   }
   #about_me h2 {
     color:#ecf0f1;
     margin-bottom: 1vh;
   }
   #about_me p {
-    font-size: 0.85em;
+    font-size: 0.955em;
     color: #ecf0f1;
   }
   #portfolio {
