@@ -46,6 +46,11 @@ p a {
   font-weight:700;
   color:grey;
 }
+a {
+  text-decoration: none;
+  color:black;
+}
+
 
 /** body-components **/
 main {
