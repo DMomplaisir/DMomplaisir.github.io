@@ -4,21 +4,26 @@
     <meta charset="utf-8">
     <title>Dylan Momplaisir</title>
     <meta name="viewport" content="width=device-width" />
-
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <link rel="stylesheet" href="master.css">
   </head>
   <body>
-    <nav>
-      <ul>
-        <li id = "name">dylan momplaisir</li>
-        <div class = "block">
-          <li><a href="#hero">home</a></li>
-          <li><a href="#about_me">about me</a></li>
-          <li><a href="#portfolio">portfolio</a></li>
-          <li><a href="#contactme">contact me</a></li>
+    <div class="container-fluid">
+      <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <a class="navbar-brand">dylan momplaisir</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div  class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active"><a class="nav-link" href="#hero">home</a></li>
+            <li class="nav-item" ><a class="nav-link" href="#about_me">about me</a></li>
+            <li  class="nav-item"><a class="nav-link" href="#portfolio">portfolio</a></li>
+            <li  class="nav-item"><a class="nav-link" href="#contactme">contact me</a></li>
+          </ul>
         </div>
-      </ul>
-    </nav>
+      </nav>
+    </div>
     <main>
       <section id="hero">
         <div class = "header_text">
@@ -27,77 +32,117 @@
         </div>
       </section>
       <section id="about_me">
-        <aside>
-          <img src="IMG_7517.png" alt="">
-        </aside>
-        <article>
-          <h2>about me</h2>
-          <p>Being born and raised in Queens, New York, I've spent my  life listening
-            to people's stories, whether it be a woman on the train busking, or
-            my parents telling their stories from Haiti. I have a love for authentic
-            narratives, and find myself in all of my projects trying to provide platforms
-            for people to tell their stories, and develop new connections. Whether it
-            be through designing applications for civil activism, or developing a photography
-            project based on developing a less warped "image world" - I find myself trying
-            to provide a space for people to tell their tale.</p>
-
-          <p>
-            I’m Dylan Momplaisir, a front-end web developer, user experience design enthusiast, and photographer, currently attending Amherst College. I’ve won awards for advertising campaigns for teaching, startup funding for a teen tech incubator, and for a small documetary on Kurdistan.
-          </p>
-          <p>
-            If you interested in working on projects where your product needs to scream "authenticity”, contact me below.
-          </p>
-          <p>
-            check out my resume <a href="https://goo.gl/kEtnXn">here</a>
-          </p>
-        </article>
-
-      </section>
-      <section id="portfolio">
-        <h2>portfolio</h2>
-        <div class="container">
-          <div class = "item">
-            <p class="design_type">WEB DESIGN</p>
-            <div class="lower_text">
-              <h5>Root</h5>
-              <p>How can we make protests safer, and engage protestors in other civil activism?</p>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-6 size">
+              <img class="img-fluid " src="IMG_7517.png" alt="photo of Dylan Momplaisir, sitting down"/>
+              <!--TODO fix photo -->
+            </div>
+            <div class="col-md-6 mt-3">
+              <h2>about me</h2>
+              <!-- <p>Being born and raised in Queens, New York, I've spent my  life listening
+                to people's stories, whether it be a woman on the train busking, or
+                my parents telling their stories from Haiti. I have a love for authentic
+                narratives, and find myself in all of my projects trying to provide platforms
+                for people to tell their stories, and develop new connections. Whether it
+                be through designing applications for civil activism, or developing a photography
+                project based on developing a less warped "image world" - I find myself trying
+                to provide a space for people to tell their story.</p> -->
+              <!-- <p>Born and raised in Queens, New York, I've spent my whole life in a city where
+                access to resources was the biggest diffuculty - whether it be someone's native
+                language not being English, or not having internet acess - obstacles always stood
+                in the way of them accessing programs which would make their lives better. How can a nation
+                with some of the best designers, and programs have websites to acess basic resources be stuck in
+                the early 90s? How can I track a package traveling from China to my door online, yet need to call to
+                know when my water pipe is going to be fixed? Why am I filing gigantic, scary forms when the government
+                already has this data? These frustrations pushed me towards working tow  -->
+              <p>I'm Dylan Momplaisir, a sophmore at Amherst College majoring in Architectural Studies, and
+                Computer Science. I'm the Digital Director of the Amherst Student (the oldest school newspaper
+                in the country), and UX/Pre-Sales Intern at Unqork. I've been doing front-end web development
+                and Ui/UX design for about four years, and currently expanding into doing back-end development.
+              </p>
+              <p>Being born and raised in NYC, I've been raised around a world of inequality, and that's motivated me
+                to use tech for public good, supporting people in engaging with civil activism (Root), and learning more about
+                their world (the Amherst Student). I'm interested in doing work that provides people opportunties to utilize
+                resources eeasier, simplifying people's day to day work, and providing unique, interactive experienes which
+                allow people to create more.
+              </p>
+              <p>
+                If you're interested in working together, having any questions on the projects below or just want to say "Hi!",
+                contact me below!
+              </p>
+              <p>
+                check out my resume <a href="https://tinyurl.com/y853sqrx">here</a>
+              </p>
             </div>
           </div>
-          <a href="ad.html">
-          <div class="item" id="ad">
-            <!-- <img src="theimpact.jpg" alt=""> -->
-            <p class="design_type">AD DESIGN</p>
-            <div class="lower_text">
-              <h5>Teach America</h5>
-              <p>How can we inspire more college students to teach in NYC public high schools?</p>
-            </div>
-          </div>
-          </a>
-          
-          <div class="item">
-            <p class="design_type">PRINT DESIGN</p>
-            <div class="lower_text">
-              <h5>LitMag</h5>
-              <p>How do we develop and encourage a school community to enjoy literature and art?</p>
-            </div>
-          </div>
-          <a href="photo.html">
-          <div class="item">
-
-            <p class="design_type">PHOTOGRAPHY</p>
-            <div class="lower_text">
-              <h5>Reclaiming the Lens</h5>
-              <p>How can we develop an authentic image world for the realities of African-Americans at Amherst?</p>
-            </div>
-
-          </div>
-        </a>
         </div>
       </section>
-      <section id="contact">
+      <section id="portfolio">
+        <div class="container-fluid ml-2 mt-2 mr-2">
+        <div class="row pb-3">
+          <h2 class="ml-3">portfolio</h2>
+        </div>
+
+          <!--remember work on some new projects -->
+          <div class="card-deck ">
+            <div class="col-md-3 ">
+              <div class="card w-100 ml-0">
+                <img class="card-img-top" src="assets/student.jpg" alt="Card image cap">
+                <div class="card-body">
+                  <div class="card-body">
+                    <p class="web_design">WEB DESIGN</p>
+                    <h5 class="card-title design_type">the Amherst Student</h5>
+                    <p>How can we reinvent a hundrede year old newspaper for the digital era?</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card w-100 ml-0">
+                <img class="card-img-top" src="assets/DSC02313.PNG" alt="Card image cap">
+                <div class="card-body">
+                  <div class="card-body">
+                    <p class="web_design">PHOTOGRAPHY</p>
+                    <h5 class="card-title design_type">Reclaiming the Lens</h5>
+                    <p>How can we develop an authentic image world for the realities of African-Americans at Amherst?</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card w-100 ml-0">
+                <img class="card-img-top" src="assets/tempsnip.png" alt="Card image cap">
+                <div class="card-body">
+                  <a href="ad.html">
+                    <p class="web_design">AD DESIGN</p>
+                    <h5 class="card-title design_type">Teach America</h5>
+                    <p>How can we inspire more college students to teach in NYC public high schools?</p>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card w-100 ml-0">
+                <img class="card-img-top" src="assets/Capture.PNG" alt="Card image cap">
+                <div class="card-body">
+                  <a href="ad.html">
+                    <div class="card-body">
+                      <p class="web_design">PRINT DESIGN </p>
+                      <h5 class="card-title design_type">LitMag</h5>
+                      <p>How do we develop and encourage a school community to enjoy literature and art?</p>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+      </section>
+      <section id="contactme">
+        <div class="container">
         <h2>contact me</h2>
         <p>if you want to engage in new projects, or were interested in some of the work I've done, just contact me using the form below or <a href="mailto:momplasirdylan+website@gmail.com">email me</a>.</p>
-
         <form class="" action="https://formspree.io/momplaisirdylan+website@gmail.com" method="POST">
           <label for="firstname">name</label>
           <input type="text" name="name">
@@ -113,11 +158,15 @@
           <textarea name="message"></textarea>
           <input type="submit" value="Submit">
         </form>
+      </div>
       </section>
-  </main>
+    </main>
     <footer>
       <p> © 2018 Dylan Momplaisir </p>
       <p>made with love, a <span>CODEBURGUNDY</span> project</p>
     </footer>
   </body>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 </html>

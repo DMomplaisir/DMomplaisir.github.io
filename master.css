@@ -12,34 +12,34 @@ site **/
   box-sizing: border-box;
 }
 
+
+
+
 body {
   margin: 0;
-  font-size: 2.30vh;
+  font-size: 18px;
   display:block;
+  width: 100%;
 }
 h1 {
   font-family: 'Josefin Sans', sans-serif;
   font-weight: 700;
-  font-size: 3em;
+  font-size: 2.75em;
 }
 h2 {
   font-family: 'Josefin Sans', sans-serif;
   font-weight: 700;
   font-size:2.5em;
 }
-/* h3{
-  font-family: 'Josefin Sans', sans-serif;
-  font-weight: 400;
-} */
+
 h5 {
   font-family: 'Josefin Sans', sans-serif;
   font-weight: 600;
-  font-size: 1.2em;
+  font-size: 1em;
 }
 p {
   font-family: 'Space Mono', monospace;
   font-weight: 400;
-
   font-size: 0.90em;
 }
 p a {
@@ -53,18 +53,19 @@ a {
 }
 
 
+
+
 /** body-components **/
 main {
-  margin-top: 7.3vh;
   display: flex;
   flex-flow: column;
-
+  flex-grow: 1;
 }
 
 section{
-  overflow: hidden;
-  width: 100%;
-  height: 100%;
+  padding-bottom: 10px;
+  min-height: 90vh;
+
 }
 
 footer p{
@@ -73,58 +74,28 @@ footer p{
   line-height: 0.50em;
 }
 
-
-/** style the nav woot, woot **/
-nav {
-  width: 100%;
-  position: fixed;
-  height: 7.5vh;
-  top:0;
-  background: rgba(255, 255, 255, 0.75);
-
-  /** perhaps put a color overlay for this , opaque **/
-}
-.navonscroll{
-  height:5vh;
-}
-
-#hero {
-  height: 100vh;
+.navbar-brand{
+  font-family: 'Josefin Sans', sans-serif;
 
 }
 
-ul {
-  display: flex;
-  text-decoration: none;
-  list-style: none;
-  -webkit-padding-start:1px;
-  justify-content: center;
-}
+
+
 
 li {
-  flex:1;
   font-family:'Space Mono', monospace;
   font-size: 0.90em;
 }
 
-li a {
-  text-decoration:none;
-  color: black;
-}
 
 #name{
   font-weight: 700;
   margin-left: 1vw;
 }
 
-.block {
-  align-self:flex-end;
-  display:flex;
-  align-items: stretch;
-  width:45%;
+img{
+  max-height: 80vh;
 }
-
-
 
 /** hero **/
 
@@ -135,8 +106,7 @@ li a {
   align-items: center;
   justify-content: center;
   line-height: 0.25em;
-  width: 100vw;
-  margin: 0 !important;
+
 }
 .header_text{
   background: rgba(0, 0, 0, 0.5);
@@ -151,39 +121,9 @@ li a {
   font-weight: 400;
   font-size: 0.8em;
 }
-/** section for about me ( add media querys later)**/
 
-#about_me{
-  display: flex;
-  flex-direction: row;
-}
-
-#about_me aside {
-  width:45%;
-  object-fit: cover;
-}
-
-#about_me aside img {
-  max-width: 100%;
-  max-height: 100%;
-}
-
-#about_me article {
-  width:50%;
-  padding-left: 2.5%;
-}
 
 /** portfolio section **/
-#portfolio {
-  margin-left:10px;
-}
-.container{
-  display:flex;
-  flex-flow: row wrap;
-  justify-content: space-around;
-  width: 100vw;
-  margin: auto;   /*center */
-}
 
 .item {
   height: 75vh;
@@ -195,10 +135,7 @@ li a {
 .item * {
   margin-left: 2px;
 }
-.design_type {
-  font-weight: 400;
-  font-size: 0.6em;
-}
+
 .lower_text h5{
   line-height: 0.45em;
   margin-bottom:0;
@@ -208,17 +145,13 @@ li a {
   width: 90%;
   margin-top: auto;
 }
-.lower_text p {
+.web_design{
   font-size: 0.8em;
 }
 
 /* contact_me section */
 
-#contact {
-  display: flex;
-  flex-flow: column wrap;
-  margin-left: 10px;
-}
+
 
 #contact label {
   font-family: 'Space Mono', monospace;
@@ -294,52 +227,29 @@ li a {
     font-size: 0.895em;
     line-height: 0.95em;
   }
-  section {
-    width: 100%;
-  }
-  #about_me {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: 160vh;
+  body{
+    font-size: 16px;
 
   }
-  #about_me aside {
-    max-height:40%;
-    width: 100%;
-  }
-  #about_me article {
-    width:100%;
-    min-height:50%;
-    padding-left: 1.5%;
-    background: rgba(0,0,0,0.8);
-  }
+
+
+
+
   #about_me h2 {
-    color:#ecf0f1;
     margin-bottom: 1vh;
   }
   #about_me p {
     font-size: 0.955em;
-    color: #ecf0f1;
   }
-  #portfolio {
-    height:100%;
-  }
-  .container {
-    width: 100%;
-    flex-flow: row wrap;
-    margin:auto;
-  }
+
+
   .item {
     height:40%;
   }
   .item * {
     margin-left: 0px;
   }
-  .container > * {
-    flex-basis:35vh;
 
-  }
 
   #contact p {
     width: 80%;
