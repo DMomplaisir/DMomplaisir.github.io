@@ -79,7 +79,9 @@ footer p{
 
 }
 
-
+#contactme{
+  min-height:60vh;
+}
 
 
 li {
@@ -164,10 +166,15 @@ img{
   width: 55%;
 }
 
-#contact input, select, textarea {
+#contactme input, select, textarea {
   font-family: 'Space Mono', monospace;
   font-size: 0.85em;
   border: 1px solid black;
+}
+
+label{
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85em;
 }
 
 #contact input[type="text"] {

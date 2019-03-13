@@ -34,11 +34,11 @@
       <section id="about_me">
         <div class="container-fluid">
           <div class="row">
-            <div class="col-md-6 size">
-              <img class="img-fluid " src="IMG_7517.png" alt="photo of Dylan Momplaisir, sitting down"/>
+            <div class="col-md-6 col-sm-12 size bg-dark">
+              <img class="img-fluid mx-auto d-block" src="IMG_7517.png" alt="photo of Dylan Momplaisir, sitting down"/>
               <!--TODO fix photo -->
             </div>
-            <div class="col-md-6 mt-3">
+            <div class="col-md-6 col-sm-12 mt-3">
               <h2>about me</h2>
               <!-- <p>Being born and raised in Queens, New York, I've spent my  life listening
                 to people's stories, whether it be a woman on the train busking, or
@@ -80,13 +80,13 @@
       </section>
       <section id="portfolio">
         <div class="container-fluid ml-2 mt-2 mr-2">
-        <div class="row pb-3">
+        <div class="row pb-2">
           <h2 class="ml-3">portfolio</h2>
         </div>
 
           <!--remember work on some new projects -->
           <div class="card-deck ">
-            <div class="col-md-3 ">
+            <div class="col-lg-3 col-md-6 mb-2">
               <div class="card w-100 ml-0">
                 <img class="card-img-top" src="assets/student.jpg" alt="Card image cap">
                 <div class="card-body">
@@ -98,7 +98,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-lg-3 col-md-6 mb-2" >
               <div class="card w-100 ml-0">
                 <img class="card-img-top" src="assets/DSC02313.PNG" alt="Card image cap">
                 <div class="card-body">
@@ -110,7 +110,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-lg-3 col-md-6 mb-2">
               <div class="card w-100 ml-0">
                 <img class="card-img-top" src="assets/tempsnip.png" alt="Card image cap">
                 <div class="card-body">
@@ -122,7 +122,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-lg-3 col-md-6 mb-2">
               <div class="card w-100 ml-0">
                 <img class="card-img-top" src="assets/Capture.PNG" alt="Card image cap">
                 <div class="card-body">
@@ -144,19 +144,27 @@
         <h2>contact me</h2>
         <p>if you want to engage in new projects, or were interested in some of the work I've done, just contact me using the form below or <a href="mailto:momplasirdylan+website@gmail.com">email me</a>.</p>
         <form class="" action="https://formspree.io/momplaisirdylan+website@gmail.com" method="POST">
+          <div class="form-group">
           <label for="firstname">name</label>
-          <input type="text" name="name">
+          <input type="text" class="form-control" name="name">
+        </div>
+        <div class="form-group">
           <label for="email">email</label>
-          <input type="email" name="_replyto">
+          <input type="email" class="form-control" name="_replyto">
+        </div>
+        <div class="form-group">
           <label for="reason">reason for contact</label>
-          <select name="reason">
+          <select class="form-control" name="reason">
             <option value="">interested in working together</option>
             <option value="">have a question on prior work</option>
             <option value="">just general interest</option>
           </select>
+        </div>
+        <div class="form-group">
           <label for="comment">comment</label>
-          <textarea name="message"></textarea>
-          <input type="submit" value="Submit">
+          <textarea class="form-control" name="message"></textarea>
+        </div>
+          <input type="submit" class="btn" value="Submit">
         </form>
       </div>
       </section>
