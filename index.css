@@ -20,7 +20,6 @@ nav {
 #top {
     flex:0.6;
     width: 100vw;
-    object-fit: fill;
 
 }
 #bottom{ 
@@ -32,7 +31,8 @@ nav {
 }
 img {
     width: 100vw;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
 }
 
 h1, li, h4 {
@@ -84,21 +84,35 @@ li {
     nav {
       display: none;
     }
+    h1 {
+      /* Dylan Momplaisir a digital creative. */
+      font-family: Inter;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 72px;
+      line-height: 87px;
+    }
+    h4 {
+      font-size: 16px;
+    }
     main {
       flex-direction: row;
       height: auto;
       flex-flow: row wrap;
       margin-left: 0;
+      height: 100vh;
+
     }
     #top {
-      flex-grow: 1;
+      flex-grow: 0.43;
       order: 2;
+      
     }
     img {
       width: 100%;
     }
     #bottom {
-      flex-grow: 1;
-      margin: auto 0 auto 40px;
+      flex-grow: 0.57;
+      margin: auto 40px auto 40px;
     }
 }
