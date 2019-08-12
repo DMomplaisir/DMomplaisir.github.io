@@ -75,3 +75,30 @@ ul {
 li {
     list-style-type: none;
 }
+
+@media only screen and (min-width: 868px) {
+    body{
+      height: 100vh;
+      overflow: hidden;
+    }
+    nav {
+      display: none;
+    }
+    main {
+      flex-direction: row;
+      height: auto;
+      flex-flow: row wrap;
+      margin-left: 0;
+    }
+    #top {
+      flex-grow: 1;
+      order: 2;
+    }
+    img {
+      width: 100%;
+    }
+    #bottom {
+      flex-grow: 1;
+      margin: auto 0 auto 40px;
+    }
+}
