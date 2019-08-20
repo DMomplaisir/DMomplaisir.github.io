@@ -125,6 +125,6 @@ li {
     }
     #bottom {
       flex-grow: 0.57;
-      margin: auto 40px auto 40px;
+      margin: auto 40px auto 60px;
     }
 }
