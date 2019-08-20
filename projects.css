@@ -78,3 +78,26 @@ p{
     line-height: 218.2%;
     margin: 0;
 }
+
+@media only screen and (min-width: 868px) {
+    main {
+        flex-direction: row;
+    }
+
+    section {
+        flex-basis: 33.33vh;
+        align-self: baseline;
+    }
+
+    .img {
+        height: 33.33vh;
+    }
+
+    img {
+        object-fit: contain;
+    }
+
+    
+
+
+}
