@@ -43,7 +43,7 @@ article {
 
 h3, p, h2 {
       margin-left: 20px;
-    margin-right: 20px;
+    margin-right: 35px;
 }
 
 h2 {
@@ -97,7 +97,24 @@ p, blockquote {
         margin: 0 auto;
         max-width: 70vh;
 
-    }
+    }/* Group */
+
+h1 {
+
+font-size: 72px;
+line-height: 87px;
+}
+
+
+
+
+
+
+
+
+
+
+
 
 }
 
