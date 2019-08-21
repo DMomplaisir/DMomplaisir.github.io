@@ -1,0 +1,105 @@
+@import url('https://rsms.me/inter/inter.css');
+
+html { font-family: 'Inter', sans-serif; width: 100vw; }
+@supports (font-variation-settings: normal) {
+  html { font-family: 'Inter var', sans-serif; }
+}
+
+body {
+    margin: 0;
+    overflow-x: hidden;
+}
+
+header {
+    background: black;
+    color: white;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    margin: 0;
+    z-index: 2;
+    top: 0;
+}
+
+header nav, header h1 {
+    padding-left: 20px;
+}
+
+h4 {
+    font-weight: 300;
+}
+
+span {
+    font-weight: 600;
+}
+
+article {
+    margin: 0;
+    margin-top: 5vh;
+  
+    position: relative;
+    padding-bottom: 10vh;
+    
+}
+
+h3, p, h2 {
+      margin-left: 20px;
+    margin-right: 20px;
+}
+
+h2 {
+    font-family: Inter;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 159.2%;
+    /* or 38px */
+}
+
+p, blockquote {
+    font-family: Inter;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 218.2%;
+}
+
+.hero {
+    background:#C4C4C4;
+    height: 30vh;
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+   
+}
+
+.img2{
+    height: 60vh;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    }
+
+
+.hero img {
+    height: inherit;
+}
+
+.img2 img {
+    max-width: 90vw;
+    height: inherit;
+}
+
+@media only screen and (min-width: 968px) {
+    h3, p, h2 {
+    margin: 20px auto;
+    max-width: 75vh;
+    }
+    blockquote {
+        margin: 0 auto;
+        max-width: 70vh;
+
+    }
+
+}
+
+
+
