@@ -42,7 +42,7 @@ article {
 }
 
 h3, p, h2 {
-      margin-left: 20px;
+    margin-left: 20px;
     margin-right: 35px;
 }
 
@@ -80,7 +80,7 @@ blockquote {
     height: 60vh;
     margin-top: 40px;
     margin-bottom: 40px;
-    }
+}
 
 
 .hero img {
@@ -106,25 +106,7 @@ blockquote {
         margin: 0 auto;
         max-width: 70vh;
 
-    }/* Group */
-
-h1 {
-
-font-size: 72px;
-line-height: 87px;
-}
-
-
-
-
-
-
-
-
-
-
-
-
+    }
 }
 
 
