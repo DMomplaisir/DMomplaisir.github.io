@@ -101,3 +101,33 @@ p{
 
 
 }
+
+/* Just put this in a basic @includes thingy */
+nav {
+    color:white;
+    display: flex;
+    align-items: center;
+    width: 90vw;
+}
+.name{
+    flex: 2 1 0;
+}
+nav a {
+    color: white;
+    text-decoration: none;
+}
+ul {
+    flex: 2 1 0;
+    display: flex;
+    justify-content: space-between;
+
+}
+ul a {
+    text-decoration: none;
+}
+main a:hover {
+    color:#900020;
+}
+main a {
+    color: black;
+}
