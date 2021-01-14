@@ -9,7 +9,51 @@ body {
     margin: 0;
     overflow-x: hidden;
 }
+header {
+    display: flex;
+    align-items: center;
+    width: 90vw;
+    margin: auto;
+}
 
+li {
+    list-style-type: none;
+}
+
+.name {
+    flex: 2 1 0;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    flex: 2 1 0;
+  }
+
+h1{
+/* about me. */
+font-weight: bold;
+font-size: 4em;
+line-height: 44px;
+color: #000000;
+}
+
+.social {
+    margin: 0;
+    padding-inline-start: 0;
+    display: flex;
+    flex-direction: column;
+    margin-block-start: 0em;
+}
+.social li {
+    margin: .2em 0;
+}
+.social li a {
+    text-decoration: none;
+    font-weight: 500;
+    color: black;
+}
+/* 
 header {
     background: black;
     color: white;
@@ -18,7 +62,7 @@ header {
     margin: 0;
     z-index: 2;
     top: 0;
-}
+} */
 
 header nav, header h1 {
     padding-left: 20px;
@@ -72,4 +116,13 @@ form {
         width: 87vw;
         margin: 0 auto;
     }
+}
+
+.btn {
+    border-radius:0.15em;
+    border:0.15em solid black;
+    padding:0.35em 1.2em;
+    font-weight: 500;
+    background-color: transparent;
+    font-family: 'Inter';
 }
