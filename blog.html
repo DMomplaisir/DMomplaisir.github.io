@@ -1,17 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
+---
+layout: default
+description: Dylan Momplaisir's thoughts on technology, design, and more.
+custom_css:
+  - shared
+  - blog
+---
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Blog | Dylan Momplaisir</title>
-    <link rel="stylesheet" type="text/css" href="aboutme.css" />
 
-</head>
 
-<body>
-    <h1>In progress, <a href="index.html">return back to home</a></h1>
-</body>
+<main class="blog-main">
+  <section class="blog-header">
+    <h1>thoughts on <span class="burgundy">tech & design.</span></h1>
+    <p class="blog-description">{{ page.description }}</p>
+  </section>
 
-</html>
+  <section class="blog-posts">
+    {% for post in site.posts %}
+      <article class="blog-post-preview">
+        <h2 class="post-title">
+          <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+        </h2>
+        <div class="post-meta">
+          <time datetime="{{ post.date | date_to_xmlschema }}">
+            {{ post.date | date: "%B %-d, %Y" }}
+          </time>
+          {% if post.author %}
+            • <span class="post-author">{{ post.author }}</span>
+          {% endif %}
+        </div>
+        {% if post.description %}
+          <p class="post-excerpt">{{ post.description }}</p>
+        {% else %}
+          <p class="post-excerpt">{{ post.excerpt | strip_html | truncatewords: 50 }}</p>
+        {% endif %}
+        <a href="{{ post.url | relative_url }}" class="read-more">Read more →</a>
+      </article>
+    {% endfor %}
+  </section>
+</main>

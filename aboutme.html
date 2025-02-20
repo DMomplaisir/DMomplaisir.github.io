@@ -1,78 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
+---
+layout: minimal
+title: About Me
+description: Dylan Momplaisir's biography.
+custom_css:
+  - shared
+  - aboutme
+---
 
-<head>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
+<header>
+  <nav>
+    <div class="name">
+      <a href="{{ '/' | relative_url }}">dylan <span class="bold">momplaisir</span></a>
+    </div>
+    <ul>
+      <li><a href="{{ '/' | relative_url }}">home</a></li>
+      <li><a href="{{ '/projects.html' | relative_url }}">projects</a></li>
+      <li><a href="{{ '/blog' | relative_url }}">blog</a></li>
+      <li><a href="{{ '/contact.html' | relative_url }}">contact me</a></li>
+    </ul>
+  </nav>
+</header>
 
-    gtag('config', 'UA-145990754-1');
-  </script>
+<main>
+  <section>
+    <h1>about <span class="burgundy">me.</span></h1>
+    <p>I'm Dylan Momplaisir, a senior at Amherst College majoring in Architectural Studies, and Computer Science. I work as the Digital Director on the Amherst Student, the oldest school newspaper. I've been doing
+      web development and UI/UX design for about six years, and have recently expanded into doing machine learning (specifically natural language processing).  
+    </p>
+    <p>Being born and raised in NYC, I've been raised around a world of inequality, and that's motivated me to use
+      tech for public good, supporting people in engaging with civil activism (Root), and learning more about their world (the
+      Amherst Student). I'm interested in doing work that provides people opportunities to utilize resources easier,
+      simplifying people's day to day work, and providing unique, interactive experiences which allow people to create more.
+    </p>
+    <p>if you're interested in my work, have any questions, or just want to chat - <a href="{{ '/contact.html' | relative_url }}">click here to contact me</a>! while you're at it, check out <a href="{{ '/assets/2020_Resume.pdf' | relative_url }}">my resume!</a></p>
+  </section>
 
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>about me - dylan momplaisir</title>
-  <link rel="stylesheet" type="text/css" href="https://raw.githubusercontent.com/nicolas-cusan/destyle.css/master/destyle.css" />
-  <link rel="stylesheet" type="text/css" href="aboutme.css" />
-  
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-145990754-1"></script>
-  <script src="https://unpkg.com/typewriter-effect@latest/dist/core.js"></script>
-  <meta name="description" content="Dylan Momplaisir's biography." />
-  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
-  <link rel="manifest" href="assets/site.webmanifest">
-  <meta name="msapplication-config" content="assets/browserconfig.xml" />
-  <meta name="msapplication-TileColor" content="#900020">
-  <meta name="theme-color" content="#900020">
-</head>
-
-<body>
-  <header>
-    <h4 class="name">dylan <span class="bold">momplaisir</span></h4>
-    <nav>
-      <a href="./index.html">home</a>
-      <a href="./projects.html">projects</a>
-      <a href="./contact.html">contact me</a>
-      <a href="./blog.html">blog</a>
-    </nav>
-  </header>
-
-  <main>
-    <aside>
-      <img src="assets/headshot.jpg" alt="" srcset="">
-      <div class="desktop-only">
-        <span>COLLEGE</span>
-        <p>Amherst College</p>
-        <span>HOMETOWN</span>
-        <p>New York, NY</p>
-        <span>DREAM JOB</span>
-        <p>technical product manager working at a mission-oriented organization.</p>
-      </div>
-      <!-- Icons -->
-    </aside>
-
-    <section>
-      <h1>about <span class="burgundy">me.</span></h1>
-      <p>I'm Dylan Momplaisir, a senior at Amherst College majoring in Architectural Studies, and Computer Science. I work as the Digital Director on the Amherst Student, the oldest school newspaper. I've been doing
-        web development and UI/UX design for about six years, and have recently expanded  into doing machine learning (specifically natural language processing).  
-      </p>
-      <p>Being born and raised in NYC, I've been raised around a world of inequality, and that's motivated me to use
-        tech for
-        public good, supporting people in engaging with civil activism (Root), and learning more about their world (the
-        Amherst
-        Student). I'm interested in doing work that provides people opportunities to utilize resources easier,
-        simplifying
-        people's day to day work, and providing unique, interactive experiences which allow people to create more.
-      </p>
-      <p>if you're interested in my work, have any questions, or just want to chat - <a href="contact.html">click here to contact me</a>! while you're at it, check my <a href="assets/2020_Resume.pdf">my resume!</a></p>
-      <!-- check out my resume -->
-    </section>
-
-  </main>
-</body>
-
-</html>
+  <aside>
+    <img src="{{ '/assets/headshot.jpg' | relative_url }}" alt="Dylan Momplaisir" />
+    <div class="desktop-only">
+      <span>COLLEGE</span>
+      <p>Amherst College</p>
+      <span>HOMETOWN</span>
+      <p>New York, NY</p>
+      <span>DREAM JOB</span>
+      <p>technical product manager working at a mission-oriented organization.</p>
+    </div>
+  </aside>
+</main>
