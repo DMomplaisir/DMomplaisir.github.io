@@ -1,0 +1,9 @@
+<nav>
+  <h4>dylan <span>momplaisir</span></h4>
+  <ul class="nav-links">
+    <li><a href="{{ '/aboutme.html' | relative_url }}" {% if page.url == '/aboutme.html' %}class="active"{% endif %}>about me</a></li>
+    <li><a href="{{ '/projects.html' | relative_url }}" {% if page.url == '/projects.html' %}class="active"{% endif %}>projects</a></li>
+    <li><a href="{{ '/blog' | relative_url }}" {% if page.url == '/blog.html' %}class="active"{% endif %}>blog</a></li>
+    <li><a href="{{ '/contact.html' | relative_url }}" {% if page.url == '/contact.html' %}class="active"{% endif %}>contact me</a></li>
+  </ul>
+</nav> 

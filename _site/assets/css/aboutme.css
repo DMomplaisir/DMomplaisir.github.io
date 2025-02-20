@@ -1,0 +1,273 @@
+@import url('https://rsms.me/inter/inter.css');
+
+:root {
+  --color-primary: #900020;
+  --color-text: #000000;
+  --color-white: #ffffff;
+  --color-bg: #f5f5f5;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2.5rem;
+  --spacing-xl: 3.75rem;
+  --header-height: 80px;
+}
+
+html { 
+  font-family: 'Inter', sans-serif !important;
+  height: 100%;
+}
+@supports (font-variation-settings: normal) {
+  html { font-family: 'Inter var', sans-serif; }
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  position: relative;
+  overflow-x: hidden;
+  color: var(--color-text);
+}
+
+/* Header styling */
+header {
+  background: black;
+  color: white;
+  height: var(--header-height);
+  padding: 0 var(--spacing-lg);
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-sizing: border-box;
+}
+
+nav {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  align-items: center;
+  height: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.name {
+  font-weight: 300;
+  font-size: 1.1rem;
+  letter-spacing: 0.02em;
+  text-transform: lowercase;
+}
+
+.name a {
+  color: white;
+  text-decoration: none;
+}
+
+.bold {
+  font-weight: 600;
+}
+
+nav ul {
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  gap: var(--spacing-lg);
+  list-style: none;
+  justify-self: end;
+  margin: 0;
+  padding: 0;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  transition: all 0.2s;
+  font-size: 1.1rem;
+  position: relative;
+  text-transform: lowercase;
+}
+
+nav a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 1px;
+  bottom: -2px;
+  left: 0;
+  background-color: white;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+nav a:hover::after {
+  width: 100%;
+}
+
+h1 {
+  font-size: 3rem;
+  font-weight: 300;
+  margin-top: var(--spacing-lg);
+  text-transform: lowercase;
+  letter-spacing: -0.02em;
+}
+
+section {
+  flex: 1;
+  margin: var(--spacing-md);
+  opacity: 0;
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+aside {
+  flex: 1;
+  height: 50vh;
+  width: 100%;
+  position: relative;
+}
+
+aside img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  filter: grayscale(0.3);
+  transition: filter 0.5s ease;
+}
+
+aside:hover img {
+  filter: grayscale(0);
+}
+
+.burgundy{
+  color: #900020;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--header-height);
+  min-height: calc(100vh - var(--header-height));
+  width: 100%;
+}
+
+p {
+    /* I'm Dylan Momplaisir, a junior at Amherst College majoring in Architectural Studies, and Computer Science. I'm the Digital Director of the Amherst Student (the oldest school newspaper in the country). I've been doing front-end web development and UI/UX design for about four years, and currently expanding into doing back-end development. Being born and raised in NYC, I've been raised around a world of inequality, and that's motivated me to use tech for public good, supporting people in engaging with civil activism (Root), and learning more about their world (the Amherst Student). I'm interested in doing work that provides people opportunities to utilize resources easier, simplifying people's day to day work, and providing unique, interactive experiences which allow people to create more. If you're interested in working together, having any questions on the projects below or just want to say "Hi!", contact me below! */
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 218.2%;
+    color: #000000;
+}
+
+img {
+    object-fit: cover;
+    width: 100vw;
+    height: inherit;
+}
+
+h4 {
+    font-weight: 300;
+}
+
+.desktop-only {
+  display: none;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(5px);
+  border-left: 2px solid var(--color-primary);
+  transition: transform 0.3s ease;
+}
+
+.desktop-only:hover {
+  transform: translateX(10px);
+}
+
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(20px);
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0);
+  }
+}
+
+@media only screen and (min-width: 868px) {
+    main {
+      flex-direction: row;
+      height: calc(100vh - var(--header-height));
+      overflow: hidden;
+      margin-top: var(--header-height);
+    }
+
+    h1 {
+      /* Dylan Momplaisir a digital creative. */
+     
+      font-size: 5em;
+      line-height: 1.1;
+      margin-bottom: var(--spacing-md);
+      transform: translateX(-50px);
+      opacity: 0;
+      animation: slideIn 1s ease-out forwards 0.3s;
+    }
+    aside {
+      flex: 1;
+      height: 100%;
+      order: 2;
+    }
+    img {
+        width: 100%;
+        height: 100%;
+    }
+    section {
+        flex: 1;
+        height: 100%;
+        margin: 0;
+        padding: var(--spacing-xl);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        overflow-y: auto;
+    }
+    header {
+      width: 100%;
+    }
+    .desktop-only {
+      width: 250px;
+      height: auto;
+      max-height: 200px;
+      z-index: 20;
+      position: absolute;
+      bottom: 0;
+      background: white;
+      margin: 20px;
+      padding: 20px;
+      display: block;
+    }
+
+    .desktop-only span { 
+      font-style: normal;
+      font-weight: 300;
+      font-size: 12px;
+      line-height: 218.2%;
+      /* or 26px */
+      color: #000000;
+      margin-top: 20px;
+
+    }
+    .desktop-only p {
+      margin: 0;
+      /* Using tech to support marginalized communties */
+      font-weight: 500;
+      font-size: 12px;
+      line-height: 218.2%;
+      /* or 26px */
+      color: #000000;
+    }
+
+    @keyframes slideIn {
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+}
+

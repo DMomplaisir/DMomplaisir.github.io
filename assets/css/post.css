@@ -1,0 +1,198 @@
+@import url('https://rsms.me/inter/inter.css');
+
+:root {
+  --color-primary: #900020;
+  --color-text: #333;
+  --color-bg: #ffffff;
+  --color-muted: #666666;
+  --spacing-unit: 8px;
+  --header-height: 80px;
+  --max-width: 800px;
+}
+
+body {
+  margin: 0;
+  padding-top: var(--header-height);
+  line-height: 1.6;
+  font-family: 'Inter', sans-serif;
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+
+/* Header styles */
+header {
+  background: black;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header-height);
+  z-index: 1000;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+nav {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--spacing-unit);
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.name {
+  font-weight: 300;
+  font-size: 1.1rem;
+}
+
+.name a {
+  color: white;
+  text-decoration: none;
+}
+
+.bold {
+  font-weight: 600;
+}
+
+nav ul {
+  display: flex;
+  gap: calc(var(--spacing-unit) * 4);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.1rem;
+  transition: all 0.2s;
+  position: relative;
+}
+
+nav a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 1px;
+  bottom: -2px;
+  left: 0;
+  background-color: white;
+  transition: width 0.3s ease;
+}
+
+nav a:hover::after {
+  width: 100%;
+}
+
+/* Post styles */
+.post {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: calc(var(--spacing-unit) * 4);
+}
+
+.post-meta {
+  margin-bottom: calc(var(--spacing-unit) * 4);
+  color: var(--color-muted);
+}
+
+.post-meta time {
+  font-size: 0.9rem;
+}
+
+.post-author {
+  font-style: italic;
+}
+
+.post-description {
+  font-size: 1.1rem;
+  margin-top: calc(var(--spacing-unit) * 2);
+  color: var(--color-text);
+}
+
+.post-content {
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+.post-content h1,
+.post-content h2,
+.post-content h3,
+.post-content h4 {
+  margin-top: calc(var(--spacing-unit) * 6);
+  margin-bottom: calc(var(--spacing-unit) * 3);
+}
+
+.post-content p {
+  margin-bottom: calc(var(--spacing-unit) * 3);
+}
+
+.post-content img {
+  max-width: 100%;
+  height: auto;
+  margin: calc(var(--spacing-unit) * 4) 0;
+}
+
+.post-tags {
+  margin-top: calc(var(--spacing-unit) * 6);
+  padding-top: calc(var(--spacing-unit) * 3);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.tags-label {
+  font-weight: 600;
+  margin-right: calc(var(--spacing-unit) * 2);
+}
+
+.tag {
+  display: inline-block;
+  padding: calc(var(--spacing-unit) / 2) var(--spacing-unit);
+  margin-right: var(--spacing-unit);
+  background: var(--color-bg);
+  border: 1px solid var(--color-muted);
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.post-navigation {
+  margin-top: calc(var(--spacing-unit) * 6);
+  padding-top: calc(var(--spacing-unit) * 3);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+}
+
+.prev-post,
+.next-post {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.prev-post:hover,
+.next-post:hover {
+  opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --max-width: 100%;
+  }
+  
+  .post {
+    padding: calc(var(--spacing-unit) * 2);
+  }
+  
+  nav {
+    padding: 0 calc(var(--spacing-unit) * 2);
+  }
+  
+  nav ul {
+    gap: calc(var(--spacing-unit) * 2);
+  }
+} 
+header:has(.nav-bar) h1 {
+  display: none;
+}

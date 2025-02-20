@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2025-02-20T02:26:42-05:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Dylan Momplaisir</title><subtitle>Personal Portfolio</subtitle><entry><title type="html">Test Post</title><link href="http://localhost:4000/blog/2024/03/21/test-post/" rel="alternate" type="text/html" title="Test Post" /><published>2024-03-21T00:00:00-04:00</published><updated>2024-03-21T00:00:00-04:00</updated><id>http://localhost:4000/blog/2024/03/21/test-post</id><content type="html" xml:base="http://localhost:4000/blog/2024/03/21/test-post/"><![CDATA[<p>This is a test post to verify that blog posts are working correctly.</p>
+
+<h2 id="test-section">Test Section</h2>
+
+<ul>
+  <li>Testing markdown</li>
+  <li>Testing layout</li>
+  <li>Testing URLs</li>
+</ul>
+
+<h3 id="code-test">Code Test</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span><span class="s">"Hello, blog!"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>Testing blockquotes and other markdown features.</p>
+</blockquote>]]></content><author><name>Dylan Momplaisir</name></author><category term="test" /><summary type="html"><![CDATA[A test post to verify blog functionality]]></summary></entry><entry><title type="html">Welcome to My Blog</title><link href="http://localhost:4000/blog/2024/03/21/welcome-to-my-blog/" rel="alternate" type="text/html" title="Welcome to My Blog" /><published>2024-03-21T00:00:00-04:00</published><updated>2024-03-21T00:00:00-04:00</updated><id>http://localhost:4000/blog/2024/03/21/welcome-to-my-blog</id><content type="html" xml:base="http://localhost:4000/blog/2024/03/21/welcome-to-my-blog/"><![CDATA[<p>Hello and welcome to my blog! This is where I’ll be sharing my thoughts, experiences, and insights about technology, design, and the intersection of both. As someone who’s passionate about creating meaningful digital experiences, I believe in the power of sharing knowledge and fostering discussions within our community.</p>
+
+<h2 id="what-to-expect">What to Expect</h2>
+
+<p>In this blog, you can expect posts about:</p>
+
+<ul>
+  <li>Frontend Development</li>
+  <li>UI/UX Design</li>
+  <li>Photography</li>
+  <li>Urban Design and Architecture</li>
+  <li>My Personal Projects</li>
+  <li>Tech Industry Insights</li>
+</ul>
+
+<h2 id="why-start-a-blog">Why Start a Blog?</h2>
+
+<p>I believe that writing is one of the best ways to organize thoughts and share experiences. Through this blog, I hope to:</p>
+
+<ol>
+  <li>Share my learning journey</li>
+  <li>Connect with like-minded individuals</li>
+  <li>Document my experiences and growth</li>
+  <li>Contribute to the tech community</li>
+</ol>
+
+<p>Stay tuned for more posts coming soon!</p>]]></content><author><name>Dylan Momplaisir</name></author><category term="welcome" /><category term="technology" /><category term="design" /><summary type="html"><![CDATA[An introduction to my new blog where I'll share thoughts on technology, design, and more.]]></summary></entry></feed>

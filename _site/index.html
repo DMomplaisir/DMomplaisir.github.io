@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home | Dylan Momplaisir</title>
+    <link rel="stylesheet" href="/assets/css/shared.css">
+    
+        
+        <link rel="stylesheet" href="/assets/css/shared.css">
+        
+        <link rel="stylesheet" href="/assets/css/index.css">
+        
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Home | Dylan Momplaisir</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Home" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Dylan Momplaisir’s personal website, and portfolio." />
+<meta property="og:description" content="Dylan Momplaisir’s personal website, and portfolio." />
+<link rel="canonical" href="http://localhost:4000/" />
+<meta property="og:url" content="http://localhost:4000/" />
+<meta property="og:site_name" content="Dylan Momplaisir" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Home" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","description":"Dylan Momplaisir’s personal website, and portfolio.","headline":"Home","name":"Dylan Momplaisir","url":"http://localhost:4000/"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+<body>
+    <header>
+        <nav class="nav-bar">
+            <div class="name">
+                <a href="/">dylan <span class="bold">momplaisir</span></a>
+            </div>
+            <ul>
+                <li><a href="/">home</a></li>
+                <li><a href="/projects">projects</a></li>
+                <li><a href="/about">about</a></li>
+                <li><a href="/contact">contact</a></li>
+            </ul>
+        </nav>
+        
+        <h1>Home</h1>
+        
+    </header>
+
+    <main>
+        <header>
+  <nav>
+  <h4>dylan <span>momplaisir</span></h4>
+  <ul class="nav-links">
+    <li><a href="/aboutme.html" >about me</a></li>
+    <li><a href="/projects.html" >projects</a></li>
+    <li><a href="/blog" >blog</a></li>
+    <li><a href="/contact.html" >contact me</a></li>
+  </ul>
+</nav> 
+</header>
+
+<main>
+  <section id="hero">
+    <div class="hero-image-container">
+      <img src="/assets/frontpagephoto.jpg" alt="Dylan Momplaisir" />
+    </div>
+    <div class="hero-content">
+      <h1>Dylan <br/> Momplaisir</h1>
+      <div class="role-container">
+        <span class="prefix">i'm </span>
+        <span id="text" class="burgundy"></span>
+      </div>
+      <h2>website refresh coming soon</h2>
+    </div>
+  </section>
+</main>
+
+<script src="https://unpkg.com/typewriter-effect/dist/core.js"></script>
+<script>
+  // Wait for the DOM to be fully loaded
+  document.addEventListener('DOMContentLoaded', function() {
+    var app = document.getElementById('text');
+    
+    if (!app) {
+      console.error('Typewriter target element not found');
+      return;
+    }
+
+    var typewriter = new Typewriter(app, {
+      loop: true,
+      delay: 75,
+      deleteSpeed: 50,
+      cursor: '|',
+      stringSplitter: null,
+    });
+    
+    typewriter
+      .pauseFor(1000)
+      .typeString('a digital creative')
+      .pauseFor(2000)
+      .deleteAll()
+      .typeString('a frontend engineer')
+      .pauseFor(2000)
+      .deleteAll()
+      .typeString('a photographer')
+      .pauseFor(2000)
+      .deleteAll()
+      .typeString('an urbanism nerd')
+      .pauseFor(2000)
+      .start();
+  });
+</script>
+
+    </main>
+</body>
+</html> 

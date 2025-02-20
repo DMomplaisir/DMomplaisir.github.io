@@ -1,0 +1,22 @@
+---
+layout: default
+---
+<article>
+    {% if page.hero_image %}
+    <div class="hero">
+        <img src="{{ page.hero_image | relative_url }}" alt="{{ page.title }}">
+    </div>
+    {% endif %}
+
+    <h2>{{ page.title }}</h2>
+    
+    {{ content }}
+
+    {% if page.additional_images %}
+    <div class="img2">
+        {% for image in page.additional_images %}
+        <img src="{{ image | relative_url }}" alt="Additional project image">
+        {% endfor %}
+    </div>
+    {% endif %}
+</article> 
