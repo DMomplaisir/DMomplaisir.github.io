@@ -3,12 +3,33 @@ description: Personal Portfolio
 url: "https://dmomplaisir.github.io"
 baseurl: ""
 
+# Theme settings
+theme: minima
+remote_theme: jekyll/minima
+
 # Build settings
 markdown: kramdown
+highlighter: rouge
+future: false  # Don't publish posts with future dates
+timezone: America/New_York  # Set your timezone
+encoding: utf-8
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
   - jekyll-sitemap
+  - jekyll-redirect-from
+  - jekyll-mentions
+  - jemoji
+
+# SEO settings
+twitter:
+  username: # Add your Twitter username if you have one
+  card: summary
+social:
+  name: Dylan Momplaisir
+  links:
+    - https://github.com/DMomplaisir
+    # Add other social media links as needed
 
 # Exclude from processing
 exclude:
@@ -19,9 +40,15 @@ exclude:
   - .git/
   - .github/
   - .gitignore
+  - vendor/
+  - oldsite/
+  - Rally/
 
 # Collections
 collections:
+  pages:
+    output: true
+    permalink: /:title/
   projects:
     output: true
     permalink: /projects/:path/
@@ -48,6 +75,15 @@ defaults:
       layout: "default"
       custom_css: 
         - shared
+  -
+    scope:
+      path: ""
+      type: "projects"
+    values:
+      layout: "project"
+      custom_css:
+        - shared
+        - project
 
 # Blog settings
 permalink: /blog/:year/:month/:day/:title/
