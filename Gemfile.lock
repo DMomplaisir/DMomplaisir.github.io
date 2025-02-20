@@ -303,12 +303,6 @@ PLATFORMS
 
 DEPENDENCIES
   github-pages
-  jekyll-feed
-  jekyll-mentions
-  jekyll-redirect-from
-  jekyll-seo-tag
-  jekyll-sitemap
-  jemoji
   webrick (~> 1.7)
 
 BUNDLED WITH
