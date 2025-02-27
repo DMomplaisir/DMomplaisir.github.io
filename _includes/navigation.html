@@ -11,7 +11,7 @@
   </button>
   <ul class="nav-links">
     {% for item in site.data.navigation %}
-    <li><a href="{{ item.link | relative_url }}" {% if page.url == item.link %}class="active"{% endif %}>{{ item.name }}</a></li>
+    <li><a href="{{ item.link | relative_url }}">{{ item.name }}</a></li>
     {% endfor %}
   </ul>
 </nav>

@@ -48,8 +48,7 @@ nav {
   transition: color 0.2s ease;
 }
 
-.nav-links a:hover,
-.nav-links a.active {
+.nav-links a:hover {
   color: var(--primary-color);
 }
 
@@ -60,8 +59,7 @@ nav {
 }
 
 .header-dark .name a:hover,
-.header-dark .nav-links a:hover,
-.header-dark .nav-links a.active {
+.header-dark .nav-links a:hover {
   color: #ff1744;
 }
 
