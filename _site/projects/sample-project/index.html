@@ -1,12 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sample Project | Dylan Momplaisir</title>
-    <link rel="stylesheet" href="/assets/css/shared.css">
-    
-    <!-- Begin Jekyll SEO tag v2.8.0 -->
+    <!-- Meta tags -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Sample Project | Dylan Momplaisir</title>
+<meta name="description" content="Personal Portfolio">
+<meta name="theme-color" content="#900020">
+
+<!-- Favicon -->
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+<link rel="manifest" href="/assets/site.webmanifest">
+
+<!-- Styles -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/modern-normalize@2.0.0/modern-normalize.min.css">
+
+<!-- Google Analytics -->
+
+
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
 <title>Sample Project | Dylan Momplaisir</title>
 <meta name="generator" content="Jekyll v3.10.0" />
 <meta property="og:title" content="Sample Project" />
@@ -24,23 +40,60 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebPage","description":"This is a sample project description. Replace this with your actual project content.","headline":"Sample Project","image":"http://localhost:4000/assets/images/sample-project.jpg","url":"http://localhost:4000/projects/sample-project/"}</script>
 <!-- End Jekyll SEO tag -->
-
+ 
 </head>
 <body>
     <header>
-        <nav class="nav-bar">
-            <div class="name">
-                <a href="/">dylan <span class="bold">momplaisir</span></a>
-            </div>
-            <ul>
-                <li><a href="/">home</a></li>
-                <li><a href="/projects">projects</a></li>
-                <li><a href="/about">about</a></li>
-                <li><a href="/contact">contact</a></li>
-            </ul>
-        </nav>
-        
-        <h1>Sample Project</h1>
+        <nav>
+  <div class="name">
+    <a href="/">dylan <span class="bold">momplaisir</span></a>
+  </div>
+  <button class="nav-toggle" aria-label="Toggle navigation">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </button>
+  <ul class="nav-links">
+    
+    <li><a href="/" >Home</a></li>
+    
+    <li><a href="/projects" >Projects</a></li>
+    
+    <li><a href="/blog" >Blog</a></li>
+    
+    <li><a href="/aboutme" >About</a></li>
+    
+    <li><a href="/contact" >Contact</a></li>
+    
+  </ul>
+</nav>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const navToggle = document.querySelector('.nav-toggle');
+  const navLinks = document.querySelector('.nav-links');
+  const header = document.querySelector('header');
+  
+  navToggle.addEventListener('click', function() {
+    navLinks.classList.toggle('active');
+    navToggle.setAttribute('aria-expanded', navLinks.classList.contains('active'));
+  });
+
+  // Function to handle scroll event
+  function handleScroll() {
+    if (window.scrollY > 50) {
+      header.classList.add('collapsed');
+    } else {
+      header.classList.remove('collapsed');
+    }
+  }
+
+  // Add scroll event listener
+  window.addEventListener('scroll', handleScroll);
+});
+</script> 
         
     </header>
 

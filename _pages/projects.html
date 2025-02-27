@@ -1,26 +1,31 @@
 ---
 layout: default
-title: Projects
+title: Featured Projects
+description: Explore my work in software development, design, and creative technology.
+header_style: content
 custom_css: 
+  - shared
+  - header_styles
+  - navigation
   - projects
 ---
 
-<main>
-    {% for project in site.projects %}
-    <section>
-        <div class="img">
-            {% if project.hero_image %}
-            <a href="{{ project.url | relative_url }}">
-                <img src="{{ project.hero_image | relative_url }}" alt="{{ project.title }}">
-            </a>
-            {% endif %}
-        </div>
-        <div>
-            <a href="{{ project.url | relative_url }}">
-                <h3>{{ project.title }}</h3>
-            </a>
-            <p>{{ project.excerpt }}</p>
-        </div>
-    </section>
-    {% endfor %}
-</main>
+<div class="projects-grid">
+  {% for project in site.projects %}
+  <article class="project-card">
+    <div class="project-card-image">
+      {% if project.hero_image %}
+      <a href="{{ project.url | relative_url }}">
+        <img src="{{ project.hero_image | relative_url }}" alt="{{ project.title }}">
+      </a>
+      {% endif %}
+    </div>
+    <div class="project-card-content">
+      <a href="{{ project.url | relative_url }}">
+        <h3>{{ project.title }}</h3>
+      </a>
+      <p>{{ project.excerpt }}</p>
+    </div>
+  </article>
+  {% endfor %}
+</div>

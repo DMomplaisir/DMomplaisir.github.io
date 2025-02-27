@@ -1,0 +1,66 @@
+/* Base Header Element */
+header {
+  width: 100%;
+  background: var(--color-bg);
+  position: sticky;
+  top: 0;
+  z-index: var(--z-nav);
+  transition: height 0.3s ease;
+  border-bottom: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+}
+
+header.collapsed {
+  height: var(--header-height-collapsed, 3rem);
+}
+
+/* Base Header Styles - Shared across all header variants */
+.header {
+  padding: var(--spacing-lg) var(--spacing-lg);
+  margin: 0 auto;
+  max-width: var(--max-width);
+}
+
+/* Common text styles */
+.header h1 {
+  font-weight: 600;
+  margin-bottom: var(--spacing-xs);
+  font-size: var(--font-size-xl);
+}
+
+.header .description {
+  font-size: var(--font-size-lg);
+  color: var(--color-muted);
+  max-width: var(--max-width-sm);
+  line-height: 1.6;
+}
+
+/* Main Header Style - Used for homepage and major landing pages */
+.header-main {
+  text-align: center;
+  max-width: var(--max-width-sm);
+  padding-top: var(--spacing-xl);
+  padding-bottom: var(--spacing-xl);
+}
+
+.header-main h1 {
+  font-size: var(--font-size-xxl);
+  margin-bottom: var(--spacing-md);
+  font-weight: 700;
+}
+
+/* Content Header Style - Used for content pages (projects, blog, etc) */
+.header-content {
+  padding-top: var(--spacing-lg);
+  padding-bottom: var(--spacing-lg);
+}
+
+/* Only override what's different from base header styles */
+.header-content h1 {
+  font-size: var(--font-size-xl);
+}
+
+.header-content .description {
+  font-size: var(--font-size-lg);
+  color: var(--color-muted);
+  max-width: var(--max-width-sm);
+} 

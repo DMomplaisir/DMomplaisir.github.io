@@ -1,9 +1,42 @@
 <nav>
-  <h4>dylan <span>momplaisir</span></h4>
+  <div class="name">
+    <a href="{{ '/' | relative_url }}">dylan <span class="bold">momplaisir</span></a>
+  </div>
+  <button class="nav-toggle" aria-label="Toggle navigation">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </button>
   <ul class="nav-links">
-    <li><a href="{{ '/aboutme.html' | relative_url }}" {% if page.url == '/aboutme.html' %}class="active"{% endif %}>about me</a></li>
-    <li><a href="{{ '/projects.html' | relative_url }}" {% if page.url == '/projects.html' %}class="active"{% endif %}>projects</a></li>
-    <li><a href="{{ '/blog' | relative_url }}" {% if page.url == '/blog.html' %}class="active"{% endif %}>blog</a></li>
-    <li><a href="{{ '/contact.html' | relative_url }}" {% if page.url == '/contact.html' %}class="active"{% endif %}>contact me</a></li>
+    {% for item in site.data.navigation %}
+    <li><a href="{{ item.link | relative_url }}" {% if page.url == item.link %}class="active"{% endif %}>{{ item.name }}</a></li>
+    {% endfor %}
   </ul>
-</nav> 
+</nav>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const navToggle = document.querySelector('.nav-toggle');
+  const navLinks = document.querySelector('.nav-links');
+  const header = document.querySelector('header');
+  
+  navToggle.addEventListener('click', function() {
+    navLinks.classList.toggle('active');
+    navToggle.setAttribute('aria-expanded', navLinks.classList.contains('active'));
+  });
+
+  // Function to handle scroll event
+  function handleScroll() {
+    if (window.scrollY > 50) {
+      header.classList.add('collapsed');
+    } else {
+      header.classList.remove('collapsed');
+    }
+  }
+
+  // Add scroll event listener
+  window.addEventListener('scroll', handleScroll);
+});
+</script> 

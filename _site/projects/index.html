@@ -1,117 +1,183 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projects | Dylan Momplaisir</title>
+    <!-- Meta tags -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Featured Projects | Dylan Momplaisir</title>
+<meta name="description" content="Explore my work in software development, design, and creative technology.">
+<meta name="theme-color" content="#900020">
+
+<!-- Favicon -->
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+<link rel="manifest" href="/assets/site.webmanifest">
+
+<!-- Styles -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/modern-normalize@2.0.0/modern-normalize.min.css">
+
+<!-- Google Analytics -->
+
+
+
+    
     <link rel="stylesheet" href="/assets/css/shared.css">
     
-        
-        <link rel="stylesheet" href="/assets/css/projects.css">
-        
+    <link rel="stylesheet" href="/assets/css/header_styles.css">
     
-    <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Projects | Dylan Momplaisir</title>
+    <link rel="stylesheet" href="/assets/css/navigation.css">
+    
+    <link rel="stylesheet" href="/assets/css/projects.css">
+    
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Featured Projects | Dylan Momplaisir</title>
 <meta name="generator" content="Jekyll v3.10.0" />
-<meta property="og:title" content="Projects" />
+<meta property="og:title" content="Featured Projects" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Personal Portfolio" />
-<meta property="og:description" content="Personal Portfolio" />
+<meta name="description" content="Explore my work in software development, design, and creative technology." />
+<meta property="og:description" content="Explore my work in software development, design, and creative technology." />
 <link rel="canonical" href="http://localhost:4000/projects/" />
 <meta property="og:url" content="http://localhost:4000/projects/" />
 <meta property="og:site_name" content="Dylan Momplaisir" />
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Projects" />
+<meta property="twitter:title" content="Featured Projects" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","description":"Personal Portfolio","headline":"Projects","url":"http://localhost:4000/projects/"}</script>
+{"@context":"https://schema.org","@type":"WebPage","description":"Explore my work in software development, design, and creative technology.","headline":"Featured Projects","url":"http://localhost:4000/projects/"}</script>
 <!-- End Jekyll SEO tag -->
-
+ 
 </head>
 <body>
     <header>
-        <nav class="nav-bar">
-            <div class="name">
-                <a href="/">dylan <span class="bold">momplaisir</span></a>
-            </div>
-            <ul>
-                <li><a href="/">home</a></li>
-                <li><a href="/projects">projects</a></li>
-                <li><a href="/about">about</a></li>
-                <li><a href="/contact">contact</a></li>
-            </ul>
-        </nav>
+        <nav>
+  <div class="name">
+    <a href="/">dylan <span class="bold">momplaisir</span></a>
+  </div>
+  <button class="nav-toggle" aria-label="Toggle navigation">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </button>
+  <ul class="nav-links">
+    
+    <li><a href="/" >Home</a></li>
+    
+    <li><a href="/projects" >Projects</a></li>
+    
+    <li><a href="/blog" >Blog</a></li>
+    
+    <li><a href="/aboutme" >About</a></li>
+    
+    <li><a href="/contact" >Contact</a></li>
+    
+  </ul>
+</nav>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const navToggle = document.querySelector('.nav-toggle');
+  const navLinks = document.querySelector('.nav-links');
+  const header = document.querySelector('header');
+  
+  navToggle.addEventListener('click', function() {
+    navLinks.classList.toggle('active');
+    navToggle.setAttribute('aria-expanded', navLinks.classList.contains('active'));
+  });
+
+  // Function to handle scroll event
+  function handleScroll() {
+    if (window.scrollY > 50) {
+      header.classList.add('collapsed');
+    } else {
+      header.classList.remove('collapsed');
+    }
+  }
+
+  // Add scroll event listener
+  window.addEventListener('scroll', handleScroll);
+});
+</script> 
         
-        <h1>Projects</h1>
+        <section class="header header-content">
+            <h1>Featured Projects</h1>
+            
+            <p class="description">Explore my work in software development, design, and creative technology.</p>
+            
+        </section>
         
     </header>
 
     <main>
-        <main>
-    
-    <section>
-        <div class="img">
-            
-            <a href="/projects/amherst-student/">
-                <img src="/assets/amhstu-logo.png" alt="The Amherst Student">
-            </a>
-            
-        </div>
-        <div>
-            <a href="/projects/amherst-student/">
-                <h3>The Amherst Student</h3>
-            </a>
-            <p>Design, development and deployment of a college news platform with thirty thousand page views a month.</p>
-        </div>
-    </section>
-    
-    <section>
-        <div class="img">
-            
-            <a href="/projects/nyt-spotify/">
-                <img src="/assets/project2spotify.png" alt="Adding Spotify to Times Articles">
-            </a>
-            
-        </div>
-        <div>
-            <a href="/projects/nyt-spotify/">
-                <h3>Adding Spotify to Times Articles</h3>
-            </a>
-            <p>Updating the interface on mobile, and desktop.</p>
-        </div>
-    </section>
-    
-    <section>
-        <div class="img">
-            
-        </div>
-        <div>
-            <a href="/projects/sample-project/">
-                <h3>Sample Project</h3>
-            </a>
-            <p><p>This is a sample project description. Replace this with your actual project content.</p>
+        <div class="projects-grid">
+  
+  <article class="project-card">
+    <div class="project-card-image">
+      
+      <a href="/projects/amherst-student/">
+        <img src="/assets/amhstu-logo.png" alt="The Amherst Student">
+      </a>
+      
+    </div>
+    <div class="project-card-content">
+      <a href="/projects/amherst-student/">
+        <h3>The Amherst Student</h3>
+      </a>
+      <p>Design, development and deployment of a college news platform with thirty thousand page views a month.</p>
+    </div>
+  </article>
+  
+  <article class="project-card">
+    <div class="project-card-image">
+      
+      <a href="/projects/nyt-spotify/">
+        <img src="/assets/project2spotify.png" alt="Adding Spotify to Times Articles">
+      </a>
+      
+    </div>
+    <div class="project-card-content">
+      <a href="/projects/nyt-spotify/">
+        <h3>Adding Spotify to Times Articles</h3>
+      </a>
+      <p>Updating the interface on mobile, and desktop.</p>
+    </div>
+  </article>
+  
+  <article class="project-card">
+    <div class="project-card-image">
+      
+    </div>
+    <div class="project-card-content">
+      <a href="/projects/sample-project/">
+        <h3>Sample Project</h3>
+      </a>
+      <p><p>This is a sample project description. Replace this with your actual project content.</p>
 
 </p>
-        </div>
-    </section>
-    
-    <section>
-        <div class="img">
-            
-            <a href="/projects/vitimemachine/">
-                <img src="/assets/project3.png" alt="ViTimeMachine">
-            </a>
-            
-        </div>
-        <div>
-            <a href="/projects/vitimemachine/">
-                <h3>ViTimeMachine</h3>
-            </a>
-            <p>Design of an internal newsroom tool aimed at developing a better technology base.</p>
-        </div>
-    </section>
-    
-</main>
+    </div>
+  </article>
+  
+  <article class="project-card">
+    <div class="project-card-image">
+      
+      <a href="/projects/vitimemachine/">
+        <img src="/assets/project3.png" alt="ViTimeMachine">
+      </a>
+      
+    </div>
+    <div class="project-card-content">
+      <a href="/projects/vitimemachine/">
+        <h3>ViTimeMachine</h3>
+      </a>
+      <p>Design of an internal newsroom tool aimed at developing a better technology base.</p>
+    </div>
+  </article>
+  
+</div>
     </main>
 </body>
 </html> 

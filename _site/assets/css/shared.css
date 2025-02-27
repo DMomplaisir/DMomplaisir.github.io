@@ -1,113 +1,44 @@
 @import url('https://rsms.me/inter/inter.css');
-
-:root {
-  /* Colors */
-  --color-primary: #900020;
-  --color-text: #000000;
-  --color-white: #ffffff;
-  --color-bg: #f5f5f5;
-  
-  /* Typography */
-  --font-size-base: 1rem;
-  --font-size-lg: 1.25rem;
-  --font-size-xl: 3rem;
-  --font-size-xxl: 5rem;
-  
-  /* Spacing */
-  --spacing-sm: 1rem;
-  --spacing-md: 1.5rem;
-  --spacing-lg: 2.5rem;
-  --spacing-xl: 3.75rem;
-  
-  /* Layout */
-  --header-height: 4rem;
-  --max-width: 1200px;
-}
+@import 'variables.css';
 
 /* Base styles */
 html { 
   font-family: 'Inter', sans-serif;
+  font-feature-settings: "ss01", "ss02", "cv01", "cv02";
   scroll-behavior: smooth;
+  box-sizing: border-box;
+  font-size: var(--base-font-size);
 }
 
 @supports (font-variation-settings: normal) {
   html { font-family: 'Inter var', sans-serif; }
 }
 
-body {
-  margin: 0;
-  line-height: 1.5;
-  color: var(--color-text);
-}
-
-/* Header and Navigation */
-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
-  mix-blend-mode: difference;
-}
-
-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--spacing-md) var(--spacing-lg);
-}
-
-nav h4 {
-  color: var(--color-white);
-  font-weight: 400;
-  margin: 0;
-  font-size: var(--font-size-lg);
-  letter-spacing: 0.05em;
-}
-
-nav h4 span {
-  font-weight: 600;
-}
-
-.nav-links {
-  display: flex;
+*, *:before, *:after {
+  box-sizing: inherit;
   margin: 0;
   padding: 0;
-  list-style: none;
 }
 
-.nav-links li {
-  margin-left: var(--spacing-md);
+body {
+  margin: 0;
+  line-height: 1.6;
+  color: var(--color-text);
+  background: var(--color-bg);
 }
 
-.nav-links a {
-  color: var(--color-white);
-  text-decoration: none;
-  font-size: var(--font-size-base);
-  transition: all 0.3s ease;
+/* Update main content positioning */
+main {
   position: relative;
-}
-
-.nav-links a::after {
-  content: '';
-  position: absolute;
-  width: 0;
-  height: 1px;
-  bottom: -2px;
-  left: 0;
-  background: var(--color-primary);
-  transition: width 0.3s ease;
-}
-
-.nav-links a:hover::after {
-  width: 100%;
+  z-index: 1;
+  padding-top: var(--spacing-sm); /* Add slight padding for better spacing */
 }
 
 /* Common animations */
 @keyframes fadeIn {
   from { 
     opacity: 0; 
-    transform: translateY(20px); 
+    transform: translateY(var(--spacing-sm)); 
   }
   to { 
     opacity: 1; 

@@ -1,18 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home | Dylan Momplaisir</title>
+    <!-- Meta tags -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Home | Dylan Momplaisir</title>
+<meta name="description" content="Dylan Momplaisir's personal website, and portfolio.">
+<meta name="theme-color" content="#900020">
+
+<!-- Favicon -->
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+<link rel="manifest" href="/assets/site.webmanifest">
+
+<!-- Styles -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/modern-normalize@2.0.0/modern-normalize.min.css">
+
+<!-- Google Analytics -->
+
+
+
+    
     <link rel="stylesheet" href="/assets/css/shared.css">
     
-        
-        <link rel="stylesheet" href="/assets/css/shared.css">
-        
-        <link rel="stylesheet" href="/assets/css/index.css">
-        
+    <link rel="stylesheet" href="/assets/css/header_styles.css">
     
-    <!-- Begin Jekyll SEO tag v2.8.0 -->
+    <link rel="stylesheet" href="/assets/css/navigation.css">
+    
+    <link rel="stylesheet" href="/assets/css/index.css">
+    
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
 <title>Home | Dylan Momplaisir</title>
 <meta name="generator" content="Jekyll v3.10.0" />
 <meta property="og:title" content="Home" />
@@ -28,40 +48,72 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","description":"Dylan Momplaisir’s personal website, and portfolio.","headline":"Home","name":"Dylan Momplaisir","url":"http://localhost:4000/"}</script>
 <!-- End Jekyll SEO tag -->
-
+ 
 </head>
 <body>
     <header>
-        <nav class="nav-bar">
-            <div class="name">
-                <a href="/">dylan <span class="bold">momplaisir</span></a>
-            </div>
-            <ul>
-                <li><a href="/">home</a></li>
-                <li><a href="/projects">projects</a></li>
-                <li><a href="/about">about</a></li>
-                <li><a href="/contact">contact</a></li>
-            </ul>
-        </nav>
+        <nav>
+  <div class="name">
+    <a href="/">dylan <span class="bold">momplaisir</span></a>
+  </div>
+  <button class="nav-toggle" aria-label="Toggle navigation">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </button>
+  <ul class="nav-links">
+    
+    <li><a href="/" class="active">Home</a></li>
+    
+    <li><a href="/projects" >Projects</a></li>
+    
+    <li><a href="/blog" >Blog</a></li>
+    
+    <li><a href="/aboutme" >About</a></li>
+    
+    <li><a href="/contact" >Contact</a></li>
+    
+  </ul>
+</nav>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const navToggle = document.querySelector('.nav-toggle');
+  const navLinks = document.querySelector('.nav-links');
+  const header = document.querySelector('header');
+  
+  navToggle.addEventListener('click', function() {
+    navLinks.classList.toggle('active');
+    navToggle.setAttribute('aria-expanded', navLinks.classList.contains('active'));
+  });
+
+  // Function to handle scroll event
+  function handleScroll() {
+    if (window.scrollY > 50) {
+      header.classList.add('collapsed');
+    } else {
+      header.classList.remove('collapsed');
+    }
+  }
+
+  // Add scroll event listener
+  window.addEventListener('scroll', handleScroll);
+});
+</script> 
         
-        <h1>Home</h1>
+        <section class="header header-main">
+            <h1>Home</h1>
+            
+            <p class="description">Dylan Momplaisir's personal website, and portfolio.</p>
+            
+        </section>
         
     </header>
 
     <main>
-        <header>
-  <nav>
-  <h4>dylan <span>momplaisir</span></h4>
-  <ul class="nav-links">
-    <li><a href="/aboutme.html" >about me</a></li>
-    <li><a href="/projects.html" >projects</a></li>
-    <li><a href="/blog" >blog</a></li>
-    <li><a href="/contact.html" >contact me</a></li>
-  </ul>
-</nav> 
-</header>
-
-<main>
+        <main>
   <section id="hero">
     <div class="hero-image-container">
       <img src="/assets/frontpagephoto.jpg" alt="Dylan Momplaisir" />

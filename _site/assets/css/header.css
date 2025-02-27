@@ -1,0 +1,147 @@
+header {
+  background: var(--color-bg-dark, #000000);
+  color: var(--color-text-light, #ffffff);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100vw;
+  height: var(--header-height);
+  z-index: 1000;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-sizing: border-box;
+  padding: 0 var(--spacing-md);
+  transition: height 0.3s ease;
+}
+
+header.collapsed {
+  height: 2rem;
+}
+
+header.collapsed .name {
+  display: none;
+}
+
+header.collapsed nav ul {
+  display: none;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  max-width: var(--max-width, 1400px);
+  margin: 0 auto;
+  padding: 0 var(--spacing-sm);
+  position: relative;
+}
+
+.name {
+  font-weight: 300;
+  font-size: 1.1rem;
+  letter-spacing: 0.02em;
+  text-transform: lowercase;
+  white-space: nowrap;
+}
+
+.name a {
+  color: var(--color-text-light, #ffffff);
+  text-decoration: none;
+}
+
+nav ul {
+  display: flex;
+  gap: var(--spacing-md);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+}
+
+nav a {
+  color: var(--color-text-light, #ffffff);
+  text-decoration: none;
+  transition: all 0.2s;
+  font-size: 1rem;
+  position: relative;
+  text-transform: lowercase;
+  padding: 0.5rem 0;
+}
+
+nav a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 1px;
+  bottom: 0;
+  left: 0;
+  background-color: var(--color-text-light, #ffffff);
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+nav a:hover::after {
+  width: 100%;
+}
+
+/* Mobile Navigation */
+.nav-toggle {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  header {
+    padding: 0;
+  }
+
+  nav {
+    padding: 0 var(--spacing-sm);
+  }
+
+  .nav-toggle {
+    display: block;
+    background: none;
+    border: none;
+    color: var(--color-text-light, #ffffff);
+    cursor: pointer;
+    padding: 0.5rem;
+    z-index: 2000;
+  }
+
+  nav ul {
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    right: 0;
+    background: var(--color-bg-dark, #000000);
+    flex-direction: column;
+    padding: var(--spacing-md);
+    gap: var(--spacing-md);
+    transform: translateY(-100%);
+    transition: transform 0.3s ease;
+    width: 100%;
+    align-items: flex-start;
+  }
+
+  nav ul.active {
+    transform: translateY(0);
+  }
+
+  .name {
+    font-size: 1rem;
+  }
+
+  nav a {
+    font-size: 0.9rem;
+    width: 100%;
+    display: block;
+  }
+}
+
+/* Dark mode header */
+@media (prefers-color-scheme: dark) {
+  header {
+    background: var(--color-bg-dark, #000000);
+    border-bottom: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  }
+} 

@@ -1,41 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0BWB7M0MWY"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-0BWB7M0MWY');
-    </script>
-    <title>{{ page.title }} | {{ site.title }}</title>
-    <link rel="stylesheet" href="{{ '/assets/css/shared.css' | relative_url }}">
-    {% if page.custom_css %}
-        {% for stylesheet in page.custom_css %}
-        <link rel="stylesheet" href="{{ '/assets/css/' | append: stylesheet | append: '.css' | relative_url }}">
-        {% endfor %}
-    {% endif %}
-    {% seo %}
+    {% include head.html %}
 </head>
 <body>
     <header>
-        <nav class="nav-bar">
-            <div class="name">
-                <a href="{{ '/' | relative_url }}">dylan <span class="bold">momplaisir</span></a>
-            </div>
-            <ul>
-                <li><a href="{{ '/' | relative_url }}">home</a></li>
-                <li><a href="{{ '/projects' | relative_url }}">projects</a></li>
-                <li><a href="{{ '/aboutme' | relative_url }}">about</a></li>
-                <li><a href="{{ '/contact' | relative_url }}">contact</a></li>
-            </ul>
-        </nav>
-        {% if page.title %}
-        <h1>{{ page.title }}</h1>
+        {% include navigation.html %}
+        {% if page.header_style %}
+        <section class="header header-{{ page.header_style }}">
+            <h1>{{ page.title }}</h1>
+            {% if page.description %}
+            <p class="description">{{ page.description }}</p>
+            {% endif %}
+        </section>
         {% endif %}
     </header>
 

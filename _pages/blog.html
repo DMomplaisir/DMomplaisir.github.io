@@ -1,19 +1,16 @@
 ---
 layout: default
+title: thoughts on tech & design.
 description: Dylan Momplaisir's thoughts on technology, design, and more.
+header_style: main
 custom_css:
   - shared
+  - header_styles
+  - navigation
   - blog
 ---
 
-
-
 <main class="blog-main">
-  <section class="blog-header">
-    <h1>thoughts on <span class="burgundy">tech & design.</span></h1>
-    <p class="blog-description">{{ page.description }}</p>
-  </section>
-
   <section class="blog-posts">
     {% for post in site.posts %}
       <article class="blog-post-preview">

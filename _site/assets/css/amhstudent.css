@@ -1,19 +1,14 @@
 @import url('https://rsms.me/inter/inter.css');
+@import url('variables.css');
+@import url('shared.css');
 
+/* AMH Student-specific styles */
 :root {
-  /* Colors */
-  --color-primary: #900020;
-  --color-text: #333;
-  --color-bg: #ffffff;
-  --color-muted: #666666;
-  --grid-background: #f8f8f8;
-  
-  /* Layout */
-  --spacing-unit: 8px;
-  --grid-margin: calc(var(--spacing-unit) * 4);
+  --grid-background: var(--color-bg-light);
+  --grid-margin: var(--spacing-lg);
   --content-width: min(65ch, 100% - (var(--grid-margin) * 2));
   --max-width: 1400px;
-  --header-height: 28vh;
+  --header-height: var(--header-height);
   
   /* Typography */
   --base-font-size: 16px;
@@ -48,8 +43,6 @@ body {
   overflow-x: hidden;
   position: relative;
 }
-
-
 
 /* Header and Navigation */
 header {
@@ -137,20 +130,20 @@ h1, h2, h3, h4 {
 
 /* Content Elements */
 p, ul, ol {
-  font-size: var(--body);
-  line-height: 1.7;
-  margin: calc(var(--spacing-unit) * 3) 0;
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+  margin: var(--spacing-lg) 0;
   max-width: var(--content-width);
   color: var(--color-text);
 }
 
 ul, ol {
-  padding-left: calc(var(--spacing-unit) * 4);
+  padding-left: var(--spacing-xl);
 }
 
 li {
-  margin: calc(var(--spacing-unit) * 1.5) 0;
-  padding-left: var(--spacing-unit);
+  margin: var(--spacing-sm) 0;
+  padding-left: var(--spacing-sm);
 }
 
 ul li::marker {
@@ -159,21 +152,21 @@ ul li::marker {
 }
 
 blockquote {
-  font-size: 1.25rem;
-  line-height: 1.6;
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-relaxed);
   font-style: italic;
-  margin: calc(var(--spacing-unit) * 6) 0;
-  padding-left: calc(var(--spacing-unit) * 3);
+  margin: var(--spacing-2xl) 0;
+  padding-left: var(--spacing-lg);
   border-left: 2px solid var(--color-primary);
   max-width: var(--content-width);
-  color: var(--color-muted);
+  color: var(--color-text-muted);
 }
 
 /* Layout */
 article {
-  padding: calc(var(--spacing-unit) * 6) var(--grid-margin);
+  padding: var(--spacing-2xl) var(--grid-margin);
   margin: 0 auto;
-  max-width: 1200px;
+  max-width: var(--max-width);
 }
 
 /* Images */
@@ -184,7 +177,7 @@ article {
   margin-right: calc(50% - 50vw);
   position: relative;
   overflow: hidden;
-  background: #f5f5f5;
+  background: var(--color-bg-light);
 }
 
 .hero img {
@@ -198,16 +191,16 @@ article {
   width: 100vw;
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
-  margin-top: calc(var(--spacing-unit) * 8);
-  margin-bottom: calc(var(--spacing-unit) * 8);
+  margin-top: var(--spacing-3xl);
+  margin-bottom: var(--spacing-3xl);
   display: grid;
   place-items: center;
-  background: #f5f5f5;
+  background: var(--color-bg-light);
 }
 
 .img2 img {
   width: 100%;
-  max-width: 1400px;
+  max-width: var(--max-width);
   height: auto;
   display: block;
 }
@@ -225,23 +218,19 @@ a:hover {
 
 /* Embedded Content */
 .twitter-tweet {
-  margin: calc(var(--spacing-unit) * 4) auto !important;
+  margin: var(--spacing-xl) auto !important;
 }
 
 /* Responsive Adjustments */
 @media screen and (min-width: 768px) {
   :root {
-    --grid-margin: calc(var(--spacing-unit) * 8);
-  }
-  
-  article {
-    padding: calc(var(--spacing-unit) * 6) var(--grid-margin);
+    --grid-margin: var(--spacing-2xl);
   }
 }
 
 @media screen and (min-width: 1200px) {
   :root {
-    --grid-margin: calc(var(--spacing-unit) * 12);
+    --grid-margin: var(--spacing-3xl);
   }
 }
 
