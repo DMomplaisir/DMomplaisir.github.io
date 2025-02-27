@@ -3,10 +3,15 @@
 /* Blog Layout */
 .blog-container {
   max-width: var(--max-width);
-  margin: var(--header-height) auto 0;
+  margin: 0 auto;
   padding: var(--spacing-lg);
   min-height: calc(100vh - var(--header-height));
 }
+
+/* Remove individual header spacing - now handled globally */
+/* main {
+  padding-top: var(--header-height);
+} */
 
 /* Blog Header */
 .blog-header {
@@ -89,8 +94,8 @@
 
 /* Individual Post Page */
 .post {
-  max-width: var(--content-width);
-  margin: var(--header-height) auto 0;
+  max-width: var(--project-container-width);
+  margin: 0 auto;
   padding: var(--spacing-lg);
   min-height: calc(100vh - var(--header-height));
 }
@@ -110,20 +115,26 @@
   font-size: var(--font-size-sm);
 }
 
+/* Post Content - Consistent with project styling */
 .post-content {
   font-size: var(--font-size-base);
-  line-height: 1.6;
+  line-height: 1.7;
   color: var(--color-text);
 }
 
 .post-content p {
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+  width: 100%;
 }
 
 .post-content img {
   max-width: 100%;
   height: auto;
-  margin: var(--spacing-xl) 0;
+  border-radius: 8px;
+  margin: 1.5rem auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  display: block;
+  object-fit: contain;
 }
 
 /* Post Tags */
@@ -172,13 +183,15 @@
   opacity: 0.8;
 }
 
-/* General body adjustments */
-body {
-  padding-top: var(--header-height);
-}
-
+/* Fix header visibility */
 header:has(.nav-bar) h1 {
   display: none;
+}
+
+/* Transparent header for blog and posts */
+.blog-container header,
+.post header {
+  background: transparent !important;
 }
 
 /* Responsive Adjustments */
@@ -202,17 +215,35 @@ header:has(.nav-bar) h1 {
   .post-content {
     font-size: var(--font-size-base);
   }
+  
+  .post {
+    padding: var(--spacing-md);
+  }
 }
 
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
   .blog-post-preview {
-    background: var(--color-bg);
-    box-shadow: 0 2px 4px var(--color-border);
+    background-color: #222;
+    border-color: #333;
+  }
+  
+  .blog-post-preview h2 a {
+    color: #fff;
+  }
+  
+  .blog-post-preview p {
+    color: #ddd;
   }
   
   .tag {
-    background: var(--color-bg);
-    border: 1px solid var(--color-border);
+    background-color: #333;
+    color: #fff;
+  }
+  
+  /* Ensure transparent header in dark mode */
+  .blog-container header,
+  .post header {
+    background: transparent !important;
   }
 } 

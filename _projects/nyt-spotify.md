@@ -4,7 +4,9 @@ title: Adding Spotify to Times Articles
 hero_image: /assets/project2spotify.png
 additional_images:
   - /assets/nyt-image.png
-excerpt: Updating the interface on mobile, and desktop.
+description: Updating the interface on mobile, and desktop.
+custom_css:
+  - projects
 ---
 
 ## Summary

@@ -2,30 +2,34 @@
 layout: default
 title: Featured Projects
 description: Explore my work in software development, design, and creative technology.
-header_style: content
+header_style: dark
 custom_css: 
-  - shared
-  - header_styles
-  - navigation
   - projects
 ---
 
-<div class="projects-grid">
-  {% for project in site.projects %}
-  <article class="project-card">
-    <div class="project-card-image">
+<div class="projects-container">
+  <div class="projects-grid">
+    {% for project in site.projects %}
+    <article class="project-card">
       {% if project.hero_image %}
-      <a href="{{ project.url | relative_url }}">
-        <img src="{{ project.hero_image | relative_url }}" alt="{{ project.title }}">
+      <a href="{{ project.url | relative_url }}" class="project-card-link" aria-label="View {{ project.title }} project">
+        <div class="project-card-image">
+          <img src="{{ project.hero_image | relative_url }}" alt="{{ project.title }}" loading="lazy">
+        </div>
+        <div class="project-card-content">
+          <h3>{{ project.title }}</h3>
+          <p>{{ project.excerpt }}</p>
+          {% if project.tags %}
+          <div class="project-tags">
+            {% for tag in project.tags limit:3 %}
+            <span class="tag">{{ tag }}</span>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
       </a>
       {% endif %}
-    </div>
-    <div class="project-card-content">
-      <a href="{{ project.url | relative_url }}">
-        <h3>{{ project.title }}</h3>
-      </a>
-      <p>{{ project.excerpt }}</p>
-    </div>
-  </article>
-  {% endfor %}
+    </article>
+    {% endfor %}
+  </div>
 </div>

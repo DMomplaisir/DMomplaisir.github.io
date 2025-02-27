@@ -23,12 +23,6 @@
 
 
     
-    <link rel="stylesheet" href="/assets/css/shared.css">
-    
-    <link rel="stylesheet" href="/assets/css/header_styles.css">
-    
-    <link rel="stylesheet" href="/assets/css/navigation.css">
-    
     <link rel="stylesheet" href="/assets/css/contactme.css">
     
 
@@ -49,9 +43,17 @@
 {"@context":"https://schema.org","@type":"WebPage","description":"Want to chat some more, learn about my work, or collaborate on something new? Contact me through the form below, or find me on any of these platforms.","headline":"let’s connect.","url":"http://localhost:4000/contact/"}</script>
 <!-- End Jekyll SEO tag -->
  
+    <link rel="stylesheet" href="/assets/css/shared.css">
+    <link rel="stylesheet" href="/assets/css/header_styles.css">
+    <link rel="stylesheet" href="/assets/css/navigation.css">
+    
+        
+        <link rel="stylesheet" href="/assets/css/contactme.css">
+        
+    
 </head>
-<body>
-    <header>
+<body class="contact-page">
+    <header class="site-header header-dark">
         <nav>
   <div class="name">
     <a href="/">dylan <span class="bold">momplaisir</span></a>
@@ -82,28 +84,15 @@
 document.addEventListener('DOMContentLoaded', function() {
   const navToggle = document.querySelector('.nav-toggle');
   const navLinks = document.querySelector('.nav-links');
-  const header = document.querySelector('header');
   
   navToggle.addEventListener('click', function() {
     navLinks.classList.toggle('active');
     navToggle.setAttribute('aria-expanded', navLinks.classList.contains('active'));
   });
-
-  // Function to handle scroll event
-  function handleScroll() {
-    if (window.scrollY > 50) {
-      header.classList.add('collapsed');
-    } else {
-      header.classList.remove('collapsed');
-    }
-  }
-
-  // Add scroll event listener
-  window.addEventListener('scroll', handleScroll);
 });
 </script> 
         
-        <section class="header header-main">
+        <section class="header-content">
             <h1>let's connect.</h1>
             
             <p class="description">Want to chat some more, learn about my work, or collaborate on something new? Contact me through the form below, or find me on any of these platforms.</p>
@@ -112,9 +101,10 @@ document.addEventListener('DOMContentLoaded', function() {
         
     </header>
 
-    <main>
-        <main>
-  <section class="social">
+    <main class="site-content ">
+        <section class="contact-container">
+  <div class="social-links">
+    <h2>Find me online</h2>
     <ul class="social">
       <li>
         <a href="https://instagram.com/codeburgundy">
@@ -141,30 +131,61 @@ document.addEventListener('DOMContentLoaded', function() {
         </a>
       </li>
     </ul>
-  </section>
+  </div>
 
-  <section class="contact-form">
+  <div class="contact-form">
+    <h2>Send me a message</h2>
     <form action="https://formspree.io/momplaisirdylan+website@gmail.com" method="POST">
-      <label for="name">name</label>
-      <input type="text" id="name" class="form-control" name="name" required>
+      <div class="form-group">
+        <label for="name">name</label>
+        <input type="text" id="name" class="form-control" name="name" required>
+      </div>
       
-      <label for="email">email</label>
-      <input type="email" id="email" class="form-control" name="_replyto" required>
+      <div class="form-group">
+        <label for="email">email</label>
+        <input type="email" id="email" class="form-control" name="_replyto" required>
+        <span class="form-hint">I'll never share your email with anyone else.</span>
+      </div>
       
-      <label for="reason">reason for contact</label>
-      <select id="reason" class="form-control" name="reason" required>
-        <option value="work">interested in working together</option>
-        <option value="question">have a question on prior work</option>
-        <option value="general">just general interest</option>
-      </select>
+      <div class="form-group">
+        <label for="reason">reason for contact</label>
+        <select id="reason" class="form-control" name="reason" required>
+          <option value="work">interested in working together</option>
+          <option value="question">have a question on prior work</option>
+          <option value="general">just general interest</option>
+        </select>
+      </div>
       
-      <label for="message">message</label>
-      <textarea id="message" class="form-control" name="message" required></textarea>
+      <div class="form-group">
+        <label for="message">message</label>
+        <textarea id="message" class="form-control" name="message" required></textarea>
+      </div>
       
       <button type="submit" class="btn">Send Message</button>
     </form>
-  </section>
-</main>
+    
+    <div class="form-success" id="form-success">
+      <h3>Message sent!</h3>
+      <p>Thank you for reaching out. I'll get back to you as soon as possible.</p>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    const formSuccess = document.getElementById('form-success');
+    
+    form.addEventListener('submit', function(e) {
+      // Form submission is handled by Formspree
+      // This is just for visual feedback
+      form.style.display = 'none';
+      formSuccess.classList.add('visible');
+    });
+  });
+</script>
     </main>
+    
+    <script src="/assets/js/header.js"></script>
 </body>
 </html> 

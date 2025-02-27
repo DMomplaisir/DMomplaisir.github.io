@@ -3,15 +3,23 @@
 <head>
     {% include head.html %}
     <link rel="stylesheet" href="{{ '/assets/css/shared.css' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/css/header_styles.css' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/css/navigation.css' | relative_url }}">
     {% if page.custom_css %}
         {% for stylesheet in page.custom_css %}
         <link rel="stylesheet" href="{{ '/assets/css/' | append: stylesheet | append: '.css' | relative_url }}">
         {% endfor %}
     {% endif %}
 </head>
-<body>
-    <main class="site-content">
+<body class="home-page">
+    <header class="site-header">
+        {% include navigation.html %}
+    </header>
+
+    <main class="home-content">
         {{ content }}
     </main>
+    
+    <script src="{{ '/assets/js/header.js' | relative_url }}"></script>
 </body>
 </html> 

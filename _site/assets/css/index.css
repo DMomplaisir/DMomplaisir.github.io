@@ -2,12 +2,13 @@
 @import url('variables.css');
 @import url('shared.css');
 
-:root {
+/* Index page specific variables */
+.home-page {
   /* Colors */
   --color-primary: #900020;
   --color-text: #000000;
   --color-white: #ffffff;
-  
+  --color-bg: #f5f5f5;
   
   /* Typography */
   --font-size-base: 1rem;
@@ -22,40 +23,47 @@
   --spacing-xl: 3.75rem;
   
   /* Layout */
-  --header-height: 4rem;
+  --header-height: 2.5rem;
   --max-width: 1200px;
   --column-width: 50%;
 }
 
-/* Base styles */
-html { 
-  font-family: 'Inter', sans-serif;
-  scroll-behavior: smooth;
-}
-
-@supports (font-variation-settings: normal) {
-  html { font-family: 'Inter var', sans-serif; }
-}
-
-body {
+/* Home page specific body styles */
+.home-page {
   margin: 0;
   line-height: 1.5;
   color: var(--color-text);
   overflow-x: hidden;
+  /* Allow vertical scrolling */
+  overflow-y: auto;
 }
 
-/* Main content */
-main {
+/* Home page specific main content */
+.home-page main {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  /* Explicitly set padding-top to 0 to override any JS calculations */
+  padding-top: 0 !important;
 }
 
+/* Home page specific styles */
+.home-content {
+  padding: 0 !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  /* Ensure no padding-top is applied */
+  padding-top: 0 !important;
+}
+
+/* Hero section */
 #hero {
   position: relative;
-  height: 100vh;
+  min-height: 100vh; /* Use min-height instead of fixed height */
   display: flex;
   flex-direction: column;
+  /* Ensure the hero section starts at the top of the viewport */
+  margin-top: 0;
 }
 
 .hero-image-container {
@@ -126,7 +134,7 @@ main {
   font-size: 0.9em;
 }
 
-.burgundy {
+.home-page .burgundy {
   color: var(--color-primary);
   display: inline-block;
   position: relative;
@@ -166,21 +174,22 @@ main {
 
 /* Responsive design */
 @media (min-width: 768px) {
-  body {
-    overflow: hidden;
+  .home-page {
+    /* Remove overflow: hidden to allow scrolling */
+    overflow-y: auto;
   }
 
-  .nav-links {
+  .home-page .nav-links {
     display: flex;
   }
 
-  main {
+  .home-page main {
     flex-direction: row;
   }
 
   #hero {
     flex-direction: row;
-    height: 100vh;
+    min-height: 100vh; /* Use min-height instead of fixed height */
   }
 
   .hero-image-container {
@@ -213,7 +222,7 @@ main {
 }
 
 @media (min-width: 1024px) {
-  :root {
+  .home-page:root {
     --spacing-xl: 5rem;
   }
 
@@ -224,14 +233,14 @@ main {
 
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
-  :root {
+  .home-page {
     --color-text: #ffffff;
     --color-primary: #ff1744;
     --color-bg: #121212;
   }
 
   .hero-content {
-    background: var(--color-bg-dark);
+    background: var(--color-bg-dark, #121212);
   }
   
   #hero img {
@@ -240,5 +249,17 @@ main {
 
   #hero:hover img {
     filter: grayscale(0.2) brightness(0.9);
+  }
+
+  .hero-section {
+    background-color: #121212;
+  }
+  
+  .hero-content h1 {
+    color: #ffffff;
+  }
+  
+  .hero-content p {
+    color: #dddddd;
   }
 }

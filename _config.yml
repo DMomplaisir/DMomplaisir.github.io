@@ -11,6 +11,11 @@ markdown: kramdown
 future: false  # Don't publish posts with future dates
 timezone: America/New_York
 
+# Plugins
+plugins:
+  - jekyll-paginate
+  - jekyll-seo-tag
+
 # Exclude from processing
 exclude:
   - Gemfile

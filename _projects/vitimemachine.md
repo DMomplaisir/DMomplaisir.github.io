@@ -2,7 +2,9 @@
 layout: project
 title: ViTimeMachine
 hero_image: /assets/project3.png
-excerpt: Design of an internal newsroom tool aimed at developing a better technology base.
+description: Design of an internal newsroom tool aimed at developing a better technology base.
+custom_css:
+  - projects
 ---
 
 ## Summary

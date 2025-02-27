@@ -47,3 +47,25 @@ Temporary Items
 .apdisk
 
 .early.coverage
+
+# Jekyll specific
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+.bundle/
+vendor/
+
+# IDE specific
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Node modules if you're using any Node.js tools
+node_modules/
+
+# Local environment files
+.env
+.env.local
+.env.*.local

@@ -23,12 +23,6 @@
 
 
     
-    <link rel="stylesheet" href="/assets/css/shared.css">
-    
-    <link rel="stylesheet" href="/assets/css/header_styles.css">
-    
-    <link rel="stylesheet" href="/assets/css/navigation.css">
-    
     <link rel="stylesheet" href="/assets/css/blog.css">
     
 
@@ -49,9 +43,17 @@
 {"@context":"https://schema.org","@type":"WebPage","description":"Dylan Momplaisir’s thoughts on technology, design, and more.","headline":"thoughts on tech &amp; design.","url":"http://localhost:4000/blog/"}</script>
 <!-- End Jekyll SEO tag -->
  
+    <link rel="stylesheet" href="/assets/css/shared.css">
+    <link rel="stylesheet" href="/assets/css/header_styles.css">
+    <link rel="stylesheet" href="/assets/css/navigation.css">
+    
+        
+        <link rel="stylesheet" href="/assets/css/blog.css">
+        
+    
 </head>
-<body>
-    <header>
+<body class="blog-page">
+    <header class="site-header header-project">
         <nav>
   <div class="name">
     <a href="/">dylan <span class="bold">momplaisir</span></a>
@@ -82,28 +84,15 @@
 document.addEventListener('DOMContentLoaded', function() {
   const navToggle = document.querySelector('.nav-toggle');
   const navLinks = document.querySelector('.nav-links');
-  const header = document.querySelector('header');
   
   navToggle.addEventListener('click', function() {
     navLinks.classList.toggle('active');
     navToggle.setAttribute('aria-expanded', navLinks.classList.contains('active'));
   });
-
-  // Function to handle scroll event
-  function handleScroll() {
-    if (window.scrollY > 50) {
-      header.classList.add('collapsed');
-    } else {
-      header.classList.remove('collapsed');
-    }
-  }
-
-  // Add scroll event listener
-  window.addEventListener('scroll', handleScroll);
 });
 </script> 
         
-        <section class="header header-main">
+        <section class="header-content">
             <h1>thoughts on tech & design.</h1>
             
             <p class="description">Dylan Momplaisir's thoughts on technology, design, and more.</p>
@@ -112,48 +101,48 @@ document.addEventListener('DOMContentLoaded', function() {
         
     </header>
 
-    <main>
-        <main class="blog-main">
-  <section class="blog-posts">
-    
-      <article class="blog-post-preview">
-        <h2 class="post-title">
-          <a href="/blog/2024/03/21/welcome-to-my-blog/">Welcome to My Blog</a>
-        </h2>
-        <div class="post-meta">
-          <time datetime="2024-03-21T00:00:00-04:00">
-            March 21, 2024
-          </time>
-          
-            • <span class="post-author">Dylan Momplaisir</span>
-          
-        </div>
+    <main class="site-content ">
+        <section class="blog-posts">
+  
+    <article class="blog-post-preview">
+      <h2 class="post-title">
+        <a href="/blog/2024/03/21/welcome-to-my-blog/">Welcome to My Blog</a>
+      </h2>
+      <div class="post-meta">
+        <time datetime="2024-03-21T00:00:00-04:00">
+          March 21, 2024
+        </time>
         
-          <p class="post-excerpt">An introduction to my new blog where I'll share thoughts on technology, design, and more.</p>
+          • <span class="post-author">Dylan Momplaisir</span>
         
-        <a href="/blog/2024/03/21/welcome-to-my-blog/" class="read-more">Read more →</a>
-      </article>
-    
-      <article class="blog-post-preview">
-        <h2 class="post-title">
-          <a href="/blog/2024/03/21/test-post/">Test Post</a>
-        </h2>
-        <div class="post-meta">
-          <time datetime="2024-03-21T00:00:00-04:00">
-            March 21, 2024
-          </time>
-          
-            • <span class="post-author">Dylan Momplaisir</span>
-          
-        </div>
+      </div>
+      
+        <p class="post-excerpt">An introduction to my new blog where I'll share thoughts on technology, design, and more.</p>
+      
+      <a href="/blog/2024/03/21/welcome-to-my-blog/" class="read-more">Read more →</a>
+    </article>
+  
+    <article class="blog-post-preview">
+      <h2 class="post-title">
+        <a href="/blog/2024/03/21/test-post/">Test Post</a>
+      </h2>
+      <div class="post-meta">
+        <time datetime="2024-03-21T00:00:00-04:00">
+          March 21, 2024
+        </time>
         
-          <p class="post-excerpt">A test post to verify blog functionality</p>
+          • <span class="post-author">Dylan Momplaisir</span>
         
-        <a href="/blog/2024/03/21/test-post/" class="read-more">Read more →</a>
-      </article>
-    
-  </section>
-</main>
+      </div>
+      
+        <p class="post-excerpt">A test post to verify blog functionality</p>
+      
+      <a href="/blog/2024/03/21/test-post/" class="read-more">Read more →</a>
+    </article>
+  
+</section>
     </main>
+    
+    <script src="/assets/js/header.js"></script>
 </body>
 </html> 

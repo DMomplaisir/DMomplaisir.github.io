@@ -1,66 +1,245 @@
-/* Base Header Element */
+/* Header Styles - Isolated from page content */
+
+/* Define a CSS variable for actual header height */
+:root {
+  --actual-header-height: 3rem; /* Standardized header height */
+  --header-collapsed-height: 2.5rem; /* Increased from 2rem to 2.5rem */
+}
+
+/* Base header positioning */
 header {
-  width: 100%;
-  background: var(--color-bg);
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: var(--z-nav);
-  transition: height 0.3s ease;
-  border-bottom: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  will-change: padding, height;
+  height: auto;
+  background-color: var(--background-color, #ffffff);
 }
 
-header.collapsed {
-  height: var(--header-height-collapsed, 3rem);
+/* Site header container - STANDARDIZED for all pages */
+.site-header {
+  width: 100%;
+  padding: 0.75rem 2rem; /* Standardized padding */
+  position: relative;
+  z-index: 100;
+  transition: all 0.3s ease;
 }
 
-/* Base Header Styles - Shared across all header variants */
-.header {
-  padding: var(--spacing-lg) var(--spacing-lg);
-  margin: 0 auto;
-  max-width: var(--max-width);
+.site-header.collapsed {
+  padding: 0.6rem 2rem; /* Increased from 0.4rem to 0.6rem */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  position: fixed; /* Ensure it stays fixed */
+  top: 0;
+  left: 0;
+  right: 0;
 }
 
-/* Common text styles */
-.header h1 {
-  font-weight: 600;
-  margin-bottom: var(--spacing-xs);
-  font-size: var(--font-size-xl);
-}
-
-.header .description {
-  font-size: var(--font-size-lg);
-  color: var(--color-muted);
-  max-width: var(--max-width-sm);
-  line-height: 1.6;
-}
-
-/* Main Header Style - Used for homepage and major landing pages */
-.header-main {
-  text-align: center;
-  max-width: var(--max-width-sm);
-  padding-top: var(--spacing-xl);
-  padding-bottom: var(--spacing-xl);
-}
-
-.header-main h1 {
-  font-size: var(--font-size-xxl);
-  margin-bottom: var(--spacing-md);
-  font-weight: 700;
-}
-
-/* Content Header Style - Used for content pages (projects, blog, etc) */
+/* Standardized header content for all pages */
 .header-content {
-  padding-top: var(--spacing-lg);
-  padding-bottom: var(--spacing-lg);
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.75rem 2rem; /* Standardized padding */
+  text-align: center; /* Default centered text */
+  transition: all 0.3s ease;
 }
 
-/* Only override what's different from base header styles */
-.header-content h1 {
-  font-size: var(--font-size-xl);
+/* Main header style - full width with centered content */
+.header-main {
+  background-color: var(--background-color, #ffffff);
+  color: var(--text-color, #333333);
 }
 
-.header-content .description {
-  font-size: var(--font-size-lg);
-  color: var(--color-muted);
-  max-width: var(--max-width-sm);
+/* STANDARDIZED heading styles for all pages */
+.site-header h1 {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+  transition: font-size 0.3s ease, margin 0.3s ease;
+}
+
+.site-header .description {
+  font-size: 1.5rem;
+  max-width: 800px;
+  margin: 0 auto 1rem;
+  line-height: 1.6;
+  transition: opacity 0.3s ease, max-height 0.3s ease;
+}
+
+/* Dark header style - for projects, blog, about, contact pages */
+.header-dark {
+  background-color: #121212;
+  color: #ffffff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+}
+
+.header-dark::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to right, rgba(255,255,255,0.1), rgba(255,255,255,0.5), rgba(255,255,255,0.1));
+}
+
+/* Left-aligned text for dark headers */
+.header-dark .header-content {
+  text-align: left;
+}
+
+.header-dark h1 {
+  color: #ffffff;
+}
+
+.header-dark .description {
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 1rem; /* Left-aligned margin */
+}
+
+.header-dark .nav-link {
+  color: #ffffff;
+}
+
+.header-dark .nav-link:hover,
+.header-dark .nav-link.active {
+  color: var(--color-primary, #900020);
+}
+
+.header-dark .logo {
+  color: #ffffff;
+}
+
+/* Project header style - for project pages */
+.header-project {
+  background-color: var(--background-color-alt, #f8f8f8);
+  color: var(--text-color, #333333);
+  padding-bottom: 0.6rem;
+}
+
+/* Minimal header style - for simple pages */
+.header-minimal {
+  padding: 0.5rem 0;
+  background-color: transparent;
+}
+
+.header-minimal h1 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+/* Header expansion/collapse transitions - STANDARDIZED */
+.header-expanded {
+  padding: 0.5rem 2rem;
+  transition: all 0.3s ease;
+}
+
+.header-collapsed {
+  padding: 0.5rem 2rem; /* Increased from 0.3rem to 0.5rem */
+  transition: all 0.3s ease;
+  position: fixed; /* Ensure it stays fixed */
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--background-color, #ffffff); /* Default white background */
+}
+
+/* Explicitly set background colors for different header types when collapsed */
+.header-dark.header-collapsed {
+  background-color: #121212; /* Dark background for dark headers */
+}
+
+.header-project.header-collapsed {
+  background-color: var(--background-color-alt, #f8f8f8); /* Light background for project headers */
+}
+
+.header-collapsed .header-content {
+  padding: 0.5rem 0; /* Increased from 0.3rem to 0.5rem */
+  transition: padding 0.3s ease;
+}
+
+.header-expanded .header-content {
+  padding: 0.5rem 0;
+  transition: padding 0.3s ease;
+}
+
+.header-collapsed h1 {
+  font-size: 2.25rem !important;
+  margin-bottom: 0.15rem !important; /* Increased from 0 to 0.15rem */
+  transition: font-size 0.3s ease, margin 0.3s ease;
+  padding: 0.15rem 0; /* Added padding around the title */
+}
+
+.header-expanded h1 {
+  transition: font-size 0.3s ease, margin 0.3s ease;
+}
+
+/* Hide everything except the title in collapsed state */
+.header-collapsed .description,
+.header-collapsed .header-content > *:not(h1) {
+  display: none;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+/* Main content spacing - This affects all pages */
+main {
+  /* This will be overridden by JavaScript for specific pages */
+  padding-top: var(--actual-header-height);
+  transition: padding-top 0.3s ease;
+  /* Ensure main content takes up remaining space */
+  min-height: calc(100vh - var(--actual-header-height));
+  position: relative; /* Add position relative */
+  z-index: 1; /* Lower z-index than header */
+}
+
+/* Adjust padding for collapsed header */
+.header-collapsed + main {
+  padding-top: var(--header-collapsed-height);
+  margin-top: var(--header-collapsed-height); /* Add margin to prevent content from being hidden */
+}
+
+/* Responsive adjustments - STANDARDIZED */
+@media (max-width: 768px) {
+  .header-content {
+    padding: 0.5rem 1rem;
+  }
+  
+  .site-header h1 {
+    font-size: 2.5rem;
+  }
+  
+  .site-header .description {
+    font-size: 1.2rem;
+  }
+  
+  .header-dark .header-content {
+    padding: 0.5rem 1rem;
+  }
+  
+  .header-expanded {
+    padding: 0.5rem 1rem;
+  }
+  
+  .header-collapsed {
+    padding: 0.4rem 1rem; /* Increased from 0.3rem to 0.4rem */
+  }
+  
+  .header-collapsed h1 {
+    font-size: 1.75rem !important;
+    padding: 0.1rem 0; /* Added padding for mobile */
+  }
+  
+  :root {
+    --actual-header-height: 2.5rem;
+    --header-collapsed-height: 1.75rem; /* Increased from 1.5rem to 1.75rem */
+  }
 } 

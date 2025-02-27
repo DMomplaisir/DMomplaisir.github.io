@@ -7,8 +7,9 @@ additional_images:
   - /assets/designdreamboard.png
   - /assets/amhstuoldie.png
   - /assets/update_img.png
-excerpt: Design, development and deployment of a college news platform with thirty thousand page views a month.
+description: Design, development and deployment of a college news platform with thirty thousand page views a month.
 custom_css:
+  - projects
   - amhstudent
 ---
 

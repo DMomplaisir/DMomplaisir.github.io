@@ -20,23 +20,10 @@
 document.addEventListener('DOMContentLoaded', function() {
   const navToggle = document.querySelector('.nav-toggle');
   const navLinks = document.querySelector('.nav-links');
-  const header = document.querySelector('header');
   
   navToggle.addEventListener('click', function() {
     navLinks.classList.toggle('active');
     navToggle.setAttribute('aria-expanded', navLinks.classList.contains('active'));
   });
-
-  // Function to handle scroll event
-  function handleScroll() {
-    if (window.scrollY > 50) {
-      header.classList.add('collapsed');
-    } else {
-      header.classList.remove('collapsed');
-    }
-  }
-
-  // Add scroll event listener
-  window.addEventListener('scroll', handleScroll);
 });
 </script> 

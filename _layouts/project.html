@@ -2,7 +2,6 @@
 layout: default
 header_style: project
 custom_css:
-  - shared
   - projects
 ---
 <article class="project-article">
@@ -12,22 +11,6 @@ custom_css:
             <img src="{{ page.hero_image | relative_url }}" alt="{{ page.title }}">
         </div>
         {% endif %}
-        
-        <div class="hero-content">
-            <div class="container">
-                <h1>{{ page.title }}</h1>
-                {% if page.description %}
-                <p class="hero-description">{{ page.description }}</p>
-                {% endif %}
-                {% if page.tags %}
-                <div class="hero-tags">
-                    {% for tag in page.tags %}
-                    <span class="tag">{{ tag }}</span>
-                    {% endfor %}
-                </div>
-                {% endif %}
-            </div>
-        </div>
     </div>
     
     <div class="project-content">
@@ -41,4 +24,73 @@ custom_css:
         {% endfor %}
     </div>
     {% endif %}
-</article> 
+    
+    <div class="project-navigation">
+        <div class="container">
+            <div class="nav-links">
+                {% assign projects = site.projects | sort: 'date' | reverse %}
+                {% for project in projects %}
+                    {% if project.url == page.url %}
+                        {% assign project_index = forloop.index0 %}
+                        {% assign prev_index = project_index | minus: 1 %}
+                        {% assign next_index = project_index | plus: 1 %}
+                        
+                        {% if prev_index >= 0 %}
+                            {% assign prev_project = projects[prev_index] %}
+                            <a href="{{ prev_project.url | relative_url }}" class="prev-project">
+                                <span class="nav-label">Previous Project</span>
+                                <span class="project-title">{{ prev_project.title }}</span>
+                            </a>
+                        {% else %}
+                            <div class="nav-placeholder"></div>
+                        {% endif %}
+                        
+                        <a href="{{ '/projects/' | relative_url }}" class="all-projects">
+                            <span class="nav-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                            </span>
+                            <span class="nav-label">All Projects</span>
+                        </a>
+                        
+                        {% if next_index < projects.size %}
+                            {% assign next_project = projects[next_index] %}
+                            <a href="{{ next_project.url | relative_url }}" class="next-project">
+                                <span class="nav-label">Next Project</span>
+                                <span class="project-title">{{ next_project.title }}</span>
+                            </a>
+                        {% else %}
+                            <div class="nav-placeholder"></div>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    
+    <button id="back-to-top" class="back-to-top" aria-label="Back to top">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+    </button>
+</article>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const backToTopButton = document.getElementById('back-to-top');
+        
+        // Show/hide button based on scroll position
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('visible');
+            } else {
+                backToTopButton.classList.remove('visible');
+            }
+        });
+        
+        // Scroll to top when button is clicked
+        backToTopButton.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    });
+</script> 

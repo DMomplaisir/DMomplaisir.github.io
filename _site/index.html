@@ -49,9 +49,23 @@
 {"@context":"https://schema.org","@type":"WebSite","description":"Dylan Momplaisir’s personal website, and portfolio.","headline":"Home","name":"Dylan Momplaisir","url":"http://localhost:4000/"}</script>
 <!-- End Jekyll SEO tag -->
  
+    <link rel="stylesheet" href="/assets/css/shared.css">
+    <link rel="stylesheet" href="/assets/css/header_styles.css">
+    <link rel="stylesheet" href="/assets/css/navigation.css">
+    
+        
+        <link rel="stylesheet" href="/assets/css/shared.css">
+        
+        <link rel="stylesheet" href="/assets/css/header_styles.css">
+        
+        <link rel="stylesheet" href="/assets/css/navigation.css">
+        
+        <link rel="stylesheet" href="/assets/css/index.css">
+        
+    
 </head>
-<body>
-    <header>
+<body class="home-page">
+    <header class="site-header">
         <nav>
   <div class="name">
     <a href="/">dylan <span class="bold">momplaisir</span></a>
@@ -82,52 +96,29 @@
 document.addEventListener('DOMContentLoaded', function() {
   const navToggle = document.querySelector('.nav-toggle');
   const navLinks = document.querySelector('.nav-links');
-  const header = document.querySelector('header');
   
   navToggle.addEventListener('click', function() {
     navLinks.classList.toggle('active');
     navToggle.setAttribute('aria-expanded', navLinks.classList.contains('active'));
   });
-
-  // Function to handle scroll event
-  function handleScroll() {
-    if (window.scrollY > 50) {
-      header.classList.add('collapsed');
-    } else {
-      header.classList.remove('collapsed');
-    }
-  }
-
-  // Add scroll event listener
-  window.addEventListener('scroll', handleScroll);
 });
 </script> 
-        
-        <section class="header header-main">
-            <h1>Home</h1>
-            
-            <p class="description">Dylan Momplaisir's personal website, and portfolio.</p>
-            
-        </section>
-        
     </header>
 
-    <main>
-        <main>
-  <section id="hero">
-    <div class="hero-image-container">
-      <img src="/assets/frontpagephoto.jpg" alt="Dylan Momplaisir" />
+    <main class="home-content">
+        <section id="hero">
+  <div class="hero-image-container">
+    <img src="/assets/frontpagephoto.jpg" alt="Dylan Momplaisir" />
+  </div>
+  <div class="hero-content">
+    <h1>Dylan <br/> Momplaisir</h1>
+    <div class="role-container">
+      <span class="prefix">i'm </span>
+      <span id="text" class="burgundy"></span>
     </div>
-    <div class="hero-content">
-      <h1>Dylan <br/> Momplaisir</h1>
-      <div class="role-container">
-        <span class="prefix">i'm </span>
-        <span id="text" class="burgundy"></span>
-      </div>
-      <h2>website refresh coming soon</h2>
-    </div>
-  </section>
-</main>
+    <h2>website refresh coming soon</h2>
+  </div>
+</section>
 
 <script src="https://unpkg.com/typewriter-effect/dist/core.js"></script>
 <script>
@@ -166,5 +157,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
     </main>
+    
+    <script src="/assets/js/header.js"></script>
 </body>
 </html> 

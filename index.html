@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: home
 title: Home
 description: Dylan Momplaisir's personal website, and portfolio.
 header_style: main
@@ -9,21 +9,19 @@ custom_css:
   - navigation
   - index
 ---
-<main>
-  <section id="hero">
-    <div class="hero-image-container">
-      <img src="{{ '/assets/frontpagephoto.jpg' | relative_url }}" alt="Dylan Momplaisir" />
+<section id="hero">
+  <div class="hero-image-container">
+    <img src="{{ '/assets/frontpagephoto.jpg' | relative_url }}" alt="Dylan Momplaisir" />
+  </div>
+  <div class="hero-content">
+    <h1>Dylan <br/> Momplaisir</h1>
+    <div class="role-container">
+      <span class="prefix">i'm </span>
+      <span id="text" class="burgundy"></span>
     </div>
-    <div class="hero-content">
-      <h1>Dylan <br/> Momplaisir</h1>
-      <div class="role-container">
-        <span class="prefix">i'm </span>
-        <span id="text" class="burgundy"></span>
-      </div>
-      <h2>website refresh coming soon</h2>
-    </div>
-  </section>
-</main>
+    <h2>website refresh coming soon</h2>
+  </div>
+</section>
 
 <script src="https://unpkg.com/typewriter-effect/dist/core.js"></script>
 <script>

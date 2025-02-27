@@ -41,9 +41,13 @@
 {"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Dylan Momplaisir"},"dateModified":"2024-03-21T00:00:00-04:00","datePublished":"2024-03-21T00:00:00-04:00","description":"A test post to verify blog functionality","headline":"Test Post","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/blog/2024/03/21/test-post/"},"url":"http://localhost:4000/blog/2024/03/21/test-post/"}</script>
 <!-- End Jekyll SEO tag -->
  
+    <link rel="stylesheet" href="/assets/css/shared.css">
+    <link rel="stylesheet" href="/assets/css/header_styles.css">
+    <link rel="stylesheet" href="/assets/css/navigation.css">
+    
 </head>
-<body>
-    <header>
+<body class="blog-page">
+    <header class="site-header ">
         <nav>
   <div class="name">
     <a href="/">dylan <span class="bold">momplaisir</span></a>
@@ -74,30 +78,24 @@
 document.addEventListener('DOMContentLoaded', function() {
   const navToggle = document.querySelector('.nav-toggle');
   const navLinks = document.querySelector('.nav-links');
-  const header = document.querySelector('header');
   
   navToggle.addEventListener('click', function() {
     navLinks.classList.toggle('active');
     navToggle.setAttribute('aria-expanded', navLinks.classList.contains('active'));
   });
-
-  // Function to handle scroll event
-  function handleScroll() {
-    if (window.scrollY > 50) {
-      header.classList.add('collapsed');
-    } else {
-      header.classList.remove('collapsed');
-    }
-  }
-
-  // Add scroll event listener
-  window.addEventListener('scroll', handleScroll);
 });
 </script> 
         
+        <section class="header-content">
+            <h1>Test Post</h1>
+            
+            <p class="description">A test post to verify blog functionality</p>
+            
+        </section>
+        
     </header>
 
-    <main>
+    <main class="site-content ">
         <article class="post">
   <div class="post-meta">
     <time datetime="2024-03-21T00:00:00-04:00">
@@ -150,5 +148,7 @@ document.addEventListener('DOMContentLoaded', function() {
   </div>
 </article> 
     </main>
+    
+    <script src="/assets/js/header.js"></script>
 </body>
 </html> 

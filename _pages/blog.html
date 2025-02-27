@@ -2,36 +2,31 @@
 layout: default
 title: thoughts on tech & design.
 description: Dylan Momplaisir's thoughts on technology, design, and more.
-header_style: main
+header_style: project
 custom_css:
-  - shared
-  - header_styles
-  - navigation
   - blog
 ---
 
-<main class="blog-main">
-  <section class="blog-posts">
-    {% for post in site.posts %}
-      <article class="blog-post-preview">
-        <h2 class="post-title">
-          <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-        </h2>
-        <div class="post-meta">
-          <time datetime="{{ post.date | date_to_xmlschema }}">
-            {{ post.date | date: "%B %-d, %Y" }}
-          </time>
-          {% if post.author %}
-            • <span class="post-author">{{ post.author }}</span>
-          {% endif %}
-        </div>
-        {% if post.description %}
-          <p class="post-excerpt">{{ post.description }}</p>
-        {% else %}
-          <p class="post-excerpt">{{ post.excerpt | strip_html | truncatewords: 50 }}</p>
+<section class="blog-posts">
+  {% for post in site.posts %}
+    <article class="blog-post-preview">
+      <h2 class="post-title">
+        <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+      </h2>
+      <div class="post-meta">
+        <time datetime="{{ post.date | date_to_xmlschema }}">
+          {{ post.date | date: "%B %-d, %Y" }}
+        </time>
+        {% if post.author %}
+          • <span class="post-author">{{ post.author }}</span>
         {% endif %}
-        <a href="{{ post.url | relative_url }}" class="read-more">Read more →</a>
-      </article>
-    {% endfor %}
-  </section>
-</main>
+      </div>
+      {% if post.description %}
+        <p class="post-excerpt">{{ post.description }}</p>
+      {% else %}
+        <p class="post-excerpt">{{ post.excerpt | strip_html | truncatewords: 50 }}</p>
+      {% endif %}
+      <a href="{{ post.url | relative_url }}" class="read-more">Read more →</a>
+    </article>
+  {% endfor %}
+</section>

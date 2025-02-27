@@ -23,12 +23,6 @@
 
 
     
-    <link rel="stylesheet" href="/assets/css/shared.css">
-    
-    <link rel="stylesheet" href="/assets/css/header_styles.css">
-    
-    <link rel="stylesheet" href="/assets/css/navigation.css">
-    
     <link rel="stylesheet" href="/assets/css/projects.css">
     
 
@@ -49,9 +43,17 @@
 {"@context":"https://schema.org","@type":"WebPage","description":"Explore my work in software development, design, and creative technology.","headline":"Featured Projects","url":"http://localhost:4000/projects/"}</script>
 <!-- End Jekyll SEO tag -->
  
+    <link rel="stylesheet" href="/assets/css/shared.css">
+    <link rel="stylesheet" href="/assets/css/header_styles.css">
+    <link rel="stylesheet" href="/assets/css/navigation.css">
+    
+        
+        <link rel="stylesheet" href="/assets/css/projects.css">
+        
+    
 </head>
-<body>
-    <header>
+<body class="projects-page">
+    <header class="site-header header-dark">
         <nav>
   <div class="name">
     <a href="/">dylan <span class="bold">momplaisir</span></a>
@@ -82,28 +84,15 @@
 document.addEventListener('DOMContentLoaded', function() {
   const navToggle = document.querySelector('.nav-toggle');
   const navLinks = document.querySelector('.nav-links');
-  const header = document.querySelector('header');
   
   navToggle.addEventListener('click', function() {
     navLinks.classList.toggle('active');
     navToggle.setAttribute('aria-expanded', navLinks.classList.contains('active'));
   });
-
-  // Function to handle scroll event
-  function handleScroll() {
-    if (window.scrollY > 50) {
-      header.classList.add('collapsed');
-    } else {
-      header.classList.remove('collapsed');
-    }
-  }
-
-  // Add scroll event listener
-  window.addEventListener('scroll', handleScroll);
 });
 </script> 
         
-        <section class="header header-content">
+        <section class="header-content">
             <h1>Featured Projects</h1>
             
             <p class="description">Explore my work in software development, design, and creative technology.</p>
@@ -112,72 +101,102 @@ document.addEventListener('DOMContentLoaded', function() {
         
     </header>
 
-    <main>
-        <div class="projects-grid">
-  
-  <article class="project-card">
-    <div class="project-card-image">
+    <main class="site-content ">
+        <div class="projects-container">
+  <div class="projects-grid">
+    
+    <article class="project-card">
       
-      <a href="/projects/amherst-student/">
-        <img src="/assets/amhstu-logo.png" alt="The Amherst Student">
-      </a>
-      
-    </div>
-    <div class="project-card-content">
-      <a href="/projects/amherst-student/">
-        <h3>The Amherst Student</h3>
-      </a>
-      <p>Design, development and deployment of a college news platform with thirty thousand page views a month.</p>
-    </div>
-  </article>
-  
-  <article class="project-card">
-    <div class="project-card-image">
-      
-      <a href="/projects/nyt-spotify/">
-        <img src="/assets/project2spotify.png" alt="Adding Spotify to Times Articles">
-      </a>
-      
-    </div>
-    <div class="project-card-content">
-      <a href="/projects/nyt-spotify/">
-        <h3>Adding Spotify to Times Articles</h3>
-      </a>
-      <p>Updating the interface on mobile, and desktop.</p>
-    </div>
-  </article>
-  
-  <article class="project-card">
-    <div class="project-card-image">
-      
-    </div>
-    <div class="project-card-content">
-      <a href="/projects/sample-project/">
-        <h3>Sample Project</h3>
-      </a>
-      <p><p>This is a sample project description. Replace this with your actual project content.</p>
+      <a href="/projects/amherst-student/" class="project-card-link" aria-label="View The Amherst Student project">
+        <div class="project-card-image">
+          <img src="/assets/amhstu-logo.png" alt="The Amherst Student" loading="lazy">
+        </div>
+        <div class="project-card-content">
+          <h3>The Amherst Student</h3>
+          <p><h2 id="background">Background</h2>
 
 </p>
-    </div>
-  </article>
-  
-  <article class="project-card">
-    <div class="project-card-image">
-      
-      <a href="/projects/vitimemachine/">
-        <img src="/assets/project3.png" alt="ViTimeMachine">
+          
+          <div class="project-tags">
+            
+          </div>
+          
+        </div>
       </a>
       
-    </div>
-    <div class="project-card-content">
-      <a href="/projects/vitimemachine/">
-        <h3>ViTimeMachine</h3>
+    </article>
+    
+    <article class="project-card">
+      
+      <a href="/projects/nyt-spotify/" class="project-card-link" aria-label="View Adding Spotify to Times Articles project">
+        <div class="project-card-image">
+          <img src="/assets/project2spotify.png" alt="Adding Spotify to Times Articles" loading="lazy">
+        </div>
+        <div class="project-card-content">
+          <h3>Adding Spotify to Times Articles</h3>
+          <p><h2 id="summary">Summary</h2>
+
+</p>
+          
+          <div class="project-tags">
+            
+          </div>
+          
+        </div>
       </a>
-      <p>Design of an internal newsroom tool aimed at developing a better technology base.</p>
-    </div>
-  </article>
-  
+      
+    </article>
+    
+    <article class="project-card">
+      
+      <a href="/projects/sample-project/" class="project-card-link" aria-label="View Sample Project project">
+        <div class="project-card-image">
+          <img src="/assets/images/sample-project.jpg" alt="Sample Project" loading="lazy">
+        </div>
+        <div class="project-card-content">
+          <h3>Sample Project</h3>
+          <p><p>This is a sample project description. Replace this with your actual project content.</p>
+
+</p>
+          
+          <div class="project-tags">
+            
+            <span class="tag">Sample</span>
+            
+            <span class="tag">Demo</span>
+            
+          </div>
+          
+        </div>
+      </a>
+      
+    </article>
+    
+    <article class="project-card">
+      
+      <a href="/projects/vitimemachine/" class="project-card-link" aria-label="View ViTimeMachine project">
+        <div class="project-card-image">
+          <img src="/assets/project3.png" alt="ViTimeMachine" loading="lazy">
+        </div>
+        <div class="project-card-content">
+          <h3>ViTimeMachine</h3>
+          <p><h2 id="summary">Summary</h2>
+
+</p>
+          
+          <div class="project-tags">
+            
+          </div>
+          
+        </div>
+      </a>
+      
+    </article>
+    
+  </div>
 </div>
     </main>
+    
+    <script src="/assets/js/header.js"></script>
 </body>
 </html> 

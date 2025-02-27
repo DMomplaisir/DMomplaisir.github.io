@@ -2,12 +2,20 @@
 <html lang="en">
 <head>
     {% include head.html %}
+    <link rel="stylesheet" href="{{ '/assets/css/shared.css' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/css/header_styles.css' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/css/navigation.css' | relative_url }}">
+    {% if page.custom_css %}
+        {% for stylesheet in page.custom_css %}
+        <link rel="stylesheet" href="{{ '/assets/css/' | append: stylesheet | append: '.css' | relative_url }}">
+        {% endfor %}
+    {% endif %}
 </head>
-<body>
-    <header>
+<body class="{% if page.layout == 'home' %}home-page{% elsif page.url contains 'projects' %}projects-page{% elsif page.url contains 'about' %}about-page{% elsif page.url contains 'contact' %}contact-page{% elsif page.url contains 'blog' %}blog-page{% else %}default-page{% endif %}">
+    <header class="site-header {% if page.header_style %}header-{{ page.header_style }}{% endif %}">
         {% include navigation.html %}
-        {% if page.header_style %}
-        <section class="header header-{{ page.header_style }}">
+        {% if page.title and page.layout != 'home' %}
+        <section class="header-content">
             <h1>{{ page.title }}</h1>
             {% if page.description %}
             <p class="description">{{ page.description }}</p>
@@ -16,8 +24,10 @@
         {% endif %}
     </header>
 
-    <main>
+    <main class="site-content {% if page.layout == 'home' %}home-content{% endif %}">
         {{ content }}
     </main>
+    
+    <script src="{{ '/assets/js/header.js' | relative_url }}"></script>
 </body>
 </html> 

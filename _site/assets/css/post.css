@@ -6,8 +6,15 @@ body {
   padding-top: var(--header-height);
 }
 
+/* Fix header color - make it transparent */
+.post header {
+  width: 100%;
+  background: transparent !important;
+  z-index: 100;
+}
+
 .post {
-  max-width: var(--content-width);
+  max-width: var(--project-container-width, 650px);
   margin: 0 auto;
   padding: var(--spacing-lg);
 }
@@ -44,14 +51,50 @@ body {
   margin-bottom: var(--spacing-lg);
 }
 
-.post-content p {
-  margin-bottom: var(--spacing-lg);
+/* Add decorative underline to h2 headings */
+.post-content h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  position: relative;
+  padding-bottom: 0.75rem;
+  width: 100%;
 }
 
+.post-content h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 3rem;
+  height: 3px;
+  background: var(--color-primary, #0066ff);
+  border-radius: 2px;
+}
+
+.post-content h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.post-content h4 {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.post-content p {
+  margin-bottom: var(--spacing-md);
+  width: 100%;
+}
+
+/* Improve image handling */
 .post-content img {
   max-width: 100%;
   height: auto;
-  margin: var(--spacing-xl) 0;
+  border-radius: 8px;
+  margin: 1.5rem auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  display: block;
+  object-fit: contain; /* Maintain aspect ratio */
 }
 
 .post-tags {
@@ -95,12 +138,39 @@ body {
   opacity: 0.8;
 }
 
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .post {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+}
+
 @media (max-width: 768px) {
   .post {
     padding: var(--spacing-md);
   }
+  
+  .post-content h2 {
+    font-size: 1.5rem;
+  }
+  
+  .post-content h3 {
+    font-size: 1.25rem;
+  }
 }
 
+/* Fix header visibility */
 header:has(.nav-bar) h1 {
   display: none;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .post header {
+    background: transparent !important;
+  }
+  
+  .post-content h2::after {
+    background: var(--color-primary-light, #3385ff);
+  }
 }

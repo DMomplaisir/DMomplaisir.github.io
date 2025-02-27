@@ -1,39 +1,38 @@
 @import 'variables.css';
 
-/* Mobile-first styles */
-main {
-  margin-top: 0;
+/* About page specific styles - scoped to avoid affecting other pages */
+.about-page main {
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - var(--header-height));
+  min-height: calc(100vh - var(--actual-header-height));
   width: 100%;
   padding: var(--spacing-md);
   box-sizing: border-box;
+  /* Padding top is now handled by JavaScript */
 }
 
-section {
-  padding-top: calc(var(--header-height) + var(--spacing-md));
+.about-page section {
   flex: 1;
   margin: 0;
   opacity: 0;
   animation: fadeIn 0.8s ease-out forwards;
 }
 
-section p {
+.about-page section p {
   font-size: 1rem;
   line-height: 1.8;
   margin-bottom: var(--spacing-md);
   max-width: 65ch;
 }
 
-aside {
+.about-page aside {
   width: 100%;
   height: 300px;
   margin: var(--spacing-md) 0;
   position: relative;
 }
 
-aside img {
+.about-page aside img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -42,44 +41,47 @@ aside img {
 
 /* Tablet styles */
 @media screen and (min-width: 768px) {
-  main {
-    padding: var(--spacing-lg);
+  .about-page main {
+    padding: var(--spacing-md) var(--spacing-lg);
+    /* Padding top is now handled by JavaScript */
   }
 
-  section p {
+  .about-page section p {
     font-size: 1.1rem;
   }
 
-  aside {
+  .about-page aside {
     height: 400px;
   }
 }
 
 /* Desktop styles */
 @media screen and (min-width: 1024px) {
-  main {
+  .about-page main {
     flex-direction: row;
     gap: var(--spacing-xl);
-    height: calc(100vh - var(--header-height));
-    overflow: hidden;
+    min-height: calc(100vh - var(--actual-header-height));
+    /* Remove overflow: hidden to allow page to scroll as one unit */
     padding: var(--spacing-xl);
+    /* Padding top is now handled by JavaScript */
   }
 
-  section {
+  .about-page section {
     flex: 1.5;
-    padding: var(--spacing-xl) 0;
+    padding: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    /* Remove overflow-y: auto to prevent separate scroll area */
   }
 
-  aside {
+  .about-page aside {
     flex: 1;
-    height: 100%;
+    height: auto; /* Allow height to adjust based on content */
     margin: 0;
   }
 
-  .desktop-only {
+  .about-page .desktop-only {
     display: block;
     position: absolute;
     bottom: var(--spacing-lg);
@@ -95,18 +97,27 @@ aside img {
 
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
-  .desktop-only {
+  .about-page .desktop-only {
     background: rgba(18, 18, 18, 0.95);
     border-color: var(--color-primary);
   }
 
-  aside img {
+  .about-page aside img {
     filter: brightness(0.9);
+  }
+  
+  /* Additional styles for dark header compatibility */
+  .header-dark + .about-page main section {
+    color: var(--color-text);
+  }
+  
+  .header-dark + .about-page main h1 {
+    color: var(--color-text);
   }
 }
 
 /* Desktop Info Card */
-.desktop-only {
+.about-page .desktop-only {
   display: none;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(5px);
@@ -118,26 +129,26 @@ aside img {
   box-shadow: 0 2px 4px var(--color-border);
 }
 
-.desktop-only:hover {
+.about-page .desktop-only:hover {
   transform: translateX(10px);
 }
 
-.desktop-only span,
-.desktop-only p { 
+.about-page .desktop-only span,
+.about-page .desktop-only p { 
   font-size: var(--font-size-sm);
   line-height: 1.8;
   color: var(--color-text);
   margin: 0;
 }
 
-.desktop-only p {
+.about-page .desktop-only p {
   font-weight: 500;
   margin-top: var(--spacing-xs);
 }
 
 /* Desktop Layout */
 @media screen and (min-width: 868px) {
-  h1 {
+  .about-page h1 {
     font-size: var(--font-size-xxl);
     line-height: 1.1;
     margin-bottom: var(--spacing-md);
@@ -146,24 +157,24 @@ aside img {
     animation: slideIn 1s ease-out forwards 0.3s;
   }
 
-  aside {
+  .about-page aside {
     flex: 1;
-    height: 100%;
+    height: auto; /* Allow height to adjust based on content */
     order: 2;
   }
 
-  section {
+  .about-page section {
     flex: 1;
-    height: 100%;
+    height: auto; /* Allow height to adjust based on content */
     margin: 0;
     padding: var(--spacing-xl);
     display: flex;
     flex-direction: column;
     justify-content: center;
-    overflow-y: auto;
+    /* Remove overflow-y: auto to prevent separate scroll area */
   }
 
-  .desktop-only {
+  .about-page .desktop-only {
     position: absolute;
     bottom: var(--spacing-lg);
     left: var(--spacing-lg);
@@ -184,25 +195,25 @@ aside img {
   }
 }
 
-img {
+.about-page img {
     object-fit: cover;
-    width: 100vw;
+    width: 100%;
     height: inherit;
 }
 
-h4 {
+.about-page h4 {
     font-weight: 300;
 }
 
 @media only screen and (min-width: 868px) {
-    main {
+    .about-page main {
       flex-direction: row;
-      height: calc(100vh - var(--header-height));
-      overflow: hidden;
-      margin-top: var(--header-height);
+      min-height: calc(100vh - var(--actual-header-height));
+      /* Remove overflow: hidden to allow page to scroll as one unit */
+      /* Remove margin-top as it's handled by padding-top in header_styles.css */
     }
 
-    h1 {
+    .about-page h1 {
       /* Dylan Momplaisir a digital creative. */
      
       font-size: 5em;
@@ -212,29 +223,29 @@ h4 {
       opacity: 0;
       animation: slideIn 1s ease-out forwards 0.3s;
     }
-    aside {
+    .about-page aside {
       flex: 1;
-      height: 100%;
+      height: auto; /* Allow height to adjust based on content */
       order: 2;
     }
-    img {
+    .about-page img {
         width: 100%;
         height: 100%;
     }
-    section {
+    .about-page section {
         flex: 1;
-        height: 100%;
+        height: auto; /* Allow height to adjust based on content */
         margin: 0;
         padding: var(--spacing-xl);
         display: flex;
         flex-direction: column;
         justify-content: center;
-        overflow-y: auto;
+        /* Remove overflow-y: auto to prevent separate scroll area */
     }
-    header {
+    .about-page header {
       width: 100%;
     }
-    .desktop-only {
+    .about-page .desktop-only {
       width: 250px;
       height: auto;
       max-height: 200px;
@@ -247,7 +258,7 @@ h4 {
       display: block;
     }
 
-    .desktop-only span { 
+    .about-page .desktop-only span { 
       font-style: normal;
       font-weight: 300;
       font-size: 12px;
@@ -257,7 +268,7 @@ h4 {
       margin-top: 20px;
 
     }
-    .desktop-only p {
+    .about-page .desktop-only p {
       margin: 0;
       /* Using tech to support marginalized communties */
       font-weight: 500;
@@ -265,13 +276,6 @@ h4 {
       line-height: 218.2%;
       /* or 26px */
       color: #000000;
-    }
-
-    @keyframes slideIn {
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
     }
 }
 
