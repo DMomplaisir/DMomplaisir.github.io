@@ -1,118 +1,119 @@
-// Header scroll behavior
+/**
+ * Header behavior
+ * Handles header collapse/expand on scroll and adjusts content padding
+ */
+
 document.addEventListener('DOMContentLoaded', function() {
+  // DOM elements
   const header = document.querySelector('header');
-  const headerContent = document.querySelector('.header-content');
   const main = document.querySelector('main');
   
-  // Detect page type based on body class
+  // Configuration
+  const scrollThreshold = 30;
+  const transitionDuration = 300; // ms, should match CSS transition time
+  const fixedContentPadding = 20; // px
+  
+  // Page type detection
   const isHomePage = document.body.classList.contains('home-page');
-  const isAboutPage = document.body.classList.contains('about-page');
-  const isProjectsPage = document.body.classList.contains('projects-page');
   
+  // Scroll handling variables
   let lastScrollTop = 0;
-  const scrollThreshold = 30; // Reduced from 50 to 30 for quicker collapse
-  let ticking = false; // For requestAnimationFrame
+  let isThrottled = false;
   
-  // Add initial class to header
+  // Initialize header state
   if (header) {
     header.classList.add('header-expanded');
-    
-    // Set a CSS variable for the actual header height
     updateHeaderHeight();
   }
   
-  // Function to update header height CSS variable
+  /**
+   * Updates header height CSS variable and adjusts main content padding
+   */
   function updateHeaderHeight() {
-    if (header) {
-      // Get the actual rendered height of the header
-      const headerHeight = header.offsetHeight;
-      
-      // Set a fixed small padding value instead of calculating based on header height
-      // This ensures we don't add too much space
-      const fixedPadding = 20; // Reduced from 40px to 20px
-      
-      document.documentElement.style.setProperty('--actual-header-height', `${headerHeight}px`);
-      
-      // Also update the collapsed height variable based on current state
-      if (header.classList.contains('header-collapsed')) {
-        document.documentElement.style.setProperty('--header-collapsed-height', `${headerHeight}px`);
-      }
-      
-      // Special handling for different page types
-      if (main) {
-        if (isHomePage) {
-          // For home page, ensure no padding is applied
-          main.style.paddingTop = '0';
-          console.log('Home page detected - removing padding');
-        } else {
-          // For all other pages, use a fixed small padding value
-          main.style.paddingTop = `${fixedPadding}px`;
-          console.log('Content page detected - setting fixed padding to ' + fixedPadding + 'px');
-          
-          // Also check if main has site-content class and adjust accordingly
-          const siteContent = main.querySelector('.site-content');
-          if (siteContent) {
-            // Ensure site-content doesn't add additional top padding
-            siteContent.style.paddingTop = '0';
-          }
+    if (!header) return;
+    
+    // Get the actual rendered height of the header
+    const headerHeight = header.offsetHeight;
+    
+    // Update CSS variables
+    document.documentElement.style.setProperty('--actual-header-height', `${headerHeight}px`);
+    
+    if (header.classList.contains('header-collapsed')) {
+      document.documentElement.style.setProperty('--header-collapsed-height', `${headerHeight}px`);
+    }
+    
+    // Adjust main content padding based on page type
+    if (main) {
+      // Home page has special layout with no padding needed
+      if (isHomePage) {
+        main.style.paddingTop = '0';
+      } else {
+        // All other pages get fixed padding
+        main.style.paddingTop = `${fixedContentPadding}px`;
+        
+        // Ensure nested site-content doesn't add additional padding
+        const siteContent = main.querySelector('.site-content');
+        if (siteContent) {
+          siteContent.style.paddingTop = '0';
         }
       }
     }
   }
   
-  window.addEventListener('scroll', function() {
-    if (!ticking) {
-      window.requestAnimationFrame(function() {
-        const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-        
-        // Don't do anything for small scroll amounts
-        if (Math.abs(lastScrollTop - currentScroll) <= 5) {
-          ticking = false;
-          return;
-        }
-        
-        if (currentScroll > scrollThreshold) {
-          // Scrolling beyond threshold - collapse header
-          if (!header.classList.contains('header-collapsed')) {
-            header.classList.remove('header-expanded');
-            header.classList.add('header-collapsed');
-            // Update the header height after transition
-            setTimeout(updateHeaderHeight, 300); // Match transition time
-          }
-        } else {
-          // At the top - expand header
-          if (!header.classList.contains('header-expanded')) {
-            header.classList.remove('header-collapsed');
-            header.classList.add('header-expanded');
-            // Update the header height after transition
-            setTimeout(updateHeaderHeight, 300); // Match transition time
-          }
-        }
-        
-        lastScrollTop = currentScroll;
-        ticking = false;
-      });
+  /**
+   * Handles scroll events to collapse/expand header
+   */
+  function handleScroll() {
+    if (isThrottled) return;
+    
+    isThrottled = true;
+    
+    // Use requestAnimationFrame for better performance
+    window.requestAnimationFrame(function() {
+      const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
       
-      ticking = true;
-    }
-  }, { passive: true });
+      // Ignore small scroll amounts
+      if (Math.abs(lastScrollTop - currentScroll) <= 5) {
+        isThrottled = false;
+        return;
+      }
+      
+      // Toggle header state based on scroll position
+      if (currentScroll > scrollThreshold) {
+        // Scrolling down - collapse header
+        if (!header.classList.contains('header-collapsed')) {
+          header.classList.remove('header-expanded');
+          header.classList.add('header-collapsed');
+          setTimeout(updateHeaderHeight, transitionDuration);
+        }
+      } else {
+        // At the top - expand header
+        if (!header.classList.contains('header-expanded')) {
+          header.classList.remove('header-collapsed');
+          header.classList.add('header-expanded');
+          setTimeout(updateHeaderHeight, transitionDuration);
+        }
+      }
+      
+      lastScrollTop = currentScroll;
+      isThrottled = false;
+    });
+  }
   
-  // Update header height on resize
+  // Event listeners
+  window.addEventListener('scroll', handleScroll, { passive: true });
+  
   window.addEventListener('resize', function() {
-    if (!ticking) {
+    if (!isThrottled) {
+      isThrottled = true;
       window.requestAnimationFrame(function() {
         updateHeaderHeight();
-        ticking = false;
+        isThrottled = false;
       });
-      ticking = true;
     }
   }, { passive: true });
   
-  // Initial update after a short delay to ensure all styles are applied
+  // Initial updates
   setTimeout(updateHeaderHeight, 100);
-  
-  // Additional update after all images and resources are loaded
-  window.addEventListener('load', function() {
-    updateHeaderHeight();
-  });
-}); 
+  window.addEventListener('load', updateHeaderHeight);
+});

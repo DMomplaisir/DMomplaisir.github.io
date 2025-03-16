@@ -80,17 +80,6 @@
   </ul>
 </nav>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const navToggle = document.querySelector('.nav-toggle');
-  const navLinks = document.querySelector('.nav-links');
-  
-  navToggle.addEventListener('click', function() {
-    navLinks.classList.toggle('active');
-    navToggle.setAttribute('aria-expanded', navLinks.classList.contains('active'));
-  });
-});
-</script> 
         
         <section class="header-content">
             <h1>thoughts on tech & design.</h1>
@@ -144,5 +133,6 @@ document.addEventListener('DOMContentLoaded', function() {
     </main>
     
     <script src="/assets/js/header.js"></script>
+    <script src="/assets/js/navigation.js"></script>
 </body>
-</html> 
+</html>

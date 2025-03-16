@@ -1,10 +1,17 @@
-/* Navigation Styles */
+/* 
+ * Navigation Styles
+ * Core navigation component used across all pages
+ */
+
+@import 'variables.css';
+
+/* Main navigation container */
 nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem 0;
-  max-width: 1200px;
+  max-width: var(--max-width);
   margin: 0 auto;
 }
 
@@ -15,13 +22,13 @@ nav {
 }
 
 .name a {
-  color: var(--text-color);
+  color: var(--color-text);
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: color var(--transition-fast);
 }
 
 .name a:hover {
-  color: var(--primary-color);
+  color: var(--color-primary);
 }
 
 .name .bold {
@@ -41,26 +48,26 @@ nav {
 }
 
 .nav-links a {
-  color: var(--text-color);
+  color: var(--color-text);
   text-decoration: none;
-  font-size: 1rem;
+  font-size: var(--font-size-base);
   font-weight: 500;
-  transition: color 0.2s ease;
+  transition: color var(--transition-fast);
 }
 
 .nav-links a:hover {
-  color: var(--primary-color);
+  color: var(--color-primary);
 }
 
 /* Dark header navigation styles */
 .header-dark .name a,
 .header-dark .nav-links a {
-  color: #ffffff;
+  color: var(--color-text-light);
 }
 
 .header-dark .name a:hover,
 .header-dark .nav-links a:hover {
-  color: #ff1744;
+  color: var(--color-primary-light);
 }
 
 /* Mobile navigation toggle */
@@ -68,13 +75,13 @@ nav {
   display: none;
   background: none;
   border: none;
-  color: var(--text-color);
+  color: var(--color-text);
   cursor: pointer;
   padding: 0.5rem;
 }
 
 .header-dark .nav-toggle {
-  color: #ffffff;
+  color: var(--color-text-light);
 }
 
 /* Navigation adjustments for collapsed header */
@@ -104,7 +111,7 @@ nav {
     display: none;
     width: 100%;
     flex-direction: column;
-    padding: 1rem 0;
+    padding: var(--spacing-md) 0;
   }
   
   .nav-links.active {
@@ -112,16 +119,16 @@ nav {
   }
   
   .nav-links li {
-    margin: 0.5rem 0;
+    margin: var(--spacing-xs) 0;
     margin-left: 0;
   }
   
   .nav-links a {
     display: block;
-    padding: 0.5rem 0;
+    padding: var(--spacing-xs) 0;
   }
   
   .header-collapsed .nav-toggle {
     padding: 0.25rem;
   }
-} 
+}

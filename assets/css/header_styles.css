@@ -1,10 +1,9 @@
-/* Header Styles - Isolated from page content */
+/* 
+ * Header Styles
+ * Styles for different header variants used across the site
+ */
 
-/* Define a CSS variable for actual header height */
-:root {
-  --actual-header-height: 3.5rem; /* Increased from 3rem to 3.5rem */
-  --header-collapsed-height: 3rem; /* Increased from 2.5rem to 3rem */
-}
+@import 'variables.css';
 
 /* Base header positioning */
 header {
@@ -12,26 +11,26 @@ header {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  z-index: var(--z-nav);
+  transition: all var(--transition-base);
+  box-shadow: 0 2px 5px var(--color-shadow);
   will-change: padding, height;
   height: auto;
-  background-color: var(--background-color, #ffffff);
+  background-color: var(--color-white);
 }
 
 /* Site header container - STANDARDIZED for all pages */
 .site-header {
   width: 100%;
-  padding: 1rem 2.5rem; /* Increased from 0.75rem 2rem to 1rem 2.5rem */
+  padding: 1rem 2.5rem;
   position: relative;
-  z-index: 100;
-  transition: all 0.3s ease;
+  z-index: var(--z-sticky);
+  transition: all var(--transition-base);
 }
 
 .site-header.collapsed {
-  padding: 0.8rem 2.5rem; /* Increased from 0.6rem 2rem to 0.8rem 2.5rem */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  padding: 0.8rem 2.5rem;
+  box-shadow: 0 2px 4px var(--color-shadow);
   position: fixed; /* Ensure it stays fixed */
   top: 0;
   left: 0;
@@ -40,41 +39,41 @@ header {
 
 /* Standardized header content for all pages */
 .header-content {
-  max-width: 1200px;
+  max-width: var(--max-width);
   margin: 0 auto;
-  padding: 1rem 2.5rem; /* Increased from 0.75rem 2rem to 1rem 2.5rem */
+  padding: 1rem 2.5rem;
   text-align: center; /* Default centered text */
-  transition: all 0.3s ease;
+  transition: all var(--transition-base);
 }
 
 /* Main header style - full width with centered content */
 .header-main {
-  background-color: var(--background-color, #ffffff);
-  color: var(--text-color, #333333);
+  background-color: var(--color-white);
+  color: var(--color-text);
 }
 
 /* STANDARDIZED heading styles for all pages */
 .site-header h1 {
   font-size: 3.5rem;
   font-weight: 700;
-  margin-bottom: 0.75rem; /* Increased from 0.5rem to 0.75rem */
+  margin-bottom: 0.75rem;
   line-height: 1.2;
-  transition: font-size 0.3s ease, margin 0.3s ease;
+  transition: font-size var(--transition-base), margin var(--transition-base);
 }
 
 .site-header .description {
   font-size: 1.5rem;
-  max-width: 800px;
-  margin: 0 auto 1.5rem; /* Increased from 1rem to 1.5rem */
+  max-width: var(--max-width-sm);
+  margin: 0 auto 1.5rem;
   line-height: 1.6;
-  transition: opacity 0.3s ease, max-height 0.3s ease;
+  transition: opacity var(--transition-base), max-height var(--transition-base);
 }
 
 /* Dark header style - for projects, blog, about, contact pages */
 .header-dark {
-  background-color: #121212;
-  color: #ffffff;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+  background-color: var(--color-bg-dark);
+  color: var(--color-text-light);
+  box-shadow: 0 2px 5px var(--color-shadow-dark);
 }
 
 .header-dark::after {
@@ -93,7 +92,7 @@ header {
 }
 
 .header-dark h1 {
-  color: #ffffff;
+  color: var(--color-text-light);
 }
 
 .header-dark .description {
@@ -102,22 +101,22 @@ header {
 }
 
 .header-dark .nav-link {
-  color: #ffffff;
+  color: var(--color-text-light);
 }
 
 .header-dark .nav-link:hover,
 .header-dark .nav-link.active {
-  color: var(--color-primary, #900020);
+  color: var(--color-primary);
 }
 
 .header-dark .logo {
-  color: #ffffff;
+  color: var(--color-text-light);
 }
 
 /* Project header style - for project pages */
 .header-project {
-  background-color: var(--background-color-alt, #f8f8f8);
-  color: var(--text-color, #333333);
+  background-color: var(--color-bg-light);
+  color: var(--color-text);
   padding-bottom: 0.6rem;
 }
 
@@ -135,48 +134,48 @@ header {
 
 /* Header expansion/collapse transitions - STANDARDIZED */
 .header-expanded {
-  padding: 0.75rem 2.5rem; /* Increased from 0.5rem 2rem to 0.75rem 2.5rem */
-  transition: all 0.3s ease;
+  padding: 0.75rem 2.5rem;
+  transition: all var(--transition-base);
 }
 
 .header-collapsed {
-  padding: 0.7rem 2.5rem; /* Increased from 0.5rem 2rem to 0.7rem 2.5rem */
-  transition: all 0.3s ease;
+  padding: 0.7rem 2.5rem;
+  transition: all var(--transition-base);
   position: fixed; /* Ensure it stays fixed */
   top: 0;
   left: 0;
   right: 0;
-  background-color: var(--background-color, #ffffff); /* Default white background */
+  background-color: var(--color-white); /* Default white background */
 }
 
 /* Explicitly set background colors for different header types when collapsed */
 .header-dark.header-collapsed {
-  background-color: #121212; /* Dark background for dark headers */
+  background-color: var(--color-bg-dark); /* Dark background for dark headers */
 }
 
 .header-project.header-collapsed {
-  background-color: var(--background-color-alt, #f8f8f8); /* Light background for project headers */
+  background-color: var(--color-bg-light); /* Light background for project headers */
 }
 
 .header-collapsed .header-content {
-  padding: 0.7rem 0; /* Increased from 0.5rem to 0.7rem */
-  transition: padding 0.3s ease;
+  padding: 0.7rem 0;
+  transition: padding var(--transition-base);
 }
 
 .header-expanded .header-content {
-  padding: 0.75rem 0; /* Increased from 0.5rem to 0.75rem */
-  transition: padding 0.3s ease;
+  padding: 0.75rem 0;
+  transition: padding var(--transition-base);
 }
 
 .header-collapsed h1 {
-  font-size: 2.5rem !important; /* Increased from 2.25rem to 2.5rem */
-  margin-bottom: 0.25rem !important; /* Increased from 0.15rem to 0.25rem */
-  transition: font-size 0.3s ease, margin 0.3s ease;
-  padding: 0.25rem 0; /* Increased from 0.15rem to 0.25rem */
+  font-size: 2.5rem !important;
+  margin-bottom: 0.25rem !important;
+  transition: font-size var(--transition-base), margin var(--transition-base);
+  padding: 0.25rem 0;
 }
 
 .header-expanded h1 {
-  transition: font-size 0.3s ease, margin 0.3s ease;
+  transition: font-size var(--transition-base), margin var(--transition-base);
 }
 
 /* Hide everything except the title in collapsed state */
@@ -248,36 +247,36 @@ main {
 .header-transparent {
   background-color: transparent;
   box-shadow: none;
-  color: var(--text-color, #333333);
+  color: var(--color-text);
 }
 
 .header-transparent .name a,
 .header-transparent .nav-links a {
-  color: var(--text-color, #333333);
+  color: var(--color-text);
 }
 
 .header-transparent .nav-links a:hover {
-  color: var(--color-primary, #900020);
+  color: var(--color-primary);
 }
 
 .header-transparent.header-collapsed {
   background-color: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 5px var(--color-shadow);
 }
 
 @media (prefers-color-scheme: dark) {
   .header-transparent {
-    color: #ffffff;
+    color: var(--color-text-light);
   }
   
   .header-transparent .name a,
   .header-transparent .nav-links a {
-    color: #ffffff;
+    color: var(--color-text-light);
   }
   
   .header-transparent.header-collapsed {
     background-color: rgba(18, 18, 18, 0.9);
   }
-} 
+}

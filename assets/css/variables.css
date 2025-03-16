@@ -1,13 +1,45 @@
+/* 
+ * Global CSS Variables
+ * Single source of truth for all CSS variables used throughout the site
+ */
+
 :root {
-  /* Colors */
+  /* Colors - Primary Palette */
   --color-primary: #900020;
+  --color-primary-dark: #700018;
+  --color-primary-light: #ff1744; /* Used in dark mode */
+  
+  /* Colors - Text */
   --color-text: #333333;
   --color-text-light: #ffffff;
-  --color-white: #ffffff;
+  --color-text-muted: #666666;
+  --color-text-muted-dark: #999999; /* For dark mode */
+  
+  /* Colors - Background */
   --color-bg: #f5f5f5;
-  --color-bg-dark: #000000;
-  --color-muted: #666666;
+  --color-bg-light: #f8f8f8;
+  --color-bg-dark: #121212;
+  --color-bg-darker: #000000;
+  --color-white: #ffffff;
+  
+  /* Colors - UI Elements */
   --color-border: rgba(0, 0, 0, 0.1);
+  --color-border-dark: rgba(255, 255, 255, 0.1);
+  --color-shadow: rgba(0, 0, 0, 0.15);
+  --color-shadow-dark: rgba(0, 0, 0, 0.4);
+  
+  /* Typography */
+  --font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  --base-font-size: 16px;
+  --line-height-base: 1.5;
+  --type-scale: 1.333;
+  
+  /* Font Sizes */
+  --font-size-sm: calc(var(--base-font-size) * 0.875);
+  --font-size-base: var(--base-font-size);
+  --font-size-lg: calc(var(--base-font-size) * var(--type-scale));
+  --font-size-xl: calc(var(--base-font-size) * var(--type-scale) * var(--type-scale));
+  --font-size-xxl: calc(var(--base-font-size) * var(--type-scale) * var(--type-scale) * var(--type-scale));
   
   /* Spacing System */
   --spacing-unit: 8px;
@@ -18,17 +50,10 @@
   --spacing-xl: calc(var(--spacing-unit) * 6);  /* 48px */
   --spacing-xxl: calc(var(--spacing-unit) * 8); /* 64px */
   
-  /* Typography */
-  --base-font-size: 16px;
-  --type-scale: 1.333;
-  --font-size-sm: calc(var(--base-font-size) * 0.875);
-  --font-size-base: var(--base-font-size);
-  --font-size-lg: calc(var(--base-font-size) * var(--type-scale));
-  --font-size-xl: calc(var(--base-font-size) * var(--type-scale) * var(--type-scale));
-  --font-size-xxl: calc(var(--base-font-size) * var(--type-scale) * var(--type-scale) * var(--type-scale));
-  
   /* Layout */
   --header-height: 4rem;
+  --actual-header-height: 3.5rem;
+  --header-collapsed-height: 3rem;
   --max-width-sm: 65ch;
   --max-width: 1200px;
   --max-width-lg: 1400px;
@@ -52,12 +77,27 @@
 /* Dark mode overrides */
 @media (prefers-color-scheme: dark) {
   :root {
+    /* Colors - Primary Palette */
+    --color-primary: #ff1744;
+    --color-primary-dark: #d81b60;
+    --color-primary-light: #ff4081;
+    
+    /* Colors - Text */
     --color-text: #ffffff;
     --color-text-light: #ffffff;
-    --color-primary: #ff1744;
+    --color-text-muted: #aaaaaa;
+    --color-text-muted-dark: #999999;
+    
+    /* Colors - Background */
     --color-bg: #121212;
+    --color-bg-light: #1e1e1e;
     --color-bg-dark: #000000;
-    --color-muted: #999999;
+    --color-bg-darker: #000000;
+    
+    /* Colors - UI Elements */
     --color-border: rgba(255, 255, 255, 0.1);
+    --color-border-dark: rgba(255, 255, 255, 0.05);
+    --color-shadow: rgba(0, 0, 0, 0.3);
+    --color-shadow-dark: rgba(0, 0, 0, 0.5);
   }
-} 
+}
