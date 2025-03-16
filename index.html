@@ -36,24 +36,34 @@ custom_css:
     var typewriter = new Typewriter(app, {
       loop: true,
       delay: 75,
-      deleteSpeed: 50,
+      deleteSpeed: 40,
       cursor: '|',
       stringSplitter: null,
     });
     
     typewriter
-      .pauseFor(1000)
+      .pauseFor(800)
       .typeString('a digital creative')
-      .pauseFor(2000)
+      .pauseFor(2500)
       .deleteAll()
       .typeString('a frontend engineer')
-      .pauseFor(2000)
+      .pauseFor(2500)
       .deleteAll()
       .typeString('a photographer')
-      .pauseFor(2000)
+      .pauseFor(2500)
       .deleteAll()
       .typeString('an urbanism nerd')
-      .pauseFor(2000)
+      .pauseFor(2500)
       .start();
+      
+    // Add scroll animation
+    window.addEventListener('scroll', function() {
+      const scrollPosition = window.scrollY;
+      const heroImage = document.querySelector('.hero-image-container');
+      
+      if (heroImage) {
+        heroImage.style.transform = `translateY(${scrollPosition * 0.15}px)`;
+      }
+    });
   });
 </script>
