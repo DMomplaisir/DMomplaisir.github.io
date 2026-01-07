@@ -1,0 +1,166 @@
+---
+/**
+ * 404 Error Page - Dylan Momplaisir
+ * Warm minimalist design matching site aesthetic
+ */
+
+import Footer from '../components/Footer.astro';
+
+const pageTitle = '404 - Page Not Found';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Page not found">
+  <title>{pageTitle}</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/src/styles/variables.css">
+  <link rel="stylesheet" href="/src/styles/fonts.css">
+  <link rel="stylesheet" href="/src/styles/global.css">
+</head>
+
+<body>
+  <!-- Grid Background -->
+  <div class="grid-background" aria-hidden="true"></div>
+
+  <!-- 404 Content -->
+  <main class="error-page">
+    <div class="error-container">
+      <div class="error-content">
+        <span class="error-code">404</span>
+        <h1 class="error-title">Page Not Found</h1>
+        <p class="error-message">
+          The page you're looking for doesn't exist or has been moved.
+        </p>
+        <div class="error-actions">
+          <a href="/" class="btn-primary">← Back to Home</a>
+          <a href="/projects" class="btn-secondary">View Projects</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <Footer />
+</body>
+</html>
+
+<style>
+  /* ==================== GLOBAL RESET ==================== */
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-body);
+    color: var(--text-primary);
+    background-color: var(--warm-white);
+    line-height: var(--leading-normal);
+    overflow-x: hidden;
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ==================== ERROR PAGE ==================== */
+
+  .error-page {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-xxl) var(--space-lg);
+    z-index: 1;
+  }
+
+  .error-container {
+    max-width: var(--width-narrow);
+    margin: 0 auto;
+  }
+
+  .error-content {
+    text-align: center;
+    background: var(--cream);
+    border: var(--border-thin) solid var(--warm-gray-200);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xxxl) var(--space-xl);
+  }
+
+  .error-code {
+    font-family: var(--font-display);
+    font-size: clamp(6rem, 15vw, 10rem);
+    font-weight: var(--weight-light);
+    color: var(--warm-gray-200);
+    line-height: 1;
+    margin-bottom: var(--space-md);
+    display: block;
+  }
+
+  .error-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: var(--weight-regular);
+    color: var(--concrete-900);
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--leading-tight);
+    margin-bottom: var(--space-lg);
+  }
+
+  .error-message {
+    font-size: var(--text-lg);
+    color: var(--concrete-400);
+    line-height: var(--leading-relaxed);
+    margin-bottom: var(--space-xxl);
+    max-width: 50ch;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .error-actions {
+    display: flex;
+    gap: var(--space-sm);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* ==================== RESPONSIVE ==================== */
+
+  @media (max-width: 768px) {
+    .error-page {
+      padding: var(--space-xl) var(--space-md);
+    }
+
+    .error-content {
+      padding: var(--space-xxl) var(--space-lg);
+    }
+
+    .error-actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+      width: 100%;
+      text-align: center;
+    }
+  }
+</style>

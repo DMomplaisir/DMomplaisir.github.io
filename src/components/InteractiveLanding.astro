@@ -1,0 +1,344 @@
+---
+/*
+ * Interactive Landing Page Features
+ * - Elevation sidebar with scroll progress
+ * - Grid visualization toggle (G key)
+ * - Scroll-triggered animations
+ */
+---
+
+<!-- Floating Elevation Sidebar -->
+<aside class="elevation-sidebar" aria-label="Page navigation">
+  <nav class="elevation-nav">
+    <a href="#hero" class="elevation-link active" data-elevation="0.0m">
+      <span class="elevation-dot"></span>
+      <span class="elevation-label">0.0m</span>
+    </a>
+    <a href="#work" class="elevation-link" data-elevation="+2.4m">
+      <span class="elevation-dot"></span>
+      <span class="elevation-label">+2.4m</span>
+    </a>
+    <a href="#about" class="elevation-link" data-elevation="+4.8m">
+      <span class="elevation-dot"></span>
+      <span class="elevation-label">+4.8m</span>
+    </a>
+  </nav>
+</aside>
+
+<!-- Grid Toggle Hint (fades after 3 seconds) -->
+<div class="grid-hint" aria-hidden="true">
+  Press <kbd>G</kbd> to toggle grid
+</div>
+
+<style>
+  /* ==================== ELEVATION SIDEBAR ==================== */
+
+  .elevation-sidebar {
+    position: fixed;
+    right: var(--space-lg);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: var(--z-fixed);
+    opacity: 0;
+    transition: opacity var(--transition-slow);
+  }
+
+  .elevation-sidebar.visible {
+    opacity: 1;
+  }
+
+  .elevation-nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+
+  .elevation-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    text-decoration: none;
+    transition: all var(--transition-base);
+    position: relative;
+  }
+
+  .elevation-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--concrete-300);
+    border: var(--border-thin) solid var(--concrete-300);
+    transition: all var(--transition-base);
+  }
+
+  .elevation-link.active .elevation-dot {
+    background: var(--burgundy-primary);
+    border-color: var(--burgundy-primary);
+    box-shadow: 0 0 8px rgba(144, 0, 32, 0.4);
+  }
+
+  .elevation-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--concrete-400);
+    letter-spacing: var(--tracking-wide);
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: all var(--transition-base);
+    white-space: nowrap;
+  }
+
+  .elevation-link:hover .elevation-label,
+  .elevation-link.active .elevation-label {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .elevation-link:hover .elevation-dot {
+    transform: scale(1.3);
+    border-color: var(--burgundy-primary);
+  }
+
+  /* ==================== GRID HINT ==================== */
+
+  .grid-hint {
+    position: fixed;
+    bottom: var(--space-lg);
+    right: var(--space-lg);
+    background: var(--concrete-900);
+    color: var(--warm-white);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-base);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    opacity: 0;
+    animation: hintFadeInOut 5s ease-in-out forwards;
+    pointer-events: none;
+    z-index: var(--z-toast);
+  }
+
+  .grid-hint kbd {
+    background: var(--warm-white);
+    color: var(--concrete-900);
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-weight: var(--weight-medium);
+    margin: 0 4px;
+  }
+
+  @keyframes hintFadeInOut {
+    0% { opacity: 0; transform: translateY(10px); }
+    10% { opacity: 1; transform: translateY(0); }
+    80% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-10px); }
+  }
+
+  /* ==================== RESPONSIVE ==================== */
+
+  @media (max-width: 1024px) {
+    .elevation-sidebar {
+      display: none;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .grid-hint {
+      display: none;
+    }
+  }
+
+  /* ==================== REDUCED MOTION ==================== */
+
+  @media (prefers-reduced-motion: reduce) {
+    .elevation-sidebar,
+    .elevation-link,
+    .elevation-dot,
+    .elevation-label {
+      transition: none !important;
+    }
+
+    .grid-hint {
+      animation: none !important;
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  // ==================== ELEVATION SIDEBAR ====================
+
+  function initElevationSidebar() {
+    const sidebar = document.querySelector('.elevation-sidebar');
+    const links = document.querySelectorAll('.elevation-link');
+    const sections = ['hero', 'work', 'about'].map(id =>
+      document.getElementById(id)
+    ).filter(Boolean);
+
+    // Show sidebar after scrolling past hero
+    function updateSidebarVisibility() {
+      const heroSection = document.getElementById('hero');
+      if (!heroSection) return;
+
+      const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
+      const scrollPosition = window.scrollY;
+
+      if (scrollPosition > heroBottom * 0.5) {
+        sidebar?.classList.add('visible');
+      } else {
+        sidebar?.classList.remove('visible');
+      }
+    }
+
+    // Update active link based on scroll position
+    function updateActiveLink() {
+      const scrollPosition = window.scrollY + window.innerHeight / 3;
+
+      let activeIndex = 0;
+      sections.forEach((section, index) => {
+        if (section && scrollPosition >= section.offsetTop) {
+          activeIndex = index;
+        }
+      });
+
+      links.forEach((link, index) => {
+        if (index === activeIndex) {
+          link.classList.add('active');
+        } else {
+          link.classList.remove('active');
+        }
+      });
+    }
+
+    // Smooth scroll to sections
+    links.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = link.getAttribute('href')?.slice(1);
+        const target = targetId ? document.getElementById(targetId) : null;
+
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+
+    // Throttled scroll handler
+    let scrollTimeout: number;
+    function handleScroll() {
+      if (scrollTimeout) {
+        window.cancelAnimationFrame(scrollTimeout);
+      }
+      scrollTimeout = window.requestAnimationFrame(() => {
+        updateSidebarVisibility();
+        updateActiveLink();
+      });
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    // Initial update
+    updateSidebarVisibility();
+    updateActiveLink();
+  }
+
+  // ==================== GRID TOGGLE ====================
+
+  function initGridToggle() {
+    const gridBackground = document.querySelector('.grid-background');
+    let gridVisible = true; // Default visible
+
+    function toggleGrid() {
+      gridVisible = !gridVisible;
+      if (gridBackground) {
+        (gridBackground as HTMLElement).style.opacity = gridVisible ? '0.5' : '0';
+      }
+
+      // Show feedback
+      const feedback = document.createElement('div');
+      feedback.textContent = `Grid ${gridVisible ? 'ON' : 'OFF'}`;
+      feedback.style.cssText = `
+        position: fixed;
+        top: ${window.innerHeight / 2}px;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: ${gridVisible ? 'var(--burgundy-primary)' : 'var(--concrete-900)'};
+        color: var(--warm-white);
+        padding: var(--space-sm) var(--space-lg);
+        border-radius: var(--radius-base);
+        font-family: var(--font-mono);
+        font-size: var(--text-sm);
+        font-weight: var(--weight-medium);
+        z-index: var(--z-toast);
+        opacity: 0;
+        transition: opacity var(--transition-fast);
+        pointer-events: none;
+      `;
+      document.body.appendChild(feedback);
+
+      // Fade in
+      requestAnimationFrame(() => {
+        feedback.style.opacity = '1';
+      });
+
+      // Fade out and remove
+      setTimeout(() => {
+        feedback.style.opacity = '0';
+        setTimeout(() => feedback.remove(), 200);
+      }, 800);
+    }
+
+    // Listen for 'G' key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'g' || e.key === 'G') {
+        // Don't trigger if user is typing in an input
+        if (e.target instanceof HTMLInputElement ||
+            e.target instanceof HTMLTextAreaElement) {
+          return;
+        }
+        e.preventDefault();
+        toggleGrid();
+      }
+    });
+  }
+
+  // ==================== SCROLL ANIMATIONS ====================
+
+  function initScrollAnimations() {
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px 0px -100px 0px',
+      threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+        }
+      });
+    }, observerOptions);
+
+    // Observe sections for fade-in animations
+    const animatedElements = document.querySelectorAll('.about-preview, .featured-work');
+    animatedElements.forEach(el => observer.observe(el));
+  }
+
+  // ==================== INITIALIZE ====================
+
+  // Wait for DOM to be ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      initElevationSidebar();
+      initGridToggle();
+      initScrollAnimations();
+    });
+  } else {
+    initElevationSidebar();
+    initGridToggle();
+    initScrollAnimations();
+  }
+</script>

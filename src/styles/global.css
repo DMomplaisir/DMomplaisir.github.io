@@ -1,0 +1,138 @@
+/**
+ * Global Styles - Shared across all pages
+ * Architectural aesthetic with warm minimalism
+ */
+
+/* ==================== GRID BACKGROUND ==================== */
+
+.grid-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    linear-gradient(var(--blueprint-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--blueprint-line) 1px, transparent 1px);
+  background-size: var(--grid-unit) var(--grid-unit);
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ==================== BREADCRUMB NAVIGATION ==================== */
+
+.nav-breadcrumb,
+.breadcrumb {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--concrete-400);
+  letter-spacing: var(--tracking-wide);
+}
+
+.breadcrumb-link {
+  color: var(--burgundy-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.breadcrumb-link:hover {
+  color: var(--burgundy-hover);
+}
+
+.breadcrumb-separator {
+  margin: 0 var(--space-xs);
+  color: var(--concrete-300);
+}
+
+.breadcrumb-current {
+  color: var(--concrete-900);
+}
+
+/* ==================== BUTTONS ==================== */
+
+.btn,
+.btn-primary,
+.btn-secondary {
+  padding: calc(var(--space-sm) - 2px) var(--space-lg);
+  text-decoration: none;
+  border-radius: var(--radius-base);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-base);
+  transition: all var(--transition-base);
+  display: inline-block;
+  border: var(--border-thin) solid transparent;
+  cursor: pointer;
+  font-family: var(--font-body);
+}
+
+.btn-primary {
+  background: var(--burgundy-primary);
+  color: var(--warm-white);
+  border-color: var(--burgundy-primary);
+}
+
+.btn-primary:hover {
+  background: var(--burgundy-hover);
+  border-color: var(--burgundy-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-burgundy);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--concrete-900);
+  border-color: var(--concrete-300);
+}
+
+.btn-secondary:hover {
+  border-color: var(--burgundy-primary);
+  color: var(--burgundy-primary);
+  transform: translateY(-2px);
+}
+
+.btn-primary:active,
+.btn-secondary:active {
+  transform: translateY(0);
+}
+
+/* ==================== CONTAINERS ==================== */
+
+.container {
+  max-width: var(--width-content);
+  margin: 0 auto;
+}
+
+.container-narrow {
+  max-width: var(--width-narrow);
+  margin: 0 auto;
+}
+
+/* ==================== ACCESSIBILITY ==================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  html {
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Screen reader only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

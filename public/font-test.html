@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Editorial Old Font Test</title>
+  <style>
+    @font-face {
+      font-family: 'Editorial Old';
+      src: url('/fonts/editorial-old/PPEditorialOld-Variable.woff2') format('woff2-variations');
+      font-weight: 100 900;
+      font-style: normal;
+    }
+
+    body {
+      font-family: sans-serif;
+      padding: 40px;
+      background: #FFFEF9;
+    }
+
+    .test {
+      font-family: 'Editorial Old', serif;
+      font-size: 48px;
+      margin: 20px 0;
+      color: #212121;
+    }
+
+    .weight-test {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .width-test {
+      font-variation-settings: 'wdth' var(--width);
+    }
+  </style>
+</head>
+<body>
+  <h1>Editorial Old Variable Font Test</h1>
+
+  <h2>Weight Axis Test (100-900)</h2>
+  <div class="weight-test">
+    <div class="test" style="font-weight: 100;">Weight 100 - Dylan Momplaisir</div>
+    <div class="test" style="font-weight: 200;">Weight 200 - Dylan Momplaisir</div>
+    <div class="test" style="font-weight: 300;">Weight 300 - Dylan Momplaisir</div>
+    <div class="test" style="font-weight: 400;">Weight 400 - Dylan Momplaisir</div>
+    <div class="test" style="font-weight: 500;">Weight 500 - Dylan Momplaisir</div>
+    <div class="test" style="font-weight: 600;">Weight 600 - Dylan Momplaisir</div>
+    <div class="test" style="font-weight: 700;">Weight 700 - Dylan Momplaisir</div>
+    <div class="test" style="font-weight: 800;">Weight 800 - Dylan Momplaisir</div>
+    <div class="test" style="font-weight: 900;">Weight 900 - Dylan Momplaisir</div>
+  </div>
+
+  <h2>Width Axis Test (if supported)</h2>
+  <div class="width-test">
+    <div class="test" style="--width: 50;">Width 50 - Dylan Momplaisir</div>
+    <div class="test" style="--width: 75;">Width 75 - Dylan Momplaisir</div>
+    <div class="test" style="--width: 100;">Width 100 - Dylan Momplaisir</div>
+    <div class="test" style="--width: 125;">Width 125 - Dylan Momplaisir</div>
+  </div>
+
+  <h2>Optical Size Test (if supported)</h2>
+  <div>
+    <div class="test" style="font-variation-settings: 'opsz' 12;">Optical Size 12</div>
+    <div class="test" style="font-variation-settings: 'opsz' 48;">Optical Size 48</div>
+    <div class="test" style="font-variation-settings: 'opsz' 72;">Optical Size 72</div>
+  </div>
+
+  <script>
+    // Check what axes are actually available
+    if (document.fonts && document.fonts.check) {
+      document.fonts.ready.then(() => {
+        const fonts = Array.from(document.fonts);
+        console.log('Available fonts:', fonts);
+
+        fonts.forEach(font => {
+          if (font.family === 'Editorial Old') {
+            console.log('Editorial Old found:', font);
+          }
+        });
+      });
+    }
+  </script>
+</body>
+</html>

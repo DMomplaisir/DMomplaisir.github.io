@@ -1,0 +1,513 @@
+---
+/**
+ * Projects Index Page - Masonry Grid
+ * Architectural aesthetic with warm minimalism
+ */
+
+import { getAllProjects, getAllProjectTags } from '../../utils/content-helpers';
+import Footer from '../../components/Footer.astro';
+
+// Fetch all projects and tags at build time
+const projects = await getAllProjects();
+const tags = await getAllProjectTags();
+
+const pageTitle = 'Projects - Dylan Momplaisir';
+const pageDescription = 'Case studies of products I\'ve built and shipped - from full-stack engineering to product leadership.';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content={pageDescription}>
+  <title>{pageTitle}</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/src/styles/variables.css">
+  <link rel="stylesheet" href="/src/styles/fonts.css">
+</head>
+
+<body>
+  <!-- Subtle Grid Background -->
+  <div class="grid-background" aria-hidden="true"></div>
+
+  <!-- Header -->
+  <header class="page-header">
+    <nav class="nav-breadcrumb">
+      <a href="/" class="breadcrumb-link">Home</a>
+      <span class="breadcrumb-separator">/</span>
+      <span class="breadcrumb-current">Projects</span>
+    </nav>
+
+    <div class="header-content">
+      <h1 class="page-title">Projects</h1>
+      <p class="page-subtitle">Case studies of products I've built and shipped</p>
+    </div>
+
+    <!-- Tag Filter -->
+    {tags.length > 0 && (
+      <div class="tag-filter">
+        <label for="tag-select" class="filter-label">Filter</label>
+        <select id="tag-select" class="tag-select">
+          <option value="">All Projects ({projects.length})</option>
+          {tags.map(tag => {
+            const count = projects.filter(p => p.data.tags?.includes(tag)).length;
+            return <option value={tag}>{tag} ({count})</option>;
+          })}
+        </select>
+      </div>
+    )}
+  </header>
+
+  <!-- Projects Masonry Grid -->
+  <main class="projects-container">
+    <div class="masonry-grid" id="projects-grid">
+      {projects.map(project => (
+        <article class="masonry-item" data-tags={project.data.tags?.join(',') || ''}>
+          <a href={`/projects/${project.slug}/`} class="project-link">
+            <!-- Blueprint Overlay -->
+            <div class="blueprint-overlay" aria-hidden="true">
+              <svg class="blueprint-grid" width="100%" height="100%">
+                <defs>
+                  <pattern id={`grid-${project.slug}`} width="20" height="20" patternUnits="userSpaceOnUse">
+                    <path d="M 20 0 L 0 0 0 20" fill="none" stroke="var(--blueprint-line)" stroke-width="1"/>
+                  </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill={`url(#grid-${project.slug})`} />
+              </svg>
+            </div>
+
+            <!-- Corner Accents -->
+            <div class="corner-accent corner-tl" aria-hidden="true"></div>
+            <div class="corner-accent corner-br" aria-hidden="true"></div>
+
+            <div class="project-content">
+              <!-- Year Badge (architectural style) -->
+              {project.data.date && (
+                <div class="year-badge" aria-label={`Year: ${new Date(project.data.date).getFullYear()}`}>
+                  {new Date(project.data.date).getFullYear()}
+                </div>
+              )}
+
+              <h2 class="project-title">{project.data.title}</h2>
+              <p class="project-description">{project.data.description}</p>
+
+              <!-- Technical Specs -->
+              <div class="project-specs">
+                {project.data.tech_stack && project.data.tech_stack.length > 0 && (
+                  <div class="spec-item">
+                    <span class="spec-label">Tech</span>
+                    <span class="spec-value">{project.data.tech_stack.slice(0, 3).join(', ')}</span>
+                  </div>
+                )}
+                {project.data.impact && (
+                  <div class="spec-item">
+                    <span class="spec-label">Impact</span>
+                    <span class="spec-value">{project.data.impact}</span>
+                  </div>
+                )}
+              </div>
+
+              <span class="view-link">View Case Study →</span>
+            </div>
+          </a>
+        </article>
+      ))}
+    </div>
+
+    <!-- Empty State -->
+    {projects.length === 0 && (
+      <div class="empty-state">
+        <p>No projects yet. Check back soon!</p>
+      </div>
+    )}
+  </main>
+
+  <!-- Footer -->
+  <Footer />
+</body>
+</html>
+
+<script>
+  // Tag Filtering
+  const tagSelect = document.getElementById('tag-select') as HTMLSelectElement;
+
+  if (tagSelect) {
+    tagSelect.addEventListener('change', (e) => {
+      const selectedTag = (e.target as HTMLSelectElement).value;
+      const projectCards = document.querySelectorAll('.masonry-item') as NodeListOf<HTMLElement>;
+
+      projectCards.forEach(card => {
+        const cardTags = card.dataset.tags?.split(',') || [];
+
+        if (!selectedTag || cardTags.includes(selectedTag)) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  }
+</script>
+
+<style>
+  /* ==================== GLOBAL RESET ==================== */
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-body);
+    color: var(--text-primary);
+    background-color: var(--warm-white);
+    line-height: var(--leading-normal);
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* ==================== GRID BACKGROUND ==================== */
+
+  .grid-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+      linear-gradient(var(--blueprint-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--blueprint-line) 1px, transparent 1px);
+    background-size: var(--grid-unit) var(--grid-unit);
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ==================== PAGE HEADER ==================== */
+
+  .page-header {
+    position: relative;
+    padding: var(--space-xxxl) var(--space-lg) var(--space-xl);
+    max-width: var(--width-content);
+    margin: 0 auto;
+    z-index: 1;
+  }
+
+  .nav-breadcrumb {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--concrete-400);
+    margin-bottom: var(--space-lg);
+    letter-spacing: var(--tracking-wide);
+  }
+
+  .breadcrumb-link {
+    color: var(--burgundy-primary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .breadcrumb-link:hover {
+    color: var(--burgundy-hover);
+  }
+
+  .breadcrumb-separator {
+    margin: 0 var(--space-xs);
+    color: var(--concrete-300);
+  }
+
+  .breadcrumb-current {
+    color: var(--concrete-900);
+  }
+
+  .header-content {
+    margin-bottom: var(--space-lg);
+  }
+
+  .page-title {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 6vw, 5rem);
+    font-weight: var(--weight-regular);
+    color: var(--concrete-900);
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--leading-tight);
+    margin-bottom: var(--space-md);
+  }
+
+  .page-subtitle {
+    font-size: var(--text-xl);
+    color: var(--concrete-400);
+    max-width: 60ch;
+  }
+
+  /* ==================== TAG FILTER ==================== */
+
+  .tag-filter {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .filter-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--concrete-400);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wider);
+  }
+
+  .tag-select {
+    padding: var(--space-xs) var(--space-sm);
+    background: var(--warm-white);
+    border: var(--border-thin) solid var(--warm-gray-200);
+    border-radius: var(--radius-base);
+    color: var(--concrete-900);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    cursor: pointer;
+    transition: border-color var(--transition-base);
+  }
+
+  .tag-select:hover {
+    border-color: var(--burgundy-primary);
+  }
+
+  .tag-select:focus {
+    outline: none;
+    border-color: var(--burgundy-primary);
+    box-shadow: 0 0 0 3px rgba(144, 0, 32, 0.1);
+  }
+
+  /* ==================== MASONRY GRID ==================== */
+
+  .projects-container {
+    position: relative;
+    max-width: var(--width-content);
+    margin: 0 auto;
+    padding: 0 var(--space-lg) var(--space-xxl);
+    z-index: 1;
+  }
+
+  .masonry-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: var(--space-md);
+  }
+
+  .masonry-item {
+    position: relative;
+    background: var(--warm-white);
+    border: var(--border-thin) solid var(--warm-gray-200);
+    border-radius: var(--radius-base);
+    overflow: hidden;
+    transition: all var(--transition-base);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .masonry-item:hover {
+    border-color: var(--burgundy-primary);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .masonry-item:hover .blueprint-overlay {
+    opacity: 1;
+  }
+
+  .blueprint-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity var(--transition-base);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .corner-accent {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border: var(--border-thin) solid var(--burgundy-primary);
+    opacity: 0.2;
+    transition: opacity var(--transition-base);
+    z-index: 2;
+  }
+
+  .masonry-item:hover .corner-accent {
+    opacity: 0.6;
+  }
+
+  .corner-tl {
+    top: var(--space-xs);
+    left: var(--space-xs);
+    border-right: none;
+    border-bottom: none;
+  }
+
+  .corner-br {
+    bottom: var(--space-xs);
+    right: var(--space-xs);
+    border-left: none;
+    border-top: none;
+  }
+
+  .project-link {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    flex: 1;
+  }
+
+  .project-content {
+    position: relative;
+    padding: var(--space-lg);
+    z-index: 3;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ==================== PROJECT CARD CONTENT ==================== */
+
+  .year-badge {
+    position: absolute;
+    top: var(--space-sm);
+    right: var(--space-md);
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    font-weight: var(--weight-light);
+    color: var(--warm-gray-200);
+    line-height: 1;
+    opacity: 0.3;
+    z-index: 1;
+  }
+
+  .project-title {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: var(--weight-regular);
+    color: var(--concrete-900);
+    margin-bottom: var(--space-sm);
+    line-height: var(--leading-snug);
+    margin-top: var(--space-sm);
+  }
+
+  .project-description {
+    font-size: var(--text-sm);
+    color: var(--concrete-400);
+    line-height: var(--leading-normal);
+    margin-bottom: auto;
+  }
+
+  .project-specs {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    margin-top: var(--space-md);
+    padding-top: var(--space-sm);
+    border-top: var(--border-thin) solid var(--warm-gray-200);
+  }
+
+  .spec-item {
+    display: flex;
+    gap: var(--space-sm);
+    font-size: var(--text-sm);
+  }
+
+  .spec-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--concrete-400);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wider);
+    min-width: 60px;
+  }
+
+  .spec-value {
+    color: var(--concrete-900);
+    line-height: 1.4;
+  }
+
+  .view-link {
+    color: var(--burgundy-primary);
+    font-weight: var(--weight-medium);
+    font-size: var(--text-sm);
+    transition: transform var(--transition-fast);
+    display: inline-block;
+    margin-top: var(--space-sm);
+  }
+
+  .masonry-item:hover .view-link {
+    transform: translateX(4px);
+  }
+
+  /* ==================== EMPTY STATE ==================== */
+
+  .empty-state {
+    text-align: center;
+    padding: var(--space-xxxl) var(--space-lg);
+    color: var(--concrete-400);
+    font-size: var(--text-lg);
+  }
+
+  /* ==================== RESPONSIVE ==================== */
+
+  @media (max-width: 768px) {
+    .page-header {
+      padding: var(--space-xxl) var(--space-md) var(--space-lg);
+    }
+
+    .projects-container {
+      padding: 0 var(--space-md) var(--space-xl);
+    }
+
+    .masonry-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-sm);
+    }
+
+    .project-content {
+      padding: var(--space-md);
+    }
+
+    .year-badge {
+      font-size: 2rem;
+      top: var(--space-xs);
+      right: var(--space-sm);
+    }
+
+    .tag-filter {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-xs);
+    }
+
+    .tag-select {
+      width: 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>

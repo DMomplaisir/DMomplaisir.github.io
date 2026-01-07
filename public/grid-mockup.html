@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Section-Based Grid Patterns - Visual Mockup</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #FFFEF9;
+      color: #212121;
+    }
+
+    .section {
+      height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .section-content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 40px;
+      background: rgba(255, 254, 249, 0.9);
+      border-radius: 8px;
+    }
+
+    .section h1 {
+      font-size: 48px;
+      margin-bottom: 16px;
+      font-weight: 400;
+    }
+
+    .section h2 {
+      font-size: 24px;
+      color: #757575;
+      font-weight: 400;
+      margin-bottom: 24px;
+    }
+
+    .section p {
+      font-size: 16px;
+      color: #757575;
+      line-height: 1.6;
+      max-width: 500px;
+    }
+
+    .grid-label {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      background: #212121;
+      color: #FFFEF9;
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-family: 'Monaco', monospace;
+      font-size: 12px;
+      z-index: 20;
+    }
+
+    /* ==================== HERO GRID (Ultra-Subtle) ==================== */
+
+    .hero-section {
+      background: #FFFEF9;
+    }
+
+    .hero-grid {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image:
+        linear-gradient(rgba(14, 165, 233, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(14, 165, 233, 0.02) 1px, transparent 1px);
+      background-size: 16px 16px;
+      opacity: 1;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ==================== WORK GRID (Blueprint Precision) ==================== */
+
+    .work-section {
+      background: #F8F6F0;
+    }
+
+    .work-grid {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image:
+        linear-gradient(rgba(14, 165, 233, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(14, 165, 233, 0.08) 1px, transparent 1px);
+      background-size: 8px 8px;
+      opacity: 1;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Crosshair accent every 5th line */
+    .work-grid::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image:
+        linear-gradient(rgba(144, 0, 32, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(144, 0, 32, 0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    /* ==================== ABOUT GRID (Organic Warp) ==================== */
+
+    .about-section {
+      background: #FFFEF9;
+    }
+
+    .about-grid {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 1;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* SVG warped grid pattern */
+    .about-grid svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Alternative: CSS-based organic grid using radial distortion */
+    .about-grid-css {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image:
+        linear-gradient(rgba(14, 165, 233, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(14, 165, 233, 0.03) 1px, transparent 1px);
+      background-size: 12px 12px;
+      opacity: 1;
+      pointer-events: none;
+      z-index: 0;
+      filter: url(#warp);
+    }
+
+    /* ==================== COMPARISON OVERLAY ==================== */
+
+    .comparison {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #212121;
+      color: #FFFEF9;
+      padding: 24px;
+      z-index: 100;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .comparison h3 {
+      margin-bottom: 12px;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .comparison-item strong {
+      color: #00d9ff;
+      font-family: 'Monaco', monospace;
+    }
+
+    @media (max-width: 768px) {
+      .comparison-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ==================== SCROLL HINT ==================== */
+
+    .scroll-hint {
+      position: fixed;
+      top: 50%;
+      left: 24px;
+      transform: translateY(-50%);
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      font-size: 12px;
+      color: #757575;
+      font-family: 'Monaco', monospace;
+      z-index: 50;
+    }
+  </style>
+</head>
+<body>
+  <!-- Scroll Progress Hint -->
+  <div class="scroll-hint">↓ SCROLL TO COMPARE ↓</div>
+
+  <!-- SVG Filter for Organic Warp -->
+  <svg style="position: absolute; width: 0; height: 0;">
+    <defs>
+      <filter id="warp">
+        <feTurbulence type="turbulence" baseFrequency="0.008" numOctaves="2" result="turbulence"/>
+        <feDisplacementMap in2="turbulence" in="SourceGraphic" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </defs>
+  </svg>
+
+  <!-- SECTION 1: HERO (Ultra-Subtle Grid) -->
+  <section class="section hero-section">
+    <div class="hero-grid"></div>
+    <div class="grid-label">Grid: 16px | Opacity: 2%</div>
+    <div class="section-content">
+      <h1>Dylan Momplaisir</h1>
+      <h2>Elevation 0.0m - Hero Section</h2>
+      <p>
+        <strong>Ultra-subtle grid:</strong> Largest spacing (16px), minimal opacity (2%).
+        Creates quiet, contemplative space. Barely visible - suggests structure
+        without demanding attention. Lets typography breathe.
+      </p>
+    </div>
+  </section>
+
+  <!-- SECTION 2: WORK (Blueprint Precision) -->
+  <section class="section work-section">
+    <div class="work-grid"></div>
+    <div class="grid-label">Grid: 8px | Opacity: 8% + Accent</div>
+    <div class="section-content">
+      <h1>Selected Work</h1>
+      <h2>Elevation +2.4m - Projects Section</h2>
+      <p>
+        <strong>Blueprint precision:</strong> Tightest grid (8px baseline), higher opacity (8%).
+        Every 5th line has burgundy accent for dimension feel. Technical, architectural.
+        Perfect backdrop for project cards with blueprint overlays.
+      </p>
+    </div>
+  </section>
+
+  <!-- SECTION 3: ABOUT (Organic Warp) -->
+  <section class="section about-section">
+    <div class="about-grid-css"></div>
+    <div class="grid-label">Grid: 12px | Warped | Opacity: 3%</div>
+    <div class="section-content">
+      <h1>About</h1>
+      <h2>Elevation +4.8m - Personal Section</h2>
+      <p>
+        <strong>Organic warp:</strong> Medium spacing (12px), subtle turbulence distortion.
+        Grid feels more human, less mechanical. Reflects transition from
+        rigid architecture to fluid engineering. Warmer, more personal.
+      </p>
+    </div>
+  </section>
+
+  <!-- Comparison Overlay -->
+  <div class="comparison">
+    <h3>Grid Pattern Comparison</h3>
+    <div class="comparison-grid">
+      <div class="comparison-item">
+        <strong>HERO (0.0m):</strong><br>
+        16px spacing<br>
+        2% opacity<br>
+        Blueprint blue<br>
+        Pristine, minimal
+      </div>
+      <div class="comparison-item">
+        <strong>WORK (+2.4m):</strong><br>
+        8px baseline grid<br>
+        8% opacity + accents<br>
+        Blueprint + burgundy<br>
+        Technical, precise
+      </div>
+      <div class="comparison-item">
+        <strong>ABOUT (+4.8m):</strong><br>
+        12px warped<br>
+        3% opacity<br>
+        Turbulence filter<br>
+        Organic, human
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Highlight current section in overlay
+    const sections = document.querySelectorAll('.section');
+    const gridLabels = document.querySelectorAll('.grid-label');
+
+    function updateActiveSection() {
+      const scrollPos = window.scrollY + window.innerHeight / 2;
+
+      sections.forEach((section, index) => {
+        const top = section.offsetTop;
+        const bottom = top + section.offsetHeight;
+
+        if (scrollPos >= top && scrollPos < bottom) {
+          gridLabels[index].style.background = '#900020';
+          gridLabels[index].style.transform = 'scale(1.1)';
+        } else {
+          gridLabels[index].style.background = '#212121';
+          gridLabels[index].style.transform = 'scale(1)';
+        }
+      });
+    }
+
+    window.addEventListener('scroll', updateActiveSection);
+    updateActiveSection();
+  </script>
+</body>
+</html>

@@ -1,0 +1,572 @@
+---
+/**
+ * Contact Page - Dylan Momplaisir
+ * Clean form with architectural aesthetic
+ */
+
+import Footer from '../components/Footer.astro';
+
+const pageTitle = 'Contact - Dylan Momplaisir';
+const pageDescription = 'Get in touch about opportunities, collaboration, or just to say hello.';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content={pageDescription}>
+  <title>{pageTitle}</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/src/styles/variables.css">
+  <link rel="stylesheet" href="/src/styles/fonts.css">
+</head>
+
+<body>
+  <!-- Subtle Grid Background -->
+  <div class="grid-background" aria-hidden="true"></div>
+
+  <!-- Header -->
+  <header class="page-header">
+    <nav class="nav-breadcrumb">
+      <a href="/" class="breadcrumb-link">Home</a>
+      <span class="breadcrumb-separator">/</span>
+      <span class="breadcrumb-current">Contact</span>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="contact-content">
+    <div class="container-narrow">
+      <!-- Hero -->
+      <section class="contact-hero">
+        <h1 class="page-title">Let's build something together</h1>
+        <p class="lead-text">
+          I'm interested in product engineering roles, consulting opportunities,
+          and conversations about journalism, technology, and building meaningful products.
+        </p>
+      </section>
+
+      <!-- Contact Methods -->
+      <div class="contact-layout">
+        <!-- Form -->
+        <section class="contact-form-section">
+          <h2 class="section-heading">Send a message</h2>
+
+          <form action="https://formspree.io/f/xzzdlnoy" method="POST" class="contact-form" id="contact-form">
+            <div class="form-group">
+              <label for="name" class="form-label">Name</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                class="form-input"
+                required
+                placeholder="Your name"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="email" class="form-label">Email</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                class="form-input"
+                required
+                placeholder="you@example.com"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="subject" class="form-label">Subject</label>
+              <input
+                type="text"
+                id="subject"
+                name="subject"
+                class="form-input"
+                required
+                placeholder="What's this about?"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="message" class="form-label">Message</label>
+              <textarea
+                id="message"
+                name="message"
+                class="form-textarea"
+                required
+                rows="6"
+                placeholder="Tell me more..."
+              ></textarea>
+            </div>
+
+            <button type="submit" class="btn-submit">
+              Send Message
+            </button>
+
+            <div class="form-status" id="form-status"></div>
+          </form>
+        </section>
+
+        <!-- Other Contact Methods -->
+        <aside class="contact-info">
+          <h2 class="section-heading">Other ways to connect</h2>
+
+          <div class="contact-links">
+            <a href="mailto:momplaisirdylan@gmail.com" class="contact-link">
+              <div class="link-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+              </div>
+              <div class="link-content">
+                <div class="link-label">Email</div>
+                <div class="link-value">momplaisirdylan@gmail.com</div>
+              </div>
+            </a>
+
+            <a href="https://www.linkedin.com/in/dmomplaisir" target="_blank" rel="noopener noreferrer" class="contact-link">
+              <div class="link-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                  <rect x="2" y="9" width="4" height="12"></rect>
+                  <circle cx="4" cy="4" r="2"></circle>
+                </svg>
+              </div>
+              <div class="link-content">
+                <div class="link-label">LinkedIn</div>
+                <div class="link-value">linkedin.com/in/dmomplaisir</div>
+              </div>
+            </a>
+
+            <a href="https://github.com/DMomplaisir" target="_blank" rel="noopener noreferrer" class="contact-link">
+              <div class="link-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                </svg>
+              </div>
+              <div class="link-content">
+                <div class="link-label">GitHub</div>
+                <div class="link-value">github.com/DMomplaisir</div>
+              </div>
+            </a>
+
+            <a href="/resume.pdf" download class="contact-link">
+              <div class="link-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+              </div>
+              <div class="link-content">
+                <div class="link-label">Resume</div>
+                <div class="link-value">Download PDF</div>
+              </div>
+            </a>
+          </div>
+
+          <!-- Response Time Note -->
+          <div class="response-note">
+            <p>
+              I typically respond within 24-48 hours. If you don't hear back,
+              feel free to send a follow-up or reach out via LinkedIn.
+            </p>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <Footer />
+</body>
+</html>
+
+<script>
+  // Form submission handling
+  const form = document.getElementById('contact-form') as HTMLFormElement;
+  const formStatus = document.getElementById('form-status') as HTMLElement;
+
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Get form data
+      const formData = new FormData(form);
+
+      // Update status
+      formStatus.textContent = 'Sending...';
+      formStatus.className = 'form-status sending';
+
+      try {
+        // Submit to Formspree
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          formStatus.textContent = 'Message sent! I\'ll get back to you soon.';
+          formStatus.className = 'form-status success';
+          form.reset();
+        } else {
+          throw new Error('Form submission failed');
+        }
+      } catch (error) {
+        formStatus.textContent = 'Something went wrong. Please try emailing me directly.';
+        formStatus.className = 'form-status error';
+      }
+    });
+  }
+</script>
+
+<style>
+  /* ==================== GLOBAL RESET ==================== */
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-body);
+    color: var(--text-primary);
+    background-color: var(--warm-white);
+    line-height: var(--leading-normal);
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* ==================== GRID BACKGROUND ==================== */
+
+  .grid-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+      linear-gradient(var(--blueprint-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--blueprint-line) 1px, transparent 1px);
+    background-size: var(--grid-unit) var(--grid-unit);
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ==================== HEADER ==================== */
+
+  .page-header {
+    position: relative;
+    padding: var(--space-xxl) var(--space-lg) var(--space-lg);
+    max-width: var(--width-content);
+    margin: 0 auto;
+    z-index: 1;
+  }
+
+  .nav-breadcrumb {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--concrete-400);
+    letter-spacing: var(--tracking-wide);
+  }
+
+  .breadcrumb-link {
+    color: var(--burgundy-primary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .breadcrumb-link:hover {
+    color: var(--burgundy-hover);
+  }
+
+  .breadcrumb-separator {
+    margin: 0 var(--space-xs);
+    color: var(--concrete-300);
+  }
+
+  .breadcrumb-current {
+    color: var(--concrete-900);
+  }
+
+  /* ==================== MAIN CONTENT ==================== */
+
+  .contact-content {
+    position: relative;
+    padding: 0 var(--space-lg) var(--space-xxxl);
+    z-index: 1;
+  }
+
+  .container-narrow {
+    max-width: var(--width-narrow);
+    margin: 0 auto;
+  }
+
+  /* ==================== HERO ==================== */
+
+  .contact-hero {
+    margin-bottom: var(--space-xxxl);
+    padding-bottom: var(--space-xl);
+    border-bottom: var(--border-thin) solid var(--warm-gray-200);
+  }
+
+  .page-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: var(--weight-regular);
+    color: var(--concrete-900);
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--leading-tight);
+    margin-bottom: var(--space-lg);
+  }
+
+  .lead-text {
+    font-size: var(--text-xl);
+    line-height: var(--leading-relaxed);
+    color: var(--concrete-400);
+    max-width: 65ch;
+  }
+
+  /* ==================== LAYOUT ==================== */
+
+  .contact-layout {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: var(--space-xxxl);
+  }
+
+  .section-heading {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    font-weight: var(--weight-regular);
+    color: var(--concrete-900);
+    margin-bottom: var(--space-xl);
+    letter-spacing: var(--tracking-tight);
+  }
+
+  /* ==================== FORM ==================== */
+
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .form-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--concrete-400);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wider);
+    font-weight: var(--weight-medium);
+  }
+
+  .form-input,
+  .form-textarea {
+    padding: var(--space-sm) var(--space-md);
+    background: var(--warm-white);
+    border: var(--border-thin) solid var(--warm-gray-200);
+    border-radius: var(--radius-base);
+    color: var(--concrete-900);
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    transition: all var(--transition-base);
+  }
+
+  .form-input:focus,
+  .form-textarea:focus {
+    outline: none;
+    border-color: var(--burgundy-primary);
+    box-shadow: 0 0 0 3px rgba(144, 0, 32, 0.1);
+  }
+
+  .form-input::placeholder,
+  .form-textarea::placeholder {
+    color: var(--concrete-300);
+  }
+
+  .form-textarea {
+    resize: vertical;
+    min-height: 150px;
+  }
+
+  .btn-submit {
+    padding: var(--space-sm) var(--space-xl);
+    background: var(--burgundy-primary);
+    color: var(--warm-white);
+    border: var(--border-thin) solid var(--burgundy-primary);
+    border-radius: var(--radius-base);
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    font-weight: var(--weight-medium);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    align-self: flex-start;
+  }
+
+  .btn-submit:hover {
+    background: var(--burgundy-hover);
+    border-color: var(--burgundy-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-burgundy);
+  }
+
+  .btn-submit:active {
+    transform: translateY(0);
+  }
+
+  .form-status {
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-base);
+    font-size: var(--text-sm);
+    display: none;
+  }
+
+  .form-status.sending,
+  .form-status.success,
+  .form-status.error {
+    display: block;
+  }
+
+  .form-status.sending {
+    background: var(--cream);
+    color: var(--concrete-400);
+    border: var(--border-thin) solid var(--warm-gray-200);
+  }
+
+  .form-status.success {
+    background: #d4edda;
+    color: #155724;
+    border: var(--border-thin) solid #c3e6cb;
+  }
+
+  .form-status.error {
+    background: #f8d7da;
+    color: #721c24;
+    border: var(--border-thin) solid #f5c6cb;
+  }
+
+  /* ==================== CONTACT INFO ==================== */
+
+  .contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
+  }
+
+  .contact-link {
+    display: flex;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    background: var(--cream);
+    border: var(--border-thin) solid var(--warm-gray-200);
+    border-radius: var(--radius-base);
+    text-decoration: none;
+    color: inherit;
+    transition: all var(--transition-base);
+  }
+
+  .contact-link:hover {
+    border-color: var(--burgundy-primary);
+    transform: translateX(4px);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .link-icon {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    color: var(--burgundy-primary);
+  }
+
+  .link-content {
+    flex: 1;
+  }
+
+  .link-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--concrete-400);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wider);
+    margin-bottom: var(--space-xxs);
+  }
+
+  .link-value {
+    font-size: var(--text-sm);
+    color: var(--concrete-900);
+    font-weight: var(--weight-medium);
+  }
+
+  .response-note {
+    padding: var(--space-md);
+    background: var(--warm-white);
+    border-left: 3px solid var(--burgundy-primary);
+  }
+
+  .response-note p {
+    font-size: var(--text-sm);
+    line-height: var(--leading-relaxed);
+    color: var(--concrete-400);
+  }
+
+  /* ==================== RESPONSIVE ==================== */
+
+  @media (max-width: 768px) {
+    .page-header {
+      padding: var(--space-xl) var(--space-md) var(--space-md);
+    }
+
+    .contact-content {
+      padding: 0 var(--space-md) var(--space-xxl);
+    }
+
+    .contact-layout {
+      grid-template-columns: 1fr;
+      gap: var(--space-xxl);
+    }
+
+    .contact-info {
+      order: -1;
+    }
+
+    .btn-submit {
+      width: 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>

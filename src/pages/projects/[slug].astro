@@ -1,0 +1,695 @@
+---
+/**
+ * Project Detail Template
+ * Consistent architectural aesthetic for all case studies
+ */
+
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { getRelatedProjects, formatDate, formatDateISO } from '../../utils/content-helpers';
+import Footer from '../../components/Footer.astro';
+
+// Generate static paths for all projects at build time
+// Excludes draft projects in production builds
+export async function getStaticPaths() {
+  const projects = await getCollection('projects', ({ data }) => {
+    // In development, include drafts; in production, exclude them
+    if (import.meta.env.DEV) {
+      return true;
+    }
+    return data.draft !== true;
+  });
+
+  return projects.map(project => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+type Props = {
+  project: CollectionEntry<'projects'>;
+};
+
+const { project } = Astro.props;
+
+// Render markdown content
+const { Content } = await project.render();
+
+// Get related projects based on shared tags
+const relatedProjects = await getRelatedProjects(project, 3);
+
+// Destructure project data
+const {
+  title,
+  description,
+  hero_image,
+  date,
+  tags = [],
+  tech_stack,
+  role,
+  impact,
+  github_url,
+  live_url,
+} = project.data;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content={description}>
+  <title>{title} - Dylan Momplaisir</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/src/styles/variables.css">
+  <link rel="stylesheet" href="/src/styles/fonts.css">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content={title}>
+  <meta property="og:description" content={description}>
+  <meta property="og:type" content="article">
+  {hero_image && <meta property="og:image" content={hero_image.src}>}
+</head>
+
+<body>
+  <!-- Subtle Grid Background -->
+  <div class="grid-background" aria-hidden="true"></div>
+
+  <article class="project-detail">
+    <!-- Header with Breadcrumb -->
+    <header class="project-header">
+      <nav class="breadcrumb">
+        <a href="/" class="breadcrumb-link">Home</a>
+        <span class="breadcrumb-separator">/</span>
+        <a href="/projects" class="breadcrumb-link">Projects</a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-current">{title}</span>
+      </nav>
+
+      <div class="header-content">
+        <h1 class="project-title">{title}</h1>
+        <p class="project-subtitle">{description}</p>
+
+        <!-- Project Meta Grid -->
+        <div class="project-meta">
+          {role && (
+            <div class="meta-item">
+              <span class="meta-label">Role</span>
+              <span class="meta-value">{role}</span>
+            </div>
+          )}
+
+          {date && (
+            <div class="meta-item">
+              <span class="meta-label">Year</span>
+              <time datetime={formatDateISO(date)} class="meta-value">
+                {new Date(date).getFullYear()}
+              </time>
+            </div>
+          )}
+
+          {tech_stack && tech_stack.length > 0 && (
+            <div class="meta-item meta-item-full">
+              <span class="meta-label">Tech Stack</span>
+              <div class="tech-stack">
+                {tech_stack.map(tech => (
+                  <span class="tech-badge">{tech}</span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        <!-- Impact Callout (if exists) -->
+        {impact && (
+          <div class="impact-callout">
+            <span class="impact-label">Impact</span>
+            <p class="impact-value">{impact}</p>
+          </div>
+        )}
+
+        <!-- Action Buttons -->
+        <div class="project-actions">
+          {live_url && (
+            <a href={live_url} class="btn btn-primary" target="_blank" rel="noopener">
+              View Live Project ↗
+            </a>
+          )}
+          {github_url && (
+            <a href={github_url} class="btn btn-secondary" target="_blank" rel="noopener">
+              View on GitHub ↗
+            </a>
+          )}
+        </div>
+      </div>
+    </header>
+
+    <!-- Project Content (Markdown) -->
+    <section class="project-content">
+      <Content />
+    </section>
+
+    <!-- Related Projects -->
+    {relatedProjects.length > 0 && (
+      <aside class="related-section">
+        <h2 class="section-heading">Related Projects</h2>
+        <div class="related-grid">
+          {relatedProjects.map(related => (
+            <article class="related-card">
+              <a href={`/projects/${related.slug}/`} class="related-link">
+                <div class="corner-accent corner-tl" aria-hidden="true"></div>
+                <div class="corner-accent corner-br" aria-hidden="true"></div>
+
+                <div class="related-content">
+                  {related.data.date && (
+                    <span class="related-year">
+                      {new Date(related.data.date).getFullYear()}
+                    </span>
+                  )}
+                  <h3 class="related-title">{related.data.title}</h3>
+                  <p class="related-description">{related.data.description}</p>
+                </div>
+              </a>
+            </article>
+          ))}
+        </div>
+      </aside>
+    )}
+
+    <!-- Back Navigation -->
+    <nav class="back-nav">
+      <a href="/projects" class="back-link">← All Projects</a>
+    </nav>
+  </article>
+
+  <!-- Footer -->
+  <Footer />
+</body>
+</html>
+
+<style>
+  /* ==================== GLOBAL RESET ==================== */
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-body);
+    color: var(--text-primary);
+    background-color: var(--warm-white);
+    line-height: var(--leading-normal);
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* ==================== GRID BACKGROUND ==================== */
+
+  .grid-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+      linear-gradient(var(--blueprint-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--blueprint-line) 1px, transparent 1px);
+    background-size: var(--grid-unit) var(--grid-unit);
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ==================== PROJECT HEADER ==================== */
+
+  .project-detail {
+    position: relative;
+    z-index: 1;
+  }
+
+  .project-header {
+    max-width: var(--width-narrow);
+    margin: 0 auto;
+    padding: var(--space-xxxl) var(--space-lg) var(--space-xxl);
+  }
+
+  .breadcrumb {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--concrete-400);
+    margin-bottom: var(--space-xl);
+    letter-spacing: var(--tracking-wide);
+  }
+
+  .breadcrumb-link {
+    color: var(--burgundy-primary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .breadcrumb-link:hover {
+    color: var(--burgundy-hover);
+  }
+
+  .breadcrumb-separator {
+    margin: 0 var(--space-xs);
+    color: var(--concrete-300);
+  }
+
+  .breadcrumb-current {
+    color: var(--concrete-900);
+  }
+
+  .project-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: var(--weight-regular);
+    color: var(--concrete-900);
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--leading-tight);
+    margin-bottom: var(--space-md);
+  }
+
+  .project-subtitle {
+    font-size: var(--text-xl);
+    color: var(--concrete-400);
+    line-height: var(--leading-relaxed);
+    margin-bottom: var(--space-xl);
+  }
+
+  /* ==================== PROJECT META ==================== */
+
+  .project-meta {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+    padding: var(--space-lg);
+    background: var(--cream);
+    border-radius: var(--radius-base);
+    margin-bottom: var(--space-lg);
+  }
+
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .meta-item-full {
+    grid-column: 1 / -1;
+  }
+
+  .meta-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--concrete-400);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wider);
+  }
+
+  .meta-value {
+    font-size: var(--text-base);
+    color: var(--concrete-900);
+    font-weight: var(--weight-medium);
+  }
+
+  .tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+  }
+
+  .tech-badge {
+    padding: 4px var(--space-sm);
+    background: var(--warm-white);
+    border: var(--border-thin) solid var(--warm-gray-200);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-xs);
+    color: var(--concrete-900);
+    font-weight: var(--weight-medium);
+  }
+
+  /* ==================== IMPACT CALLOUT ==================== */
+
+  .impact-callout {
+    padding: var(--space-lg);
+    background: var(--warm-white);
+    border-left: var(--border-thick) solid var(--burgundy-primary);
+    border-radius: var(--radius-base);
+    margin-bottom: var(--space-lg);
+  }
+
+  .impact-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--burgundy-primary);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wider);
+    margin-bottom: var(--space-xs);
+    display: block;
+  }
+
+  .impact-value {
+    font-size: var(--text-lg);
+    color: var(--concrete-900);
+    font-weight: var(--weight-medium);
+    line-height: var(--leading-relaxed);
+  }
+
+  /* ==================== ACTION BUTTONS ==================== */
+
+  .project-actions {
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    padding: calc(var(--space-sm) - 2px) var(--space-lg);
+    text-decoration: none;
+    border-radius: var(--radius-base);
+    font-weight: var(--weight-medium);
+    font-size: var(--text-base);
+    transition: all var(--transition-base);
+    display: inline-block;
+    border: var(--border-thin) solid transparent;
+  }
+
+  .btn-primary {
+    background: var(--burgundy-primary);
+    color: var(--warm-white);
+    border-color: var(--burgundy-primary);
+  }
+
+  .btn-primary:hover {
+    background: var(--burgundy-hover);
+    border-color: var(--burgundy-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-burgundy);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--concrete-900);
+    border-color: var(--concrete-300);
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--burgundy-primary);
+    color: var(--burgundy-primary);
+    transform: translateY(-2px);
+  }
+
+  /* ==================== PROJECT CONTENT (MARKDOWN) ==================== */
+
+  .project-content {
+    max-width: var(--width-text);
+    margin: 0 auto;
+    padding: 0 var(--space-lg) var(--space-xxxl);
+    font-size: var(--text-lg);
+    line-height: var(--leading-relaxed);
+  }
+
+  .project-content :global(h2) {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    font-weight: var(--weight-regular);
+    color: var(--concrete-900);
+    margin-top: var(--space-xxl);
+    margin-bottom: var(--space-md);
+    letter-spacing: var(--tracking-tight);
+  }
+
+  .project-content :global(h3) {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    font-weight: var(--weight-regular);
+    color: var(--concrete-900);
+    margin-top: var(--space-xl);
+    margin-bottom: var(--space-sm);
+  }
+
+  .project-content :global(h4) {
+    font-size: var(--text-xl);
+    font-weight: var(--weight-medium);
+    color: var(--concrete-900);
+    margin-top: var(--space-lg);
+    margin-bottom: var(--space-sm);
+  }
+
+  .project-content :global(p) {
+    margin-bottom: var(--space-md);
+    color: var(--concrete-900);
+  }
+
+  .project-content :global(ul),
+  .project-content :global(ol) {
+    margin-bottom: var(--space-md);
+    padding-left: var(--space-lg);
+  }
+
+  .project-content :global(li) {
+    margin-bottom: var(--space-sm);
+    color: var(--concrete-900);
+  }
+
+  .project-content :global(a) {
+    color: var(--burgundy-primary);
+    text-decoration: none;
+    border-bottom: var(--border-thin) solid rgba(144, 0, 32, 0.3);
+    transition: border-color var(--transition-fast);
+  }
+
+  .project-content :global(a:hover) {
+    border-bottom-color: var(--burgundy-primary);
+  }
+
+  .project-content :global(blockquote) {
+    padding: var(--space-md) var(--space-lg);
+    margin: var(--space-lg) 0;
+    background: var(--cream);
+    border-left: var(--border-thick) solid var(--burgundy-primary);
+    font-style: italic;
+    color: var(--concrete-400);
+    border-radius: var(--radius-base);
+  }
+
+  .project-content :global(pre) {
+    padding: var(--space-md);
+    background: var(--cream);
+    border: var(--border-thin) solid var(--warm-gray-200);
+    border-radius: var(--radius-base);
+    overflow-x: auto;
+    margin-bottom: var(--space-md);
+  }
+
+  .project-content :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    color: var(--burgundy-primary);
+  }
+
+  .project-content :global(pre code) {
+    color: var(--concrete-900);
+  }
+
+  .project-content :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-base);
+    margin: var(--space-lg) 0;
+  }
+
+  .project-content :global(strong) {
+    font-weight: var(--weight-semibold);
+    color: var(--concrete-900);
+  }
+
+  /* ==================== RELATED PROJECTS ==================== */
+
+  .related-section {
+    max-width: var(--width-content);
+    margin: 0 auto;
+    padding: var(--space-xxxl) var(--space-lg);
+    border-top: var(--border-thin) solid var(--warm-gray-200);
+  }
+
+  .section-heading {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    font-weight: var(--weight-regular);
+    color: var(--concrete-900);
+    margin-bottom: var(--space-xl);
+    letter-spacing: var(--tracking-tight);
+  }
+
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-lg);
+  }
+
+  .related-card {
+    position: relative;
+    background: var(--warm-white);
+    border: var(--border-thin) solid var(--warm-gray-200);
+    border-radius: var(--radius-base);
+    overflow: hidden;
+    transition: all var(--transition-base);
+  }
+
+  .related-card:hover {
+    border-color: var(--burgundy-primary);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .related-card:hover .corner-accent {
+    opacity: 0.6;
+  }
+
+  .corner-accent {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border: var(--border-thin) solid var(--burgundy-primary);
+    opacity: 0.2;
+    transition: opacity var(--transition-base);
+    z-index: 2;
+  }
+
+  .corner-tl {
+    top: var(--space-xs);
+    left: var(--space-xs);
+    border-right: none;
+    border-bottom: none;
+  }
+
+  .corner-br {
+    bottom: var(--space-xs);
+    right: var(--space-xs);
+    border-left: none;
+    border-top: none;
+  }
+
+  .related-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    height: 100%;
+  }
+
+  .related-content {
+    position: relative;
+    padding: var(--space-lg);
+    z-index: 3;
+  }
+
+  .related-year {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--concrete-400);
+    letter-spacing: var(--tracking-wide);
+    margin-bottom: var(--space-xs);
+    display: block;
+  }
+
+  .related-title {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: var(--weight-regular);
+    color: var(--concrete-900);
+    margin-bottom: var(--space-xs);
+    line-height: var(--leading-snug);
+  }
+
+  .related-description {
+    font-size: var(--text-sm);
+    color: var(--concrete-400);
+    line-height: var(--leading-normal);
+  }
+
+  /* ==================== BACK NAVIGATION ==================== */
+
+  .back-nav {
+    text-align: center;
+    max-width: var(--width-content);
+    margin: 0 auto;
+    padding: 0 var(--space-lg) var(--space-xxxl);
+  }
+
+  .back-link {
+    display: inline-block;
+    padding: var(--space-sm) var(--space-lg);
+    color: var(--concrete-400);
+    text-decoration: none;
+    border: var(--border-thin) solid var(--warm-gray-200);
+    border-radius: var(--radius-base);
+    transition: all var(--transition-base);
+    font-size: var(--text-sm);
+    font-family: var(--font-mono);
+  }
+
+  .back-link:hover {
+    border-color: var(--burgundy-primary);
+    color: var(--burgundy-primary);
+  }
+
+  /* ==================== RESPONSIVE ==================== */
+
+  @media (max-width: 768px) {
+    .project-header {
+      padding: var(--space-xxl) var(--space-md) var(--space-xl);
+    }
+
+    .project-content {
+      padding: 0 var(--space-md) var(--space-xxl);
+      font-size: var(--text-base);
+    }
+
+    .project-meta {
+      grid-template-columns: 1fr;
+      padding: var(--space-md);
+    }
+
+    .project-actions {
+      flex-direction: column;
+    }
+
+    .btn {
+      width: 100%;
+      text-align: center;
+    }
+
+    .related-section {
+      padding: var(--space-xxl) var(--space-md);
+    }
+
+    .related-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-md);
+    }
+
+    .back-nav {
+      padding: 0 var(--space-md) var(--space-xxl);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>

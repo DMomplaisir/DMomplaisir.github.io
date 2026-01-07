@@ -1,0 +1,251 @@
+/*
+ * Elevation Grid + Blueprint Light Design System
+ * Warm minimalism with architectural precision
+ * Grid-based layout with visible technical infrastructure
+ */
+
+:root {
+  /* ==================== COLORS ==================== */
+
+  /* ===== WARM NEUTRALS (Blueprint & Light influence) ===== */
+  --warm-white: #FFFEF9;              /* Main background - warm paper */
+  --cream: #F8F6F0;                   /* Subtle section backgrounds */
+  --warm-gray-50: #FAFAF8;            /* Very light warm gray */
+  --warm-gray-100: #F2F1ED;           /* Light warm gray */
+  --warm-gray-200: #E8E6E0;           /* Medium warm gray */
+
+  /* ===== COOL GRAYS (Elevation Grid influence) ===== */
+  --concrete-300: #BDBDBD;            /* Borders, dividers */
+  --concrete-400: #757575;            /* Secondary text */
+  --concrete-900: #212121;            /* Primary text */
+
+  /* ===== ACCENT - Burgundy Brand Color ===== */
+  --burgundy-primary: #900020;        /* CTAs, links, emphasis */
+  --burgundy-hover: #C4002B;          /* Hover states (lighter) */
+  --burgundy-dark: #6B0018;           /* Active/pressed states */
+
+  /* ===== TECHNICAL BLUE (Blueprint influence) ===== */
+  --blueprint-blue: #0EA5E9;          /* Technical elements */
+  --blueprint-blue-faint: rgba(14, 165, 233, 0.06);  /* Subtle backgrounds */
+  --blueprint-line: rgba(14, 165, 233, 0.12);        /* Grid lines */
+
+  /* ===== SEMANTIC COLORS ===== */
+  --success-green: #10B981;           /* Metrics, achievements */
+  --link-color: var(--burgundy-primary);
+  --text-primary: var(--concrete-900);
+  --text-secondary: var(--concrete-400);
+
+  /* Preserved for backward compatibility */
+  --color-bg-base: var(--warm-white);
+  --color-bg-elevated: var(--cream);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-accent: var(--burgundy-primary);
+  --color-border: var(--warm-gray-200);
+  --color-black: var(--concrete-900);
+  --color-white: #ffffff;
+
+  /* ==================== TYPOGRAPHY ==================== */
+
+  /* Font Families */
+  --font-display: 'Editorial Old', Georgia, 'Times New Roman', serif;
+  --font-body: 'Neue Montreal', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Courier New', monospace;
+  --font-technical: var(--font-display); /* For labels, captions, dimension lines */
+
+  /* Fallback aliases for backward compatibility */
+  --font-sans: var(--font-body);
+
+  /* Type Scale (based on 8px grid) */
+  --text-xs: 0.75rem;    /* 12px - Captions, labels, technical annotations */
+  --text-sm: 0.875rem;   /* 14px - Small body, metadata, nav links */
+  --text-base: 1rem;     /* 16px - Base body text */
+  --text-lg: 1.125rem;   /* 18px - Large body text */
+  --text-xl: 1.25rem;    /* 20px - Subheadings */
+  --text-2xl: 1.5rem;    /* 24px - Section headings */
+  --text-3xl: 2rem;      /* 32px - Page headings */
+  --text-4xl: 3rem;      /* 48px - Hero text */
+  --text-5xl: 4rem;      /* 64px - Display text */
+  --text-6xl: 5rem;      /* 80px - Homepage hero */
+  --text-7xl: 6rem;      /* 96px - Ultra display */
+
+  /* Font Weights */
+  --weight-light: 300;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-black: 900;
+
+  /* Line Heights */
+  --leading-tight: 1.1;      /* Display headings */
+  --leading-snug: 1.25;      /* Headings */
+  --leading-normal: 1.5;     /* Body text */
+  --leading-relaxed: 1.625;  /* Long-form content */
+  --leading-loose: 2;        /* Spacious layouts */
+
+  /* Letter Spacing */
+  --tracking-tighter: -0.04em; /* Ultra display text */
+  --tracking-tight: -0.02em;   /* Large headings */
+  --tracking-normal: 0;        /* Body text */
+  --tracking-wide: 0.05em;     /* Labels, navigation */
+  --tracking-wider: 0.1em;     /* Uppercase labels */
+
+  /* ==================== SPACING ==================== */
+
+  /* 8px Baseline Grid System */
+  --grid-unit: 8px;           /* Base unit for all spacing */
+  --spacing-unit: var(--grid-unit);
+
+  /* Named Spacing Scale */
+  --space-xs: calc(var(--grid-unit) * 1);    /* 8px */
+  --space-sm: calc(var(--grid-unit) * 2);    /* 16px */
+  --space-md: calc(var(--grid-unit) * 3);    /* 24px */
+  --space-lg: calc(var(--grid-unit) * 4);    /* 32px */
+  --space-xl: calc(var(--grid-unit) * 6);    /* 48px */
+  --space-xxl: calc(var(--grid-unit) * 8);   /* 64px */
+  --space-xxxl: calc(var(--grid-unit) * 12); /* 96px */
+
+  /* Numeric Spacing Scale (for backward compatibility) */
+  --spacing-1: 8px;      /* 1 unit */
+  --spacing-2: 16px;     /* 2 units */
+  --spacing-3: 24px;     /* 3 units */
+  --spacing-4: 32px;     /* 4 units */
+  --spacing-5: 40px;     /* 5 units */
+  --spacing-6: 48px;     /* 6 units */
+  --spacing-8: 64px;     /* 8 units */
+  --spacing-10: 80px;    /* 10 units */
+  --spacing-12: 96px;    /* 12 units */
+  --spacing-16: 128px;   /* 16 units */
+  --spacing-20: 160px;   /* 20 units */
+
+  /* ==================== LAYOUT ==================== */
+
+  /* Max Widths */
+  --width-content: 1200px;       /* Main content container */
+  --width-text: 65ch;            /* Optimal reading width */
+  --width-narrow: 800px;         /* About, single column content */
+  --width-wide: 1400px;          /* Full bleed sections */
+
+  /* Backward compatibility aliases */
+  --max-width-text: var(--width-text);
+  --max-width-content: 720px;    /* Legacy value */
+  --max-width-container: var(--width-content);
+  --max-width-wide: var(--width-wide);
+
+  /* Grid System */
+  --grid-columns: 12;
+  --grid-gap: var(--space-md);   /* 24px */
+  --grid-margin: var(--space-lg); /* 32px on mobile, 48px on desktop */
+
+  /* Grid Visualization (Easter Egg) */
+  --grid-visible: false;         /* Toggle with 'G' key */
+  --grid-color: var(--blueprint-line);
+  --grid-opacity: 0.15;
+
+  /* Header Heights */
+  --header-height-expanded: 80px;
+  --header-height-collapsed: 64px;
+
+  /* Border Radius */
+  --radius-sm: 2px;
+  --radius-base: 4px;
+  --radius-lg: 8px;
+  --radius-full: 9999px;  /* Circular */
+
+  /* Border Widths */
+  --border-thin: 1px;
+  --border-medium: 2px;
+  --border-thick: 4px;    /* Emphasis borders */
+
+  /* Z-Index Scale */
+  --z-base: 0;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-fixed: 300;
+  --z-modal-backdrop: 400;
+  --z-modal: 500;
+  --z-toast: 600;
+
+  /* ==================== TRANSITIONS ==================== */
+
+  /* Durations */
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 400ms;
+  --duration-slower: 600ms;
+
+  /* Easing Functions */
+  --ease-linear: linear;
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-smooth: cubic-bezier(0.4, 0.0, 0.2, 1);        /* Smooth motion */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);     /* Gentle spring bounce */
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* Combined Transitions */
+  --transition-fast: var(--duration-fast) var(--ease-out);
+  --transition-base: var(--duration-base) var(--ease-out);
+  --transition-slow: var(--duration-slower) var(--ease-smooth);
+
+  /* ==================== SHADOWS ==================== */
+
+  /* Light Theme Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-base: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.15);
+
+  /* Accent Shadows */
+  --shadow-burgundy: 0 4px 12px rgba(144, 0, 32, 0.2);
+  --shadow-burgundy-lg: 0 8px 24px rgba(144, 0, 32, 0.25);
+  --shadow-blueprint: 0 0 20px rgba(14, 165, 233, 0.15);
+  --shadow-blueprint-lg: 0 0 40px rgba(14, 165, 233, 0.2);
+}
+
+/* ==================== ACCESSIBILITY ==================== */
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0.01ms;
+    --duration-base: 0.01ms;
+    --duration-slow: 0.01ms;
+    --duration-slower: 0.01ms;
+  }
+}
+
+/* ==================== UTILITY CLASSES ==================== */
+
+/* Quick access to design tokens via classes */
+.text-xs { font-size: var(--text-xs); }
+.text-sm { font-size: var(--text-sm); }
+.text-base { font-size: var(--text-base); }
+.text-lg { font-size: var(--text-lg); }
+.text-xl { font-size: var(--text-xl); }
+.text-2xl { font-size: var(--text-2xl); }
+.text-3xl { font-size: var(--text-3xl); }
+.text-4xl { font-size: var(--text-4xl); }
+.text-5xl { font-size: var(--text-5xl); }
+.text-6xl { font-size: var(--text-6xl); }
+.text-7xl { font-size: var(--text-7xl); }
+
+.font-light { font-weight: var(--weight-light); }
+.font-regular { font-weight: var(--weight-regular); }
+.font-medium { font-weight: var(--weight-medium); }
+.font-semibold { font-weight: var(--weight-semibold); }
+.font-bold { font-weight: var(--weight-bold); }
+.font-black { font-weight: var(--weight-black); }
+
+.font-mono { font-family: var(--font-mono); }
+.font-sans { font-family: var(--font-sans); }
+.font-display { font-family: var(--font-display); }
+.font-body { font-family: var(--font-body); }
+
+.uppercase { text-transform: uppercase; }
+
+.tracking-tighter { letter-spacing: var(--tracking-tighter); }
+.tracking-tight { letter-spacing: var(--tracking-tight); }
+.tracking-wide { letter-spacing: var(--tracking-wide); }
+.tracking-wider { letter-spacing: var(--tracking-wider); }

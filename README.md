@@ -1,30 +1,110 @@
-# Dylan Momplaisir's Portfolio
+# Dylan Momplaisir - Portfolio
 
-This is the source code for my personal website, hosted at [dmomplaisir.com](https://dmomplaisir.com).
+Personal portfolio website built with Astro, showcasing projects, writing, and professional experience.
 
-## Built With
+**Live Site:** [dmomplaisir.com](https://dmomplaisir.com)
 
-- Jekyll
-- GitHub Pages
-- Custom domain setup
+## Tech Stack
 
-## Local Development
+- **Framework:** Astro (Static Site Generator)
+- **Styling:** CSS with custom design system
+- **Typography:** Editorial Old (display) + Neue Montreal (body) + JetBrains Mono (monospace)
+- **Deployment:** GitHub Pages
+- **Form Handling:** Formspree
 
-1. Install Ruby and Bundler
-2. Clone this repository
-3. Run `bundle install`
-4. Run `bundle exec jekyll serve`
-5. Visit `http://localhost:4000`
+## Design System
 
-## Structure
+**"Elevation Grid + Blueprint Light"** - A hybrid architectural aesthetic combining:
+- Warm minimalism (cream #FFFCF5, warm white #FFFEF9)
+- Burgundy accents (#900020)
+- Blueprint-inspired grid overlays
+- 8px baseline spacing system
+- Editorial typography with architectural precision
 
-- `_pages/`: Static pages
-- `_posts/`: Blog posts
-- `_projects/`: Project showcases
-- `assets/`: Static assets (CSS, images, etc.)
-- `_includes/`: Reusable components
-- `_layouts/`: Page templates
+## Development
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+# Site will be available at http://localhost:4321
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+## Project Structure
+
+```
+/
+├── public/              # Static assets (fonts, resume, CNAME)
+├── src/
+│   ├── components/      # Astro components
+│   ├── content/         # Content collections (projects, posts)
+│   │   └── projects/    # Project case studies (markdown)
+│   ├── layouts/         # Page layouts
+│   ├── pages/           # Routes (index, about, projects, contact)
+│   ├── styles/          # Global styles and design tokens
+│   │   ├── variables.css  # Design system tokens
+│   │   └── fonts.css      # Font declarations
+│   └── utils/           # Helper functions
+├── astro.config.mjs     # Astro configuration
+└── tsconfig.json        # TypeScript configuration
+```
+
+## Content Management
+
+### Adding a New Project
+
+1. Create a markdown file in `src/content/projects/`
+2. Include frontmatter with required fields:
+   ```yaml
+   ---
+   title: "Project Title"
+   description: "Brief description"
+   tags: ["Tag1", "Tag2"]
+   line_color: "blue"  # or "red", "green", "orange"
+   date: 2024-01-15
+   featured: true  # Shows on homepage
+   tech_stack: ["React", "TypeScript", "Node.js"]
+   role: "Your Role"
+   impact: "Key impact metric"
+   live_url: "https://example.com"  # optional
+   github_url: "https://github.com/..."  # optional
+   ---
+
+   ## Project content here...
+   ```
+3. Write the case study in markdown
+
+### Featured Projects
+
+Projects with `featured: true` appear on the homepage slider. The slider shows the 3 most recent featured projects.
+
+## Deployment
+
+Deployment is automatic via GitHub Actions on push to `master` branch.
+
+The workflow:
+1. Checks out the code
+2. Uses official Astro action to build the site
+3. Deploys to GitHub Pages
+
+**Custom Domain:** Configured via `public/CNAME` file (dmomplaisir.com)
+
+## Old Site
+
+The previous Jekyll-based site has been archived to `/archive/` for reference.
+
+## TODO
+
+See [TODO.md](./TODO.md) for upcoming features and improvements.
 
 ## License
 
-© 2024 Dylan Momplaisir. All rights reserved. 
+© 2025 Dylan Momplaisir. All rights reserved.

@@ -1,0 +1,191 @@
+---
+title: "RefIndex"
+description: "Replaced paper-based referee charting with a digital platform enabling same-night evaluations - now serving 10+ customers including ESPN correspondents, with 400K+ events structured for analytics and future computer vision"
+tags: ["Contract", "Full-Stack", "Performance", "Analytics", "Sports Tech"]
+line_color: "orange"
+date: 2026-01-06
+featured: true
+tech_stack: ["Next.js 15", "TypeScript", "PostgreSQL", "Drizzle ORM", "Redis", "Inngest", "React 19", "Tailwind CSS", "Recharts", "Sentry"]
+role: "Lead Engineer (Contract)"
+impact: "10 active customers, 30+ games ingested nightly, 400K+ evaluated events, used by ESPN correspondent, college teams onboarding"
+live_url: "https://refindex.ai"
+---
+
+import DataIngestionPipeline from '../../components/diagrams/DataIngestionPipeline.astro';
+
+## The Situation
+
+It started with an SOS text from a friend. He'd paid a development team $15,000 to build a referee evaluation platform for college basketball. After months of waiting, all he had was a handful of static HTML pages - no database, no data pipeline, no backend logic. The money was gone and he had contracts to fulfill.
+
+I told him I could help.
+
+The business need was real. "Charting" games - evaluating referee performance on every reviewable call - is something the industry already requires. But the existing process is brutal: evaluators watching game film, marking up paper forms, manually tallying results. The data lives in filing cabinets. Aggregating performance across a season? Nearly impossible. Getting feedback to referees quickly? Forget it.
+
+RefIndex changes that equation. Evaluations happen digitally, the same night as the game. Data flows directly into analytics. And long-term, the structured data we're collecting becomes training data for computer vision - eventually automating the charting process entirely.
+
+My friend had customers waiting and timeline pressure. He needed someone who could actually ship.
+
+I took it on as Lead Engineer. What started as "let me just make this dynamic" evolved into building a complete production system - complex ETL pipelines, PostgreSQL with materialized views, Redis caching, background job orchestration. The timeline was aggressive, the domain was new to me, and I'd be building essentially from scratch.
+
+## Learning a New Domain Fast
+
+I knew nothing about basketball officiating when I started. Within two weeks, I had to understand:
+
+**The evaluation mental model.** Referees make hundreds of decisions per game. Evaluators don't review every play - they focus on "reviewable events" (fouls, violations, out-of-bounds calls) and assess whether the official got it right. There's a standardized correctness framework: Correct Call (CC), Incorrect Call (IC), Correct No-Call (CNC), Incorrect No-Call (INC).
+
+**The data landscape.** Game data comes from multiple proprietary sources. Each source has different APIs, different schemas, different reliability characteristics. Video is separate from play-by-play data. Some sources require authentication that expires. Some have rate limits. None of them talk to each other.
+
+**The user workflows.** Evaluators want to open a game, see a timeline of reviewable events, click an event, watch the video clip, and record their assessment. Simple user story, complex implementation.
+
+I did this by reading documentation, talking to the product team, and - honestly - just diving in. The fastest way to understand a domain is to start building. Every time I hit a question I couldn't answer, I asked. Within a month, I was speaking fluently about "missed foul calls in transition" and "out-of-bounds violations in the backcourt."
+
+## The Data Reconciliation Problem
+
+This is where the previous team got stuck, and I understand why. Getting game data into a coherent system is genuinely hard.
+
+**Same game, different IDs.** Source A calls a game "MEM@LAL_20251015". Source B calls it "42567". Source C uses a GUID. All three have data about the same game. How do you know they're the same?
+
+**Same referee, different names.** "John Smith" in one system is "J. Smith" in another and "SMITH, JOHN" in a third. Referees work multiple games across multiple sources.
+
+**Same event, different timestamps.** Play-by-play data might say a foul occurred at 10:42 in the third quarter. Video data uses absolute timestamps. Converting between them requires knowing quarter start times, which aren't always provided.
+
+**My solution: An alias system**
+
+I built game and referee alias tables that track identities across sources. When data comes in, the system first checks: "Do I already know about this game under a different ID?" If yes, link to existing record. If no, create new record.
+
+This required fuzzy matching logic - if teams and date match but IDs don't, it's probably the same game. I also built admin tools for manual reconciliation when the heuristics fail.
+
+The schema ended up at 2,300+ lines with 30+ tables. Complex, but the complexity is genuine - the problem is complex.
+
+## Performance: From Unusable to Instant
+
+When I got the evaluation system working, I discovered the database layer was too slow to use. The analytics dashboard took 25 seconds to load. Game imports took 5-10 minutes. With hundreds of thousands of events in the database, queries were timing out constantly.
+
+**The diagnosis:** Classic N+1 problems, missing indexes, and OFFSET pagination on large tables.
+
+**The fixes:**
+
+1. **Batch operations.** Game imports were inserting events one at a time - 100+ database calls per game. I rewrote to batch inserts, bringing that down to 2-3 calls. Import time: 5-10 minutes → 10-30 seconds. 20-30x improvement.
+
+2. **Strategic indexing.** I analyzed query patterns and added composite indexes for common filters. For example, most analytics queries filter by `game_id + evaluation_status`. One composite index made that query near-instant.
+
+3. **Partial indexes for active records.** Most queries care about "completed" evaluations. A partial index on `WHERE status = 'completed'` is significantly smaller than a full index and faster to scan.
+
+4. **Cursor-based pagination.** OFFSET pagination gets slower as you go deeper - `OFFSET 10000` means the database has to scan 10,000 rows just to skip them. Cursor pagination (using a unique, indexed column as the "cursor") maintains constant performance regardless of depth. This matters when users are scrolling through hundreds of games.
+
+5. **SQL CASE for bulk updates.** When batch-updating evaluation statuses, I use SQL CASE statements instead of individual UPDATE calls. Dramatically faster for bulk operations.
+
+Analytics page: 25 seconds → under 1 second.
+
+## Building the Evaluator Experience
+
+The core workflow is evaluators watching video and recording assessments. This had to feel fast and professional.
+
+### The Video Player
+
+Video integration was tricky. Clips come from external video platforms, each with their own authentication and URL patterns. Some URLs expire. Some require browser-side credentials.
+
+I built a video service layer that:
+- Fetches event-specific clips on demand
+- Tracks "freshness" - if a URL is older than N hours, re-fetch it
+- Falls back gracefully if primary source fails
+- Supports manual uploads via Vercel Blob as a last resort
+
+For one video provider, authentication required browser session cookies that expire every few hours. I set up Puppeteer to run in a scheduled job, maintaining valid sessions in the background. Users never see auth failures - the system handles credential refresh automatically.
+
+### The Evaluation Interface
+
+Evaluators review dozens of events per game. Speed matters. I built:
+
+**Keyboard shortcuts.** Power users can navigate events and record assessments without touching the mouse. Arrow keys move between events, number keys record correctness, Tab moves to next.
+
+**Auto-save with debouncing.** Every form change saves automatically after 500ms of inactivity. Users never lose work, but we're not hammering the database on every keystroke.
+
+**Smart filtering.** Filter by quarter, event type, evaluation status. Filters persist in URL params so evaluators can share links to specific views.
+
+**Visual timeline.** Events rendered on a timeline with markers. Clicking a marker jumps the video to that moment. Completed evaluations show green, pending show gray.
+
+### The Review Queue
+
+Not every evaluation is final. Sometimes evaluators flag a call for supervisor review - "I'm not sure about this one." I built a review queue where admins see flagged evaluations with the evaluator's notes, watch the clip, and either confirm or override the assessment.
+
+## Referee Performance Analytics
+
+The endgame is actionable insight. I built a "Performance Book" that aggregates referee data:
+
+**Weighted accuracy scores.** Raw accuracy (correct/total) isn't enough - a close call in the final minute matters more than a routine call in the first quarter. The scoring algorithm weights by game context.
+
+**Call distribution charts.** Recharts visualizations showing breakdown by call type, quarter, game situation. Is this referee more likely to miss fouls in transition? The data shows it.
+
+**Trend lines.** Performance over time. Is a referee improving? Getting worse? Consistent?
+
+**Export capabilities.** CSV export so analysts can do further work in Excel or their own tools.
+
+The analytics queries are complex - aggregations across hundreds of thousands of events with multiple joins. The indexing and view strategy I built keeps them fast.
+
+## Background Job Architecture
+
+A lot of the work happens asynchronously. I use Inngest for durable job execution:
+
+<DataIngestionPipeline />
+
+**Scheduled imports.** Nightly jobs scan for new games from data sources and import them automatically.
+
+**Video enrichment.** When a game is imported, a background job fetches video URLs for all reviewable events. This can take minutes - users shouldn't wait.
+
+**Notification delivery.** When games are assigned or evaluations are flagged, notifications go out via email. Inngest handles the send with retry logic.
+
+**Session maintenance.** The video provider auth I mentioned earlier - that's a scheduled job that refreshes credentials every 4 hours.
+
+Inngest gives me retry logic, failure tracking, and observability. When something breaks (and things always break), I can see what failed and why.
+
+## The Results
+
+**10 active customers** using the platform daily, including [Coach Neighbors](https://x.com/coachneighbors/status/2007972545182798230), an ESPN correspondent who actively uses RefIndex in his analysis workflow.
+
+**NCAA basketball focus** - we started exploring the WNBA market but pivoted to college basketball where the go-to-market was faster and demand was immediate.
+
+**Same-night turnaround.** Games are ingested, enriched with video, and ready for evaluation within hours of tip-off - replacing a process that used to take days with paper forms.
+
+**30+ games ingested nightly** across three data sources, with automatic enrichment and video fetching running in the background.
+
+**400K+ evaluated events** in the system - structured data that was previously trapped in filing cabinets, now queryable and ready to train the next generation of computer vision models.
+
+**20-30x performance improvement** on imports, sub-second analytics queries, and reliable background job processing.
+
+**Clean, data-dense UI.** Professional sports analytics aesthetic - lots of information, clearly organized. Not minimal-for-minimal's-sake, but purposefully dense.
+
+## How I Approach Unfamiliar Domains
+
+This project reinforced my belief that strong engineers can quickly get effective in any domain. The process:
+
+1. **Start building immediately.** Don't try to understand everything before writing code. The code will force clarity - you'll hit questions faster than pure research would surface them.
+
+2. **Ask questions relentlessly.** I probably asked 100+ questions to the product team in the first month. No question is too basic. Understanding the "why" behind domain rules makes the code better.
+
+3. **Build the boring stuff first.** Data import, schema design, basic CRUD. It's not exciting, but getting the foundation right makes everything else easier.
+
+4. **Optimize only when you have data.** I didn't add indexes speculatively. I waited until I had real query patterns, then added exactly the indexes those patterns needed.
+
+5. **Ship, then improve.** The first version of every feature was good enough to use. Then I iterated based on actual usage feedback.
+
+## What Made This Different
+
+Coming in after a failed development effort has its own dynamics. The client was (understandably) skeptical. I had to build trust through delivery, not promises.
+
+My approach: set short milestones and hit them. "By Friday, you'll be able to import a game." "By next Friday, you'll see it render with events." Every week, visible progress. Within a month, they were confident the project would actually ship.
+
+That rhythm - aggressive timelines, constant delivery, quick iteration - is how I like to work. It's better for everyone: the client sees progress, I get feedback quickly, and we course-correct before small issues become big problems.
+
+## Technical Summary
+
+This project demonstrated my ability to:
+
+- Jump into an unfamiliar domain and become productive quickly
+- Rescue a failed project and deliver on aggressive timelines
+- Solve complex data reconciliation across multiple sources
+- Optimize database performance at scale (20-30x improvements)
+- Build polished, data-rich user interfaces for professional users
+- Design background job systems for reliability and observability
+
+*Built with: Next.js 15, React 19, TypeScript, PostgreSQL (materialized views, complex ETL), Redis, Drizzle ORM, Inngest, Puppeteer, Recharts, Sentry, Vercel*

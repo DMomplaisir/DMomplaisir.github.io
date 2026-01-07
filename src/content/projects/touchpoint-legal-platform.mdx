@@ -1,0 +1,193 @@
+---
+title: "Touchpoint"
+description: "Built a legal matter management platform from 0 to 1, designing AI-powered email processing, outside counsel engagement workflows, and enterprise multi-tenant architecture for in-house legal teams"
+tags: ["Startup", "Full-Stack", "AI/ML", "Legal Tech", "0-to-1"]
+line_color: "purple"
+date: 2024-01-01
+featured: true
+tech_stack: ["Next.js 15", "TypeScript", "Supabase", "PostgreSQL", "AWS Bedrock", "Inngest", "Tailwind CSS", "React Server Components"]
+role: "Technical Lead"
+impact: "Year-long 0-to-1 build, shipped AI email-to-task pipeline, created Outside Counsel Engagement Studio, YC interview"
+---
+
+import EmailPipeline from '../../components/diagrams/EmailPipeline.astro';
+
+## The Brief
+
+It started with a friend from Harvard Law who had an idea. He'd seen how in-house legal teams - the people managing everything from contracts to litigation inside companies - spend enormous amounts of time on work that doesn't require a law degree: triaging emails, tracking deadlines, coordinating with outside law firms. Legal operations is a massive market drowning in manual processes, and he wanted to build something to fix it.
+
+He asked if I could help build it. I said yes.
+
+The pitch was simple: a modern platform that actually understands how legal work happens, with AI that handles the administrative burden so legal professionals can focus on legal work. I came on as Technical Lead, taking on the challenge of building a startup while continuing to deliver at The Atlantic - a deliberate bet on exploring entrepreneurship. What started as helping a friend evolved into a year-long journey through product discovery, technical architecture, and the realities of early-stage startup dynamics.
+
+## Understanding the Problem Space
+
+Before writing any code, I spent time understanding what legal teams actually need. Some patterns emerged quickly:
+
+**Email is the operating system.** Legal work lives in email. Every matter generates hundreds of messages - client updates, opposing counsel negotiations, court deadlines, internal coordination. Teams told us they spend 2-3 hours daily just extracting action items from their inboxes.
+
+**Outside counsel is a blind spot.** When companies need external legal help, they often manage the entire process - finding firms, getting proposals, tracking performance - in spreadsheets. There's no systematic way to compare firms or hold them accountable to metrics.
+
+**Matter visibility disappears at scale.** Once a team hits 50+ active matters, no one has a clear picture of what's on track, what's at risk, or who's overloaded. Dashboards exist, but they're always stale or incomplete.
+
+**Legal teams can't prove their value.** This was the deeper problem. Engineering teams have Jira, Linear, GitHub - they can show velocity, shipping cadence, incident response times. Legal departments have... filing cabinets and email threads. They're perpetually seen as cost centers because they have no data to position themselves as cost *enablers*. Every contract they review, every risk they mitigate, every deal they close faster - invisible.
+
+### The GTM Challenge
+
+We realized traditional SaaS sales cycles would be brutal. Legal teams are conservative buyers. Proving ROI for "efficiency software" takes months of usage data. And we were competing against inertia - the current process is painful, but it's the devil they know.
+
+**One branch we explored: Immediate value, local-first.** Alongside the main platform, we started building a lightweight wedge product - a service where legal departments could connect their Outlook server locally and generate a "Year in Review" using a local LLM. No data leaving their network, no long onboarding, just immediate insight into what their team actually accomplished. How many matters closed? Which outside firms performed best? Where did time actually go?
+
+The idea was to give them something they could take to their CFO *immediately* - proof that legal isn't just a cost center. Once they saw what structured data could reveal, the conversation about the full platform became much easier. It was a GTM accelerant, not the core product.
+
+## Architectural Decisions
+
+### Why Server-First Next.js 15
+
+Legal software needs to feel fast while handling complex data relationships. I chose a server-first architecture with React Server Components for several reasons:
+
+**Bundle size matters for enterprise.** Corporate networks are often throttled. Server Components let me ship significantly smaller client bundles - the initial load contains almost no JavaScript beyond hydration.
+
+**Data fetching simplicity.** Legal matters have deep relationships: a matter has tasks, tasks have assignees, assignees belong to teams, teams have permissions. Server Components let me fetch this data hierarchy once, server-side, without the waterfall problem you get with client-side fetching.
+
+**Easier security model.** With Row-Level Security and server-side data fetching, I never worry about accidentally exposing data to the wrong tenant. The client simply doesn't have access to make unauthorized queries.
+
+### Why Supabase Over Rolling My Own
+
+For a fast-moving startup, Supabase gave me a force multiplier:
+
+**Real-time out of the box.** Legal teams wanted live updates - when someone else is viewing a matter, when a task gets completed, when a new document is uploaded. Supabase Realtime handles this without me managing WebSocket infrastructure.
+
+**Row-Level Security.** I wrote 50+ RLS policies that guarantee data isolation at the database level. Even if I mess up in application code, a user from Org A physically cannot access Org B's data. This mattered for selling to compliance-conscious legal departments.
+
+**Auth + Storage + Database in one.** I didn't want to integrate Clerk + S3 + Postgres separately. Supabase gave me a coherent stack where auth tokens automatically apply to database queries and storage access.
+
+### Real-Time Sync: WebSocket with Polling Fallback
+
+Legal teams collaborate on matters in real-time - multiple people viewing the same matter, updating tasks, uploading documents. Stale data causes confusion and duplicate work.
+
+I implemented a hybrid real-time sync strategy:
+
+**WebSocket-first via Supabase Realtime.** For most users on modern networks, WebSocket connections provide instant updates. When someone completes a task, everyone viewing that matter sees it immediately.
+
+**Polling fallback for restrictive networks.** Enterprise networks often block WebSocket connections or route them through proxies that break them. The system detects connection failures and falls back to polling - checking for updates every few seconds. Not as instant, but reliable.
+
+**Optimistic updates with reconciliation.** When a user makes a change, the UI updates immediately (optimistic) while the request is in flight. If the server rejects the change, we reconcile back to the true state. This makes the app feel fast even on slow connections.
+
+### Building for SOC2-Readiness
+
+Legal departments handle sensitive data. We weren't pursuing SOC2 certification yet, but we built the architecture to be certification-ready:
+
+**Audit trails everywhere.** Every significant action logs to an audit table: who did what, when, and the full before/after state. This isn't just for compliance - it's genuinely useful when legal teams need to prove what happened.
+
+**Data isolation by design.** Row-Level Security policies at the database level, not just application code. Even if there's a bug in the API, data can't leak across organizations.
+
+**Encryption in transit and at rest.** All data encrypted via Supabase's infrastructure. No sensitive data in logs or error messages.
+
+**Access controls with principle of least privilege.** Users only see matters they're assigned to (configurable per organization). Admins have audit visibility but can't modify historical records.
+
+### The AI Email Pipeline: Building Around Early LLM Constraints
+
+Email-to-task sounds simple. It's not - especially when you're building during the early days of production LLMs.
+
+**The timing mattered.** We started building in late 2023 - GPT-4 and Claude 2 existed, but production LLM infrastructure was still maturing. LLM calls were slow - we were dealing with around 2-minute response times initially. The models were expensive. And our customers - legal teams - cared deeply about consistency. They couldn't have a system that gave different answers to the same email depending on the model's mood.
+
+**The real challenge wasn't extraction - it was efficiency and determinism.** An email might say "can you review the contract and send comments by Friday" - extracting that task isn't hard for an LLM. But hitting the LLM for every email, waiting 2 minutes each time, and getting inconsistent results? That doesn't scale.
+
+**My approach: Minimize LLM surface area**
+
+<EmailPipeline />
+
+We got response times down from 2 minutes to 30 seconds, then made everything async. But the real wins came from *not* calling the LLM at all for most emails:
+
+1. **Semantic graph filtering** - Before any LLM call, we'd check: is this email even worth processing? Using pgVector embeddings, we built a graph of relationship connections and email patterns. Routine status updates, FYI forwards, calendar confirmations - the system learned to recognize and skip these without touching the LLM.
+
+2. **Relationship pre-processing** - When we did need the LLM, we'd pre-compute the relationship context: who sent this, what matters are they on, what's their typical communication pattern, what entities have they mentioned before. This context went *into* the prompt, making extraction faster and more consistent.
+
+3. **Deterministic wrapper** - We built a deterministic system on top to limit non-deterministic behavior. Hash checks caught exact duplicates. Semantic similarity caught near-duplicates. Template matching caught common patterns. The LLM only handled genuinely novel content.
+
+**The philosophy: Building organizational memory**
+
+The goal wasn't just "turn emails into tasks." It was creating a memory for the organization - a system that understood relationships, recognized patterns, and got smarter over time. The LLM was one tool in that system, not the whole system.
+
+This approach has aged well. LLMs are faster and cheaper now, but the architecture - filter aggressively, pre-compute context, wrap non-determinism in deterministic checks - still makes sense. You want the AI doing the hard cognitive work, not burning cycles on things rules can handle.
+
+## Building the Outside Counsel Engagement Studio
+
+This feature is what got us the most early interest. The workflow:
+
+1. **Legal team creates an RFP** using a wizard I built - scope of work, budget ranges, timeline, evaluation criteria
+2. **System generates a public, tokenized submission link** - law firms can respond without creating accounts
+3. **Firms submit proposals** through a structured form matching the RFP criteria
+4. **Automated scoring** calculates weighted scores based on the criteria the legal team defined
+5. **Dashboard surfaces recommendations** with side-by-side comparisons
+
+The token-based submission was technically interesting. Each RFP generates a unique, time-limited URL. The submission form validates against the original RFP schema. Law firms get a professional experience without the friction of account creation, and legal teams get structured data they can actually compare.
+
+I also built a **firm performance dashboard** that tracks metrics over time: billing compliance, response times, matter outcomes by firm. This gives legal teams leverage in negotiations - "your average response time is 3 days slower than other firms on similar matters."
+
+## The Data Model
+
+Legal software is relational. I designed around a few core concepts:
+
+**Organizations → Users → Teams → Permissions.** Multi-tenant from day one. Every query goes through RLS. I use materialized views (`mv_organization_dashboard`) for dashboard aggregates so the CEO-level "how is legal doing?" query runs in under 100ms.
+
+**Matters → Tasks → Assignees.** Tasks support dependencies with cycle detection (you can't make Task A depend on Task B if B already depends on A). Assignees can be internal team members or external counsel, each with different budget and billing tracking.
+
+**Matters → Documents → Embeddings.** Every document gets chunked and embedded using OpenAI's text-embedding-3-small. This powers semantic search - users can ask "what did we discuss about indemnification?" and get relevant document excerpts across the matter.
+
+**Matters → Knowledge Graph.** I built a simple relationship system where users can tag matters as "similar_to", "depends_on", or "references" other matters. Combined with the embedding similarity, this surfaces related matters automatically.
+
+## Testing in High-Stakes Domain
+
+Legal software can't have bugs that cause missed deadlines. I built a serious testing infrastructure:
+
+**Cypress E2E with database isolation.** Each test runs in a transaction that rolls back after completion. Tests don't interfere with each other, and I can run the full suite in parallel.
+
+**Custom auth optimization.** The full Supabase auth flow is slow for tests. I built `cy.loginViaDB()` that inserts a session directly into the database - dramatically faster test runs.
+
+**Critical path coverage.** Every flow that could result in a missed deadline or data loss has E2E coverage: task creation, deadline modification, matter access control changes.
+
+## Product-Engineering Integration
+
+Working with a domain expert co-founder taught me a lot about legal workflows I never would have intuited:
+
+**Deadline calculations are complex.** "30 days from filing" sounds simple, but courts have rules about weekends, holidays, and what counts as a "filing" date. I built a deadline engine that handles these calculations.
+
+**Audit trails are non-negotiable.** Legal teams need to prove what happened when. Every significant action logs to an audit table with user, timestamp, and full before/after state.
+
+**Permission granularity varies.** Some organizations want strict "only assigned users can see a matter." Others want "everyone in legal can see everything." I built flexible permission models that accommodate both.
+
+## Impact
+
+**Year-long commitment to entrepreneurship.** Sustained focus on building a complex product from 0 to 1, managing the full technical scope while navigating startup dynamics.
+
+**Five major modules shipped.** Matters, tasks, documents, outside counsel engagement, and email processing - each production-ready.
+
+**AI pipeline processing real correspondence.** The email-to-task system was handling actual legal emails with effective duplicate prevention.
+
+**YC interview validation.** Got through the initial YC screening process - useful signal that the problem and approach resonated.
+
+**Enterprise-ready architecture.** Multi-tenant, auditable, and performant enough for teams with hundreds of active matters.
+
+After a year of building, I stepped back from the project due to differing visions for the company's direction. The technical foundation continues to serve the platform's development.
+
+## What I'd Do Differently
+
+**Start with more user research.** We validated the problem through conversations, but I wish I'd done more shadowing of actual legal workflows before committing to specific UX patterns.
+
+**Build analytics earlier.** The dashboard views I built late in the project should have come earlier - they drove a lot of the product conversations about what metrics matter.
+
+**Document RLS policies as I went.** 50+ policies are a lot to reason about. I ended up building a testing framework to verify them, but I should have documented the intended behavior from the start.
+
+## Technical Summary
+
+This project demonstrated my ability to:
+
+- Architect a production system from scratch in a complex domain
+- Build AI pipelines that handle real-world messiness (email processing)
+- Design multi-tenant systems with strong security guarantees
+- Ship quickly without accumulating technical debt
+- Work closely with domain experts to translate requirements into technical solutions
+
+*Built with: Next.js 15, React Server Components, TypeScript, Supabase (PostgreSQL + Auth + Storage + Realtime), AWS Bedrock (Claude 3.5), Inngest, pgVector, Tailwind CSS, Cypress*

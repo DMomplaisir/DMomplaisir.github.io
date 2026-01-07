@@ -1,0 +1,1114 @@
+---
+/*
+ * Homepage - Dylan Momplaisir Portfolio
+ * Elevation Grid + Blueprint Light Design System
+ * Warm minimalism with architectural precision
+ */
+
+import { getCollection } from 'astro:content';
+import InteractiveLanding from '../components/InteractiveLanding.astro';
+import Footer from '../components/Footer.astro';
+
+// Get featured projects
+const allProjects = await getCollection('projects');
+const featuredProjects = allProjects
+  .filter(p => p.data.featured)
+  .sort((a, b) => {
+    const dateA = a.data.date ? new Date(a.data.date).getTime() : 0;
+    const dateB = b.data.date ? new Date(b.data.date).getTime() : 0;
+    return dateB - dateA;
+  })
+  .slice(0, 3);
+
+const pageTitle = "Dylan Momplaisir - Full-Stack Engineer & Builder";
+const pageDescription = "Leveraging technology to tell stories. Building bridges between bits and narratives.";
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content={pageDescription}>
+  <meta name="generator" content={Astro.generator}>
+
+  <!-- Preconnect to fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+  <!-- Design System Imports -->
+  <link rel="stylesheet" href="/src/styles/variables.css">
+  <link rel="stylesheet" href="/src/styles/fonts.css">
+
+  <title>{pageTitle}</title>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content={pageTitle}>
+  <meta property="og:description" content={pageDescription}>
+  <meta property="og:type" content="website">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content={pageTitle}>
+  <meta name="twitter:description" content={pageDescription}>
+</head>
+
+<body>
+  <!-- Subtle Grid Background (permanent, 2-3% opacity) -->
+  <div class="grid-background" aria-hidden="true"></div>
+
+  <!-- Elevation 0.0m: Hero Section -->
+  <section class="hero-section elevation-0" id="hero">
+    <div class="hero-container">
+      <div class="elevation-marker" aria-hidden="true">
+        <span class="marker-line"></span>
+        <span class="marker-label">0.0m</span>
+      </div>
+
+      <h1 class="hero-name">Dylan Momplaisir</h1>
+
+      <div class="hero-narrative">
+        <p class="narrative-line">Leveraging technology to tell stories.</p>
+        <p class="narrative-line">Building bridges between bits and narratives.</p>
+        <p class="narrative-line">Creating platforms that transform how we explore</p>
+        <p class="narrative-line">and understand our world.</p>
+      </div>
+
+      <div class="hero-ctas">
+        <a href="#work" class="btn-primary">View Work</a>
+        <a href="/resume.pdf" class="btn-secondary">Download Resume</a>
+      </div>
+
+      <a href="#work" class="scroll-indicator" aria-label="Scroll to view work">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="7 13 12 18 17 13"></polyline>
+          <polyline points="7 6 12 11 17 6"></polyline>
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- Elevation +2.4m: Featured Work -->
+  <section class="featured-work elevation-24" id="work">
+    <div class="container">
+      <div class="elevation-marker" aria-hidden="true">
+        <span class="marker-line"></span>
+        <span class="marker-label">+2.4m</span>
+      </div>
+
+      <h2 class="section-heading">Selected Work</h2>
+      <p class="section-subtitle">Featured projects spanning full-stack engineering, product development, and technical leadership.</p>
+
+      <!-- Stacked Papers Slider -->
+      <div class="project-stack-container">
+        <div class="project-stack">
+          {featuredProjects.map((project, index) => (
+            <article class="project-card" data-index={index} data-stack-position={index}>
+              <a href={`/projects/${project.slug}/`} class="card-link">
+                <!-- Paper texture overlay -->
+                <div class="paper-texture" aria-hidden="true"></div>
+
+                <!-- Blueprint Overlay (appears on hover) -->
+                <div class="blueprint-overlay" aria-hidden="true">
+                  <svg class="blueprint-grid" width="100%" height="100%">
+                    <defs>
+                      <pattern id={`grid-${project.slug}`} width="20" height="20" patternUnits="userSpaceOnUse">
+                        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="var(--blueprint-line)" stroke-width="1"/>
+                      </pattern>
+                    </defs>
+                    <rect width="100%" height="100%" fill={`url(#grid-${project.slug})`} />
+                  </svg>
+                </div>
+
+                <!-- Architectural Corner Accents -->
+                <div class="corner-accent corner-tl" aria-hidden="true"></div>
+                <div class="corner-accent corner-br" aria-hidden="true"></div>
+
+                <div class="card-content">
+                  <!-- Year Badge (architectural style) -->
+                  {project.data.date && (
+                    <div class="year-badge" aria-label={`Year: ${new Date(project.data.date).getFullYear()}`}>
+                      {new Date(project.data.date).getFullYear()}
+                    </div>
+                  )}
+
+                  <h3 class="project-title">{project.data.title}</h3>
+                  <p class="project-description">{project.data.description}</p>
+
+                  <!-- Technical Specifications -->
+                  <div class="project-meta">
+                    {project.data.tech_stack && (
+                      <div class="meta-item">
+                        <span class="meta-label">Tech</span>
+                        <span class="meta-value">{project.data.tech_stack.slice(0, 4).join(', ')}</span>
+                      </div>
+                    )}
+                    {project.data.impact && (
+                      <div class="meta-item">
+                        <span class="meta-label">Impact</span>
+                        <span class="meta-value">{project.data.impact}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <span class="view-project">View Full Case Study →</span>
+                </div>
+              </a>
+            </article>
+          ))}
+        </div>
+
+        <!-- Stack Navigation -->
+        <div class="stack-nav">
+          <button class="stack-btn stack-prev" aria-label="Previous project">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+
+          <div class="stack-indicators">
+            {featuredProjects.map((_, index) => (
+              <button class="stack-indicator" data-index={index} aria-label={`Go to project ${index + 1}`}></button>
+            ))}
+          </div>
+
+          <button class="stack-btn stack-next" aria-label="Next project">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <a href="/projects" class="view-all">View All Projects →</a>
+    </div>
+  </section>
+
+  <!-- Elevation +4.8m: About Preview -->
+  <section class="about-preview elevation-48" id="about">
+    <div class="container-narrow">
+      <div class="elevation-marker" aria-hidden="true">
+        <span class="marker-line"></span>
+        <span class="marker-label">+4.8m</span>
+      </div>
+
+      <h2 class="section-heading">About</h2>
+      <div class="about-content">
+        <p class="large-text">
+          I build digital products that solve real problems.
+          <span class="highlight">5+ years shipping features at scale</span>, specializing in
+          product engineering and technical leadership.
+        </p>
+        <p class="body-text">
+          From urbanism to full-stack engineering—my path bridges architecture,
+          data journalism, and product development. I bring systems thinking to every project,
+          creating platforms that transform how we tell stories and understand our world.
+        </p>
+      </div>
+      <a href="/about" class="learn-more">Learn More →</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <Footer />
+
+  <!-- Interactive Features -->
+  <InteractiveLanding />
+
+  <script>
+    // Stacked Papers Functionality
+    const cards = document.querySelectorAll('.project-card') as NodeListOf<HTMLElement>;
+    const prevBtn = document.querySelector('.stack-prev');
+    const nextBtn = document.querySelector('.stack-next');
+    const indicators = document.querySelectorAll('.stack-indicator');
+
+    let currentIndex = 0;
+    const totalCards = cards.length;
+    let autoplayInterval: number;
+
+    function updateStack() {
+      // Update card positions in stack
+      cards.forEach((card, index) => {
+        const position = (index - currentIndex + totalCards) % totalCards;
+        card.setAttribute('data-stack-position', position.toString());
+
+        // Only show top 3 cards
+        if (position > 2) {
+          card.style.display = 'none';
+        } else {
+          card.style.display = 'block';
+        }
+      });
+
+      // Update indicators
+      indicators.forEach((indicator, index) => {
+        if (index === currentIndex) {
+          indicator.classList.add('active');
+        } else {
+          indicator.classList.remove('active');
+        }
+      });
+    }
+
+    function nextCard() {
+      const topCard = cards[currentIndex];
+
+      // Add removing animation to top card
+      topCard.classList.add('removing');
+
+      // Wait for animation, then update stack
+      setTimeout(() => {
+        topCard.classList.remove('removing');
+        currentIndex = (currentIndex + 1) % totalCards;
+        updateStack();
+      }, 700); // Match animation duration
+    }
+
+    function prevCard() {
+      currentIndex = (currentIndex - 1 + totalCards) % totalCards;
+      updateStack();
+    }
+
+    function goToCard(index: number) {
+      if (index === currentIndex) return;
+
+      const topCard = cards[currentIndex];
+      topCard.classList.add('removing');
+
+      setTimeout(() => {
+        topCard.classList.remove('removing');
+        currentIndex = index;
+        updateStack();
+      }, 700);
+    }
+
+    function startAutoplay() {
+      autoplayInterval = window.setInterval(nextCard, 7000); // Auto-advance every 7 seconds
+    }
+
+    function stopAutoplay() {
+      clearInterval(autoplayInterval);
+    }
+
+    // Event Listeners
+    if (prevBtn) {
+      prevBtn.addEventListener('click', () => {
+        stopAutoplay();
+        prevCard();
+        startAutoplay();
+      });
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => {
+        stopAutoplay();
+        nextCard();
+        startAutoplay();
+      });
+    }
+
+    indicators.forEach((indicator, index) => {
+      indicator.addEventListener('click', () => {
+        stopAutoplay();
+        goToCard(index);
+        startAutoplay();
+      });
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') {
+        stopAutoplay();
+        prevCard();
+        startAutoplay();
+      } else if (e.key === 'ArrowRight') {
+        stopAutoplay();
+        nextCard();
+        startAutoplay();
+      }
+    });
+
+    // Pause autoplay on hover
+    const stackContainer = document.querySelector('.project-stack-container');
+    if (stackContainer) {
+      stackContainer.addEventListener('mouseenter', stopAutoplay);
+      stackContainer.addEventListener('mouseleave', startAutoplay);
+    }
+
+    // Initialize
+    updateStack();
+    startAutoplay();
+
+    // Pause autoplay when page is hidden
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        stopAutoplay();
+      } else {
+        startAutoplay();
+      }
+    });
+  </script>
+</body>
+</html>
+
+<style>
+  /* ==================== GLOBAL RESETS ==================== */
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-body);
+    color: var(--text-primary);
+    background-color: var(--warm-white);
+    line-height: var(--leading-normal);
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* ==================== GRID BACKGROUND ==================== */
+
+  .grid-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+      linear-gradient(var(--blueprint-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--blueprint-line) 1px, transparent 1px);
+    background-size: var(--grid-unit) var(--grid-unit);
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ==================== ELEVATION MARKERS ==================== */
+
+  .elevation-marker {
+    position: absolute;
+    left: var(--space-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    opacity: 0.4;
+    transition: opacity var(--transition-base);
+  }
+
+  section:hover .elevation-marker {
+    opacity: 0.7;
+  }
+
+  .marker-line {
+    width: 16px;
+    height: 1px;
+    background: var(--concrete-400);
+  }
+
+  .marker-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--concrete-400);
+    letter-spacing: var(--tracking-wide);
+  }
+
+  /* ==================== HERO SECTION (Elevation 0.0m) ==================== */
+
+  .hero-section {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-xxl) var(--space-lg);
+    z-index: 1;
+  }
+
+  .hero-section .elevation-marker {
+    top: var(--space-xxl);
+  }
+
+  .hero-container {
+    max-width: var(--width-text);
+    text-align: center;
+    animation: heroFadeIn var(--duration-slower) var(--ease-smooth) forwards;
+  }
+
+  @keyframes heroFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .hero-name {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: var(--weight-regular);
+    font-variation-settings: 'wdth' 75; /* Narrow Editorial Old */
+    color: var(--concrete-900);
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--leading-tight);
+    margin-bottom: var(--space-xl);
+  }
+
+  .hero-narrative {
+    margin-bottom: var(--space-xl);
+    animation: narrativeFadeIn var(--duration-slower) var(--ease-smooth) 300ms forwards;
+    opacity: 0;
+  }
+
+  @keyframes narrativeFadeIn {
+    to { opacity: 1; }
+  }
+
+  .narrative-line {
+    font-family: var(--font-body);
+    font-size: var(--text-lg);
+    color: var(--concrete-400);
+    line-height: var(--leading-relaxed);
+    margin-bottom: var(--space-xs);
+  }
+
+  .narrative-line:last-child {
+    margin-bottom: 0;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: var(--space-sm);
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: ctasFadeIn var(--duration-slower) var(--ease-smooth) 600ms forwards;
+    opacity: 0;
+  }
+
+  @keyframes ctasFadeIn {
+    to { opacity: 1; }
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    padding: calc(var(--space-sm) - 2px) var(--space-lg);
+    text-decoration: none;
+    border-radius: var(--radius-base);
+    font-weight: var(--weight-medium);
+    font-size: var(--text-base);
+    transition: all var(--transition-base);
+    display: inline-block;
+    border: var(--border-thin) solid transparent;
+  }
+
+  .btn-primary {
+    background: var(--burgundy-primary);
+    color: var(--warm-white);
+    border-color: var(--burgundy-primary);
+  }
+
+  .btn-primary:hover {
+    background: var(--burgundy-hover);
+    border-color: var(--burgundy-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-burgundy);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--concrete-900);
+    border-color: var(--concrete-300);
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--burgundy-primary);
+    color: var(--burgundy-primary);
+    transform: translateY(-2px);
+  }
+
+  .scroll-indicator {
+    position: absolute;
+    bottom: var(--space-lg);
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--concrete-400);
+    animation: scrollBounce 2s ease-in-out infinite;
+    opacity: 0.6;
+    transition: opacity var(--transition-base);
+  }
+
+  .scroll-indicator:hover {
+    opacity: 1;
+  }
+
+  @keyframes scrollBounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+  }
+
+  /* ==================== FEATURED WORK (Elevation +2.4m) ==================== */
+
+  .featured-work {
+    position: relative;
+    padding: var(--space-xxxl) var(--space-lg);
+    background: var(--cream);
+    z-index: 1;
+  }
+
+  .featured-work .elevation-marker {
+    top: calc(var(--space-xxxl) + var(--space-sm));
+  }
+
+  .container {
+    max-width: var(--width-narrow);
+    margin: 0 auto;
+  }
+
+  .section-heading {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: var(--weight-regular);
+    color: var(--concrete-900);
+    margin-bottom: var(--space-md);
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--leading-snug);
+  }
+
+  .section-subtitle {
+    font-size: var(--text-lg);
+    color: var(--concrete-400);
+    margin-bottom: var(--space-xl);
+    max-width: 60ch;
+  }
+
+  /* ==================== STACKED PAPERS PROJECT CARDS ==================== */
+
+  .project-stack-container {
+    position: relative;
+    margin-bottom: var(--space-xxl);
+    perspective: 1800px;
+    padding: var(--space-lg) 0;
+  }
+
+  .project-stack {
+    position: relative;
+    width: 100%;
+    max-width: var(--width-narrow);
+    margin: 0 auto;
+    min-height: 520px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .project-card {
+    position: absolute;
+    width: 100%;
+    background: var(--warm-white);
+    border: var(--border-thin) solid var(--warm-gray-200);
+    border-radius: var(--radius-base);
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    cursor: pointer;
+    will-change: transform, opacity;
+  }
+
+  /* Stack positioning - more dramatic depth */
+  .project-card[data-stack-position="0"] {
+    transform: translateY(0) translateZ(0) rotate(0deg) scale(1);
+    z-index: 3;
+    box-shadow:
+      0 12px 40px rgba(144, 0, 32, 0.08),
+      0 6px 20px rgba(0, 0, 0, 0.12),
+      0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .project-card[data-stack-position="1"] {
+    transform: translateY(12px) translateZ(-50px) rotate(-1.5deg) scale(0.95);
+    z-index: 2;
+    opacity: 0.9;
+    box-shadow:
+      0 6px 24px rgba(0, 0, 0, 0.1),
+      0 3px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .project-card[data-stack-position="2"] {
+    transform: translateY(24px) translateZ(-100px) rotate(2deg) scale(0.90);
+    z-index: 1;
+    opacity: 0.75;
+    box-shadow:
+      0 4px 16px rgba(0, 0, 0, 0.08),
+      0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+
+  /* Cards being removed - spring-like slide out */
+  .project-card.removing {
+    animation: slideOutCard 0.7s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+  }
+
+  @keyframes slideOutCard {
+    0% {
+      transform: translateY(0) rotate(0deg) scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: translateX(30%) translateY(-10px) rotate(8deg) scale(1.05);
+      opacity: 0.8;
+    }
+    100% {
+      transform: translateX(130%) translateY(-20px) rotate(15deg) scale(0.9);
+      opacity: 0;
+    }
+  }
+
+  /* Top card hover effect */
+  .project-card[data-stack-position="0"]:hover {
+    border-color: var(--burgundy-primary);
+    box-shadow:
+      0 16px 50px rgba(144, 0, 32, 0.12),
+      0 8px 25px rgba(0, 0, 0, 0.15),
+      0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-6px) translateZ(10px) rotate(0deg) scale(1.01);
+  }
+
+  .project-card[data-stack-position="0"]:hover .blueprint-overlay {
+    opacity: 0.6;
+  }
+
+  .project-card[data-stack-position="0"]:hover .corner-accent {
+    opacity: 0.6;
+  }
+
+  .project-card[data-stack-position="0"]:active {
+    transform: translateY(-2px) translateZ(5px) rotate(0deg) scale(0.99);
+  }
+
+  /* Paper texture */
+  .paper-texture {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.01) 2px,
+        rgba(0, 0, 0, 0.01) 4px
+      );
+    pointer-events: none;
+    opacity: 0.3;
+    z-index: 1;
+  }
+
+  .blueprint-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity var(--transition-base);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .corner-accent {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: var(--border-thin) solid var(--burgundy-primary);
+    opacity: 0;
+    transition: opacity var(--transition-base);
+    z-index: 3;
+  }
+
+  .corner-tl {
+    top: var(--space-md);
+    left: var(--space-md);
+    border-right: none;
+    border-bottom: none;
+  }
+
+  .corner-br {
+    bottom: var(--space-md);
+    right: var(--space-md);
+    border-left: none;
+    border-top: none;
+  }
+
+  .card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    height: 100%;
+  }
+
+  .card-content {
+    position: relative;
+    padding: var(--space-xl) var(--space-xxl) var(--space-xxl);
+    z-index: 4;
+    min-height: 480px;
+  }
+
+  .year-badge {
+    position: absolute;
+    top: var(--space-lg);
+    right: var(--space-xl);
+    font-family: var(--font-display);
+    font-size: 4.5rem;
+    font-weight: var(--weight-light);
+    color: var(--warm-gray-200);
+    line-height: 1;
+    opacity: 0.2;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .project-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    color: var(--concrete-900);
+    margin-bottom: var(--space-md);
+    font-weight: var(--weight-regular);
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--leading-tight);
+    max-width: 20ch;
+  }
+
+  .project-description {
+    font-size: var(--text-base);
+    color: var(--concrete-400);
+    line-height: var(--leading-relaxed);
+    margin-bottom: var(--space-lg);
+    max-width: 60ch;
+  }
+
+  .project-meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+    padding-top: var(--space-md);
+    border-top: var(--border-thin) solid var(--warm-gray-200);
+  }
+
+  .meta-item {
+    display: flex;
+    gap: var(--space-md);
+    font-size: var(--text-base);
+  }
+
+  .meta-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--concrete-400);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wider);
+    min-width: 80px;
+  }
+
+  .meta-value {
+    color: var(--concrete-900);
+    line-height: 1.5;
+  }
+
+  .view-project {
+    color: var(--burgundy-primary);
+    font-weight: var(--weight-medium);
+    font-size: var(--text-base);
+    display: inline-block;
+    transition: transform var(--transition-fast);
+  }
+
+  .project-card[data-stack-position="0"]:hover .view-project {
+    transform: translateX(4px);
+  }
+
+  /* ==================== STACK NAVIGATION ==================== */
+
+  .stack-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xl);
+    margin-top: var(--space-xl);
+    padding: var(--space-md);
+  }
+
+  .stack-btn {
+    background: var(--cream);
+    border: var(--border-thin) solid var(--warm-gray-200);
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    color: var(--concrete-900);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+
+  .stack-btn:hover {
+    background: var(--burgundy-primary);
+    border-color: var(--burgundy-primary);
+    color: var(--warm-white);
+    transform: scale(1.08);
+    box-shadow: 0 4px 12px rgba(144, 0, 32, 0.15);
+  }
+
+  .stack-btn:active {
+    transform: scale(0.95);
+  }
+
+  .stack-indicators {
+    display: flex;
+    gap: var(--space-sm);
+    align-items: center;
+  }
+
+  .stack-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--warm-gray-200);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s var(--ease-smooth);
+  }
+
+  .stack-indicator:hover {
+    background: var(--concrete-400);
+    transform: scale(1.4);
+  }
+
+  .stack-indicator.active {
+    background: var(--burgundy-primary);
+    width: 24px;
+    height: 8px;
+    border-radius: 4px;
+  }
+
+  .view-all {
+    display: inline-block;
+    color: var(--burgundy-primary);
+    font-weight: var(--weight-medium);
+    font-size: var(--text-lg);
+    text-decoration: none;
+    transition: transform var(--transition-base);
+  }
+
+  .view-all:hover {
+    transform: translateX(4px);
+  }
+
+  /* ==================== ABOUT PREVIEW (Elevation +4.8m) ==================== */
+
+  .about-preview {
+    position: relative;
+    padding: var(--space-xxxl) var(--space-lg);
+    background: var(--warm-white);
+    z-index: 1;
+  }
+
+  .about-preview .elevation-marker {
+    top: calc(var(--space-xxxl) + var(--space-sm));
+  }
+
+  .container-narrow {
+    max-width: var(--width-narrow);
+    margin: 0 auto;
+  }
+
+  .about-content {
+    margin-bottom: var(--space-xl);
+  }
+
+  .large-text {
+    font-size: var(--text-xl);
+    line-height: var(--leading-relaxed);
+    color: var(--concrete-900);
+    margin-bottom: var(--space-md);
+    font-weight: var(--weight-regular);
+  }
+
+  .highlight {
+    color: var(--burgundy-primary);
+    font-weight: var(--weight-medium);
+  }
+
+  .body-text {
+    font-size: var(--text-base);
+    line-height: var(--leading-relaxed);
+    color: var(--concrete-400);
+  }
+
+  .learn-more {
+    color: var(--burgundy-primary);
+    font-weight: var(--weight-medium);
+    font-size: var(--text-lg);
+    text-decoration: none;
+    transition: transform var(--transition-base);
+    display: inline-block;
+  }
+
+  .learn-more:hover {
+    transform: translateX(4px);
+  }
+
+  /* ==================== RESPONSIVE ADJUSTMENTS ==================== */
+
+  @media (max-width: 768px) {
+    .hero-section,
+    .featured-work,
+    .about-preview {
+      padding-left: var(--space-md);
+      padding-right: var(--space-md);
+    }
+
+    .elevation-marker {
+      left: var(--space-md);
+    }
+
+    .hero-name {
+      margin-bottom: var(--space-lg);
+    }
+
+    .hero-narrative {
+      margin-bottom: var(--space-lg);
+    }
+
+    .narrative-line {
+      font-size: var(--text-base);
+    }
+
+    .card-content {
+      padding: var(--space-md) var(--space-lg) var(--space-lg);
+      min-height: 420px;
+    }
+
+    .year-badge {
+      font-size: 3rem;
+      top: var(--space-sm);
+      right: var(--space-md);
+    }
+
+    .project-stack {
+      min-height: 470px;
+    }
+
+    .stack-btn {
+      width: 42px;
+      height: 42px;
+    }
+
+    .stack-nav {
+      gap: var(--space-lg);
+      margin-top: var(--space-lg);
+    }
+
+    .project-card[data-stack-position="1"] {
+      transform: translateY(10px) translateZ(-40px) rotate(-1.2deg) scale(0.96);
+    }
+
+    .project-card[data-stack-position="2"] {
+      transform: translateY(20px) translateZ(-80px) rotate(1.8deg) scale(0.92);
+    }
+
+    .hero-ctas {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+      width: 100%;
+      max-width: 280px;
+      text-align: center;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .featured-work,
+    .about-preview {
+      padding-top: var(--space-xxl);
+      padding-bottom: var(--space-xxl);
+    }
+
+    .card-content {
+      padding: var(--space-sm) var(--space-md) var(--space-md);
+      min-height: 400px;
+    }
+
+    .year-badge {
+      font-size: 2.25rem;
+      top: var(--space-xs);
+      right: var(--space-sm);
+    }
+
+    .elevation-marker {
+      left: var(--space-sm);
+    }
+
+    .project-title {
+      font-size: clamp(1.5rem, 5vw, 2rem);
+      max-width: 100%;
+    }
+
+    .project-description {
+      font-size: var(--text-sm);
+    }
+
+    .project-stack {
+      min-height: 440px;
+    }
+
+    .project-stack-container {
+      padding: var(--space-md) 0;
+    }
+
+    .stack-btn {
+      width: 38px;
+      height: 38px;
+    }
+
+    .stack-nav {
+      gap: var(--space-md);
+    }
+
+    .project-card[data-stack-position="1"] {
+      transform: translateY(8px) translateZ(-30px) rotate(-1deg) scale(0.97);
+    }
+
+    .project-card[data-stack-position="2"] {
+      transform: translateY(16px) translateZ(-60px) rotate(1.5deg) scale(0.94);
+    }
+  }
+</style>

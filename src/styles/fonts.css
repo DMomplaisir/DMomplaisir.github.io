@@ -1,0 +1,105 @@
+/*
+ * Font Declarations
+ * Typography system for Dylan Momplaisir Portfolio
+ *
+ * Font Stack:
+ * - Display (headlines): Editorial Old (Pangram Pangram - Variable Font)
+ * - Body (text): Inter (Google Fonts)
+ * - Technical (code/specs): Office Code Pro or JetBrains Mono
+ */
+
+/* ==================== EDITORIAL OLD (Display/Headlines) ==================== */
+
+/* Editorial Old - Variable Font (Upright) */
+@font-face {
+  font-family: 'Editorial Old';
+  src: url('/fonts/editorial-old/PPEditorialOld-Variable.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Editorial Old - Variable Font (Italic) */
+@font-face {
+  font-family: 'Editorial Old';
+  src: url('/fonts/editorial-old/PPEditorialOld-ItalicVariable.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ==================== NEUE MONTREAL (Body Text) ==================== */
+
+/* Neue Montreal - Regular */
+@font-face {
+  font-family: 'Neue Montreal';
+  src: url('/fonts/neue-montreal/NeueMontreal-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Neue Montreal - Medium */
+@font-face {
+  font-family: 'Neue Montreal';
+  src: url('/fonts/neue-montreal/NeueMontreal-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Neue Montreal - Bold */
+@font-face {
+  font-family: 'Neue Montreal';
+  src: url('/fonts/neue-montreal/NeueMontreal-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Neue Montreal - Italic */
+@font-face {
+  font-family: 'Neue Montreal';
+  src: url('/fonts/neue-montreal/NeueMontreal-Italic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ==================== INTER (Fallback) ==================== */
+
+/* Using Google Fonts CDN for Inter as fallback - optimal loading */
+
+/* ==================== FONT FEATURE SETTINGS ==================== */
+
+/* Enable OpenType features for better typography */
+body {
+  font-feature-settings:
+    'kern' 1,           /* Kerning */
+    'liga' 1,           /* Standard ligatures */
+    'calt' 1;           /* Contextual alternates */
+}
+
+/* Editorial Old specific features */
+.font-display {
+  font-feature-settings:
+    'kern' 1,
+    'liga' 1,
+    'calt' 1;
+}
+
+/* Inter specific features */
+.font-sans, .font-body {
+  font-feature-settings:
+    'kern' 1,
+    'liga' 1,
+    'calt' 1;
+}
+
+/* Mono font features */
+.font-mono {
+  font-feature-settings:
+    'kern' 1,
+    'liga' 0,           /* Disable ligatures in code */
+    'calt' 0;           /* Disable contextual alternates in code */
+}

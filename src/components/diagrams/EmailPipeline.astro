@@ -1,0 +1,364 @@
+---
+/**
+ * Email-to-Task Pipeline Diagram
+ * Animated flow visualization for Touchpoint project
+ *
+ * Shows: Email → Hash Check → Claude Analysis → Semantic Similarity → Task Generation
+ */
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div class:list={["pipeline-container", className]} data-pipeline="email">
+  <div class="pipeline-track">
+    <!-- Stage 1: Email Input -->
+    <div class="pipeline-stage" data-stage="1">
+      <div class="stage-node">
+        <div class="node-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="2" y="4" width="20" height="16" rx="2"/>
+            <path d="M22 6L12 13L2 6"/>
+          </svg>
+        </div>
+        <span class="node-label">Email</span>
+      </div>
+      <div class="flow-line">
+        <div class="flow-dot"></div>
+      </div>
+    </div>
+
+    <!-- Stage 2: Hash Check -->
+    <div class="pipeline-stage" data-stage="2">
+      <div class="stage-node">
+        <div class="node-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/>
+          </svg>
+        </div>
+        <span class="node-label">Hash Check</span>
+        <span class="node-detail">Exact duplicates</span>
+      </div>
+      <div class="flow-line">
+        <div class="flow-dot"></div>
+      </div>
+    </div>
+
+    <!-- Stage 3: Claude Analysis -->
+    <div class="pipeline-stage" data-stage="3">
+      <div class="stage-node highlight">
+        <div class="node-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
+          </svg>
+        </div>
+        <span class="node-label">Claude Analysis</span>
+        <span class="node-detail">Sonnet extraction</span>
+      </div>
+      <div class="flow-line">
+        <div class="flow-dot"></div>
+      </div>
+    </div>
+
+    <!-- Stage 4: Semantic Similarity -->
+    <div class="pipeline-stage" data-stage="4">
+      <div class="stage-node">
+        <div class="node-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="6" cy="6" r="3"/>
+            <circle cx="18" cy="18" r="3"/>
+            <path d="M8.5 8.5L15.5 15.5"/>
+            <circle cx="18" cy="6" r="3"/>
+            <circle cx="6" cy="18" r="3"/>
+          </svg>
+        </div>
+        <span class="node-label">Semantic Check</span>
+        <span class="node-detail">pgVector &gt;85%</span>
+      </div>
+      <div class="flow-line">
+        <div class="flow-dot"></div>
+      </div>
+    </div>
+
+    <!-- Stage 5: Task Generation -->
+    <div class="pipeline-stage" data-stage="5">
+      <div class="stage-node endpoint">
+        <div class="node-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M9 11l3 3L22 4"/>
+            <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+          </svg>
+        </div>
+        <span class="node-label">Task Created</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Progress indicator -->
+  <div class="pipeline-progress">
+    <div class="progress-bar"></div>
+  </div>
+</div>
+
+<style>
+  .pipeline-container {
+    --pipeline-color: var(--blueprint-blue);
+    --pipeline-bg: var(--blueprint-blue-faint);
+    --pipeline-line: var(--blueprint-line);
+    --node-size: 56px;
+    --flow-duration: 0.8s;
+
+    width: 100%;
+    padding: var(--space-xl) 0;
+    margin: var(--space-lg) 0;
+    background: var(--pipeline-bg);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--pipeline-line);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .pipeline-track {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 0 var(--space-lg);
+    gap: var(--space-xs);
+  }
+
+  .pipeline-stage {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    opacity: 0;
+    transform: translateY(8px);
+    animation: stageReveal 0.5s var(--ease-out) forwards;
+  }
+
+  .pipeline-stage[data-stage="1"] { animation-delay: 0.1s; }
+  .pipeline-stage[data-stage="2"] { animation-delay: 0.25s; }
+  .pipeline-stage[data-stage="3"] { animation-delay: 0.4s; }
+  .pipeline-stage[data-stage="4"] { animation-delay: 0.55s; }
+  .pipeline-stage[data-stage="5"] { animation-delay: 0.7s; }
+
+  @keyframes stageReveal {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .stage-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xs);
+    min-width: var(--node-size);
+  }
+
+  .node-icon {
+    width: var(--node-size);
+    height: var(--node-size);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--warm-white);
+    border: 2px solid var(--pipeline-color);
+    border-radius: var(--radius-lg);
+    color: var(--pipeline-color);
+    transition: all var(--transition-base);
+  }
+
+  .node-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .stage-node.highlight .node-icon {
+    background: var(--burgundy-primary);
+    border-color: var(--burgundy-primary);
+    color: var(--warm-white);
+    box-shadow: var(--shadow-burgundy);
+  }
+
+  .stage-node.endpoint .node-icon {
+    background: var(--success-green);
+    border-color: var(--success-green);
+    color: var(--warm-white);
+  }
+
+  .node-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
+    color: var(--text-primary);
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .node-detail {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-secondary);
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  /* Flow lines between nodes */
+  .flow-line {
+    flex: 1;
+    height: 2px;
+    background: var(--pipeline-line);
+    margin: 0 var(--space-sm);
+    margin-top: calc(var(--node-size) / 2);
+    position: relative;
+    min-width: 20px;
+  }
+
+  .flow-dot {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: var(--pipeline-color);
+    border-radius: 50%;
+    top: 50%;
+    left: 0;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    animation: flowPulse 2.5s var(--ease-in-out) infinite;
+  }
+
+  .pipeline-stage[data-stage="1"] .flow-dot { animation-delay: 0s; }
+  .pipeline-stage[data-stage="2"] .flow-dot { animation-delay: 0.5s; }
+  .pipeline-stage[data-stage="3"] .flow-dot { animation-delay: 1s; }
+  .pipeline-stage[data-stage="4"] .flow-dot { animation-delay: 1.5s; }
+
+  @keyframes flowPulse {
+    0% {
+      left: 0;
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      left: 100%;
+      opacity: 0;
+    }
+  }
+
+  /* Progress bar */
+  .pipeline-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--pipeline-line);
+  }
+
+  .progress-bar {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, var(--pipeline-color), var(--burgundy-primary));
+    animation: progressFill 2.5s var(--ease-out) infinite;
+  }
+
+  @keyframes progressFill {
+    0% { width: 0; }
+    100% { width: 100%; }
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .pipeline-track {
+      flex-direction: column;
+      align-items: stretch;
+      gap: var(--space-sm);
+    }
+
+    .pipeline-stage {
+      flex-direction: row;
+    }
+
+    .stage-node {
+      flex-direction: row;
+      gap: var(--space-sm);
+      min-width: auto;
+    }
+
+    .flow-line {
+      width: 2px;
+      height: 24px;
+      min-width: 2px;
+      margin: var(--space-xs) 0;
+      margin-left: calc(var(--node-size) / 2);
+    }
+
+    .flow-dot {
+      animation-name: flowPulseVertical;
+    }
+
+    @keyframes flowPulseVertical {
+      0% {
+        top: 0;
+        left: 50%;
+        opacity: 0;
+      }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% {
+        top: 100%;
+        left: 50%;
+        opacity: 0;
+      }
+    }
+
+    .node-detail {
+      display: none;
+    }
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .pipeline-stage {
+      opacity: 1;
+      transform: none;
+      animation: none;
+    }
+
+    .flow-dot {
+      animation: none;
+      opacity: 0.5;
+      left: 50%;
+    }
+
+    .progress-bar {
+      animation: none;
+      width: 100%;
+    }
+  }
+
+  /* Dark mode support */
+  @media (prefers-color-scheme: dark) {
+    .pipeline-container {
+      --pipeline-bg: rgba(14, 165, 233, 0.08);
+      --pipeline-line: rgba(14, 165, 233, 0.2);
+    }
+
+    .node-icon {
+      background: var(--concrete-900);
+    }
+
+    .node-label {
+      color: var(--warm-white);
+    }
+  }
+</style>
