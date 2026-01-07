@@ -8,6 +8,10 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 import { getRelatedProjects, formatDate, formatDateISO } from '../../utils/content-helpers';
 import Footer from '../../components/Footer.astro';
 
+// Import design system styles
+import '../../styles/variables.css';
+import '../../styles/fonts.css';
+
 // Generate static paths for all projects at build time
 // Excludes draft projects in production builds
 export async function getStaticPaths() {
@@ -66,8 +70,6 @@ const {
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <link rel="stylesheet" href="/src/styles/variables.css">
-  <link rel="stylesheet" href="/src/styles/fonts.css">
 
   <!-- Open Graph -->
   <meta property="og:title" content={title}>
