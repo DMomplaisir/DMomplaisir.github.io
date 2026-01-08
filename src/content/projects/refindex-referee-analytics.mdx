@@ -1,13 +1,13 @@
 ---
 title: "RefIndex"
-description: "Replaced paper-based referee charting with a digital platform enabling same-night evaluations - now serving 10+ customers including ESPN correspondents, with 400K+ events structured for analytics and future computer vision"
+description: "Replaced paper-based referee charting with a digital platform enabling same-night evaluations - now serving 10 charters providing training data, with 400K+ events structured for analytics and computer vision prototyping"
 tags: ["Contract", "Full-Stack", "Performance", "Analytics", "Sports Tech"]
 line_color: "orange"
 date: 2026-01-06
 featured: true
 tech_stack: ["Next.js 15", "TypeScript", "PostgreSQL", "Drizzle ORM", "Redis", "Inngest", "React 19", "Tailwind CSS", "Recharts", "Sentry"]
-role: "Lead Engineer (Contract)"
-impact: "10 active customers, 30+ games ingested nightly, 400K+ evaluated events, used by ESPN correspondent, college teams onboarding"
+role: "Co-creator (Contract)"
+impact: "10 charters providing training data, 30+ games ingested nightly, 400K+ structured events, ESPN correspondent adviser, major Ivy League programs onboarding"
 live_url: "https://refindex.ai"
 ---
 
@@ -21,11 +21,11 @@ I told him I could help.
 
 The business need was real. "Charting" games - evaluating referee performance on every reviewable call - is something the industry already requires. But the existing process is brutal: evaluators watching game film, marking up paper forms, manually tallying results. The data lives in filing cabinets. Aggregating performance across a season? Nearly impossible. Getting feedback to referees quickly? Forget it.
 
-RefIndex changes that equation. Evaluations happen digitally, the same night as the game. Data flows directly into analytics. And long-term, the structured data we're collecting becomes training data for computer vision - eventually automating the charting process entirely.
+RefIndex changes that equation. Coaches review video footage after games - not real-time charting, but post-game evaluation where they can pause, rewind, and carefully assess each call. Evaluations happen digitally, the same night as the game. Data flows directly into analytics. Speed and efficiency gains are the core value proposition - coaches who previously spent hours on spreadsheets or wrestling with clunky existing tools can now complete evaluations in a fraction of the time. And long-term, the structured data we're collecting becomes training data for computer vision - we're currently in the prototype stage, labeling training data from the 400K+ structured events to eventually automate the charting process entirely.
 
 My friend had customers waiting and timeline pressure. He needed someone who could actually ship.
 
-I took it on as Lead Engineer. What started as "let me just make this dynamic" evolved into building a complete production system - complex ETL pipelines, PostgreSQL with materialized views, Redis caching, background job orchestration. The timeline was aggressive, the domain was new to me, and I'd be building essentially from scratch.
+I took it on as co-creator, helping a friend bring his vision to life. What started as "let me just make this dynamic" evolved into building a complete production system hosted on Supabase and Vercel - complex ETL pipelines, PostgreSQL with materialized views, Redis caching, background job orchestration. The timeline was aggressive, the domain was new to me, and I'd be building essentially from scratch.
 
 ## Learning a New Domain Fast
 
@@ -113,7 +113,7 @@ Not every evaluation is final. Sometimes evaluators flag a call for supervisor r
 
 The endgame is actionable insight. I built a "Performance Book" that aggregates referee data:
 
-**Weighted accuracy scores.** Raw accuracy (correct/total) isn't enough - a close call in the final minute matters more than a routine call in the first quarter. The scoring algorithm weights by game context.
+**Multi-dimensional evaluation system.** Raw accuracy (correct/total) isn't enough. The platform enables nuanced assessment across multiple dimensions - call type, game situation, pressure moments. A close call in the final minute matters more than a routine call in the first quarter, and the scoring algorithm weights by game context.
 
 **Call distribution charts.** Recharts visualizations showing breakdown by call type, quarter, game situation. Is this referee more likely to miss fouls in transition? The data shows it.
 
@@ -141,15 +141,19 @@ Inngest gives me retry logic, failure tracking, and observability. When somethin
 
 ## The Results
 
-**10 active customers** using the platform daily, including [Coach Neighbors](https://x.com/coachneighbors/status/2007972545182798230), an ESPN correspondent who actively uses RefIndex in his analysis workflow.
+**10 charters** - coaches actively using the platform and providing the training data that powers our analytics and future CV capabilities. These aren't just customers; they're partners in building the dataset.
+
+**ESPN correspondent adviser** - [Coach Neighbors](https://x.com/coachneighbors/status/2007972545182798230), an ESPN correspondent, is excited about the platform and advising on product direction.
+
+**Major Ivy League programs onboarding** - we're in the process of bringing on significant college basketball programs, expanding our reach into elite-level athletics.
 
 **NCAA basketball focus** - we started exploring the WNBA market but pivoted to college basketball where the go-to-market was faster and demand was immediate.
 
-**Same-night turnaround.** Games are ingested, enriched with video, and ready for evaluation within hours of tip-off - replacing a process that used to take days with paper forms.
+**Same-night turnaround.** Games are ingested, enriched with video, and ready for evaluation within hours of tip-off - replacing a process that used to take days with paper forms or clunky spreadsheet workflows.
 
-**30+ games ingested nightly** across three data sources, with automatic enrichment and video fetching running in the background.
+**30+ games ingested nightly** with automatic enrichment and video fetching running in the background.
 
-**400K+ evaluated events** in the system - structured data that was previously trapped in filing cabinets, now queryable and ready to train the next generation of computer vision models.
+**400K+ structured events** in the system - data that was previously trapped in filing cabinets or scattered across spreadsheets, now queryable and ready to train computer vision models (prototype in progress).
 
 **20-30x performance improvement** on imports, sub-second analytics queries, and reliable background job processing.
 

@@ -6,8 +6,8 @@ line_color: "purple"
 date: 2024-01-01
 featured: true
 tech_stack: ["Next.js 15", "TypeScript", "Supabase", "PostgreSQL", "AWS Bedrock", "Inngest", "Tailwind CSS", "React Server Components"]
-role: "Technical Lead"
-impact: "Year-long 0-to-1 build, shipped AI email-to-task pipeline, created Outside Counsel Engagement Studio, YC interview"
+role: "Solo Engineer"
+impact: "12+ month 0-to-1 build as sole engineer, shipped AI email-to-task pipeline, created Outside Counsel Engagement Studio, co-presented at YC interview"
 ---
 
 import EmailPipeline from '../../components/diagrams/EmailPipeline.astro';
@@ -18,7 +18,7 @@ It started with a friend from Harvard Law who had an idea. He'd seen how in-hous
 
 He asked if I could help build it. I said yes.
 
-The pitch was simple: a modern platform that actually understands how legal work happens, with AI that handles the administrative burden so legal professionals can focus on legal work. I came on as Technical Lead, taking on the challenge of building a startup while continuing to deliver at The Atlantic - a deliberate bet on exploring entrepreneurship. What started as helping a friend evolved into a year-long journey through product discovery, technical architecture, and the realities of early-stage startup dynamics.
+The pitch was simple: a modern platform that actually understands how legal work happens, with AI that handles the administrative burden so legal professionals can focus on legal work. I came on as the solo engineer, taking on the challenge of building a startup from scratch while continuing to deliver at The Atlantic - a deliberate bet on exploring entrepreneurship. What started as helping a friend evolved into a 12+ month journey through product discovery, technical architecture, and the realities of early-stage startup dynamics.
 
 ## Understanding the Problem Space
 
@@ -100,9 +100,9 @@ Email-to-task sounds simple. It's not - especially when you're building during t
 
 We got response times down from 2 minutes to 30 seconds, then made everything async. But the real wins came from *not* calling the LLM at all for most emails:
 
-1. **Semantic graph filtering** - Before any LLM call, we'd check: is this email even worth processing? Using pgVector embeddings, we built a graph of relationship connections and email patterns. Routine status updates, FYI forwards, calendar confirmations - the system learned to recognize and skip these without touching the LLM.
+1. **Contact context through PostgreSQL relations + vector embeddings** - Before any LLM call, we'd check: is this email even worth processing? I built a graph-like contact mapping system using PostgreSQL relations combined with pgVector embeddings. This contact context system tracked relationship connections and email patterns. Routine status updates, FYI forwards, calendar confirmations - the system learned to recognize and skip these without touching the LLM.
 
-2. **Relationship pre-processing** - When we did need the LLM, we'd pre-compute the relationship context: who sent this, what matters are they on, what's their typical communication pattern, what entities have they mentioned before. This context went *into* the prompt, making extraction faster and more consistent.
+2. **Email history inference for relationship context** - When we did need the LLM, we'd pre-compute the relationship context by inferring profiles from past email interactions: who sent this, what matters are they on, what's their typical communication pattern, what entities have they mentioned before. This context went *into* the prompt, making extraction faster and more consistent.
 
 3. **Deterministic wrapper** - We built a deterministic system on top to limit non-deterministic behavior. Hash checks caught exact duplicates. Semantic similarity caught near-duplicates. Template matching caught common patterns. The LLM only handled genuinely novel content.
 
@@ -114,9 +114,11 @@ This approach has aged well. LLMs are faster and cheaper now, but the architectu
 
 ## Building the Outside Counsel Engagement Studio
 
-This feature is what got us the most early interest. The workflow:
+This feature is what got us the most early interest. The Studio encompassed the full lifecycle of outside counsel relationships:
 
-1. **Legal team creates an RFP** using a wizard I built - scope of work, budget ranges, timeline, evaluation criteria
+**RFP Management** - The core workflow:
+
+1. **Legal team creates an RFP** using a wizard I built with reusable templates - scope of work, budget ranges, timeline, evaluation criteria
 2. **System generates a public, tokenized submission link** - law firms can respond without creating accounts
 3. **Firms submit proposals** through a structured form matching the RFP criteria
 4. **Automated scoring** calculates weighted scores based on the criteria the legal team defined
@@ -124,7 +126,17 @@ This feature is what got us the most early interest. The workflow:
 
 The token-based submission was technically interesting. Each RFP generates a unique, time-limited URL. The submission form validates against the original RFP schema. Law firms get a professional experience without the friction of account creation, and legal teams get structured data they can actually compare.
 
-I also built a **firm performance dashboard** that tracks metrics over time: billing compliance, response times, matter outcomes by firm. This gives legal teams leverage in negotiations - "your average response time is 3 days slower than other firms on similar matters."
+**Matter Staffing** - Once a firm is selected, the system helps legal teams assign the right attorneys to specific matters, tracking who's working on what and ensuring appropriate coverage.
+
+**Performance Tracking** - I built a firm performance dashboard that tracks metrics over time: billing compliance, response times, matter outcomes by firm. This gives legal teams leverage in negotiations - "your average response time is 3 days slower than other firms on similar matters."
+
+## Document and Email Integration
+
+Legal work lives in documents and email. I built deep integrations with the systems where that content already exists:
+
+**Document Management Systems** - Integration with iManage and NetDocs, the two major document management systems used by legal departments. This meant legal teams could reference and attach documents without leaving the platform.
+
+**Email Integration** - Deep integration with Microsoft Exchange and Gmail. Beyond the AI email processing, this enabled seamless correspondence tracking, matter association, and the kind of "single pane of glass" experience legal teams had been asking for.
 
 ## The Data Model
 
@@ -166,13 +178,15 @@ Working with a domain expert co-founder taught me a lot about legal workflows I 
 
 **AI pipeline processing real correspondence.** The email-to-task system was handling actual legal emails with effective duplicate prevention.
 
-**YC interview validation.** Got through the initial YC screening process - useful signal that the problem and approach resonated.
+**YC interview validation.** Co-presented at the YC interview alongside my co-founder - useful signal that the problem and approach resonated.
 
 **Enterprise-ready architecture.** Multi-tenant, auditable, and performant enough for teams with hundreds of active matters.
 
 After a year of building, I stepped back from the project due to differing visions for the company's direction. The technical foundation continues to serve the platform's development.
 
 ## What I'd Do Differently
+
+**Find a smaller concept first.** We built a comprehensive platform, but I underestimated the go-to-market challenges for legal departments. Enterprise legal teams are conservative buyers with long sales cycles. In hindsight, I should have started with something more nimble - a narrower wedge product that could demonstrate value faster. The Year in Review concept we explored was on the right track, but we should have led with something like that rather than building it as an afterthought.
 
 **Start with more user research.** We validated the problem through conversations, but I wish I'd done more shadowing of actual legal workflows before committing to specific UX patterns.
 

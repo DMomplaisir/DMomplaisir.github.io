@@ -14,7 +14,7 @@ github_url: "https://github.com/nytimes/covid-19-data"
 
 ## Context
 
-During the critical early months of the COVID-19 pandemic, The New York Times was racing to build data infrastructure that could track the virus's spread across thousands of jurisdictions. As public health data systems struggled to keep pace, reliable journalism depended on scalable, accurate data collection.
+During the critical early months of the COVID-19 pandemic, The New York Times was racing to build data infrastructure that could track the virus's spread across thousands of jurisdictions. As public health data systems struggled to keep pace, reliable journalism depended on scalable, accurate data collection. This work was part of a larger team effort that contributed to the Times' Pulitzer Prize-winning pandemic coverage.
 
 **Timeline:** June 2020 - November 2020
 **Team:** NYT COVID-19 Data Team
@@ -39,7 +39,8 @@ The pandemic created unprecedented demand for real-time public health data, but 
 
 Built and maintained critical data infrastructure supporting NYT's pandemic coverage:
 
-- **Scraper Triage & Maintenance**: Fixed and triaged 30+ scrapers collecting COVID-19 data from government sources, ensuring continuous data flow during critical news cycles
+- **Scraper Oncall**: Day-to-day work centered on scraper maintenance - government websites would change formats without warning, breaking our data pipelines. I was responsible for quickly diagnosing and fixing broken scrapers to ensure continuous data flow during critical news cycles. This meant understanding 30+ different scrapers, each with its own quirks and failure modes.
+- **Building New Scrapers**: Beyond maintenance, I built new scrapers for additional data sources as the pandemic evolved and we needed to track new metrics and jurisdictions.
 - **Modular Conversion Package**: Created reusable Python package for converting FOIA documents into standardized formats, reducing manual processing time
 - **Large-Scale Migration**: Orchestrated migration of 2 million documents from AWS to GCP, implementing validation checks and maintaining zero data loss
 - **Automation Infrastructure**: Built automated workflows for daily data collection, validation, and publication
@@ -52,7 +53,7 @@ Built and maintained critical data infrastructure supporting NYT's pandemic cove
 
 **Critical journalism enabled** - Data infrastructure supported hundreds of NYT articles and visualizations tracking the pandemic
 
-**Public resource** - Contributed to open-source dataset used by researchers, policymakers, and journalists worldwide
+**Public resource** - Contributed to [open-source dataset](https://github.com/nytimes/covid-19-data) used by researchers, policymakers, and journalists worldwide
 
 ## Technical Details
 

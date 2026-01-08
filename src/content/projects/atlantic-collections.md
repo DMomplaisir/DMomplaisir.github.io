@@ -24,7 +24,13 @@ I authored the RFC and led implementation of a comprehensive CMS rearchitecture 
 
 ## Technical Approach
 
-<!-- TODO: Add details about the technical implementation -->
+The key architectural insight was **component composition combined with data model flexibility**. Rather than building rigid templates for each taxonomy type, I designed a system where:
+
+**Composable Components**: Each page element (hero, article grid, featured content, navigation) became a reusable component that could be arranged in different configurations. Editors could mix and match without engineering involvement.
+
+**Flexible Data Model**: The underlying Collection model was designed to be extensible. Whether it's a Section, Channel, Project, or Special Report, the same core data structure works - with optional fields that activate different behaviors.
+
+This architecture paid dividends beyond the initial project. When we later built the AI Watchdog product, the Collections system's flexibility meant we could spin up a new content vertical with minimal engineering effort. The component composition pattern made it trivial to create a distinct visual identity while reusing the underlying infrastructure.
 
 ## Results
 
