@@ -5,6 +5,7 @@ tags: ["Web Development", "Cross-Platform", "React", "AMP"]
 line_color: "green"
 date: 2019-08-15
 featured: false
+draft: true
 hero_image: "../../assets/images/projects/nyt-spotify.png"
 tech_stack: ["React", "AMP", "JavaScript", "Responsive Design", "Accessibility"]
 role: "Software Engineering Intern"

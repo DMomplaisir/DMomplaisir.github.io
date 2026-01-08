@@ -24,8 +24,8 @@ const featuredProjects = allProjects
   })
   .slice(0, 3);
 
-const pageTitle = "Dylan Momplaisir - Full-Stack Engineer & Builder";
-const pageDescription = "Leveraging technology to tell stories. Building bridges between bits and narratives.";
+const pageTitle = "Dylan Momplaisir - Full-Stack Engineer at The Atlantic";
+const pageDescription = "Full-stack engineer building audio and content platforms at scale. 5+ years shipping products serving millions of readers.";
 ---
 
 <!DOCTYPE html>
@@ -71,10 +71,10 @@ const pageDescription = "Leveraging technology to tell stories. Building bridges
       <h1 class="hero-name">Dylan Momplaisir</h1>
 
       <div class="hero-narrative">
-        <p class="narrative-line">Leveraging technology to tell stories.</p>
-        <p class="narrative-line">Building bridges between bits and narratives.</p>
-        <p class="narrative-line">Creating platforms that transform how we explore</p>
-        <p class="narrative-line">and understand our world.</p>
+        <p class="narrative-line">Full-Stack Engineer at The Atlantic.</p>
+        <p class="narrative-line">Building audio and content platforms serving millions.</p>
+        <p class="narrative-line">100%+ increase in listener engagement.</p>
+        <p class="narrative-line">14M documents searchable. 5+ years shipping at scale.</p>
       </div>
 
       <div class="hero-ctas">
@@ -253,7 +253,12 @@ const pageDescription = "Leveraging technology to tell stories. Building bridges
       });
     }
 
+    let isAnimating = false;
+
     function nextCard() {
+      if (isAnimating) return;
+      isAnimating = true;
+
       const topCard = cards[currentIndex];
 
       // Add removing animation to top card
@@ -264,16 +269,19 @@ const pageDescription = "Leveraging technology to tell stories. Building bridges
         topCard.classList.remove('removing');
         currentIndex = (currentIndex + 1) % totalCards;
         updateStack();
+        isAnimating = false;
       }, 700); // Match animation duration
     }
 
     function prevCard() {
+      if (isAnimating) return;
       currentIndex = (currentIndex - 1 + totalCards) % totalCards;
       updateStack();
     }
 
     function goToCard(index: number) {
-      if (index === currentIndex) return;
+      if (index === currentIndex || isAnimating) return;
+      isAnimating = true;
 
       const topCard = cards[currentIndex];
       topCard.classList.add('removing');
@@ -282,6 +290,7 @@ const pageDescription = "Leveraging technology to tell stories. Building bridges
         topCard.classList.remove('removing');
         currentIndex = index;
         updateStack();
+        isAnimating = false;
       }, 700);
     }
 
