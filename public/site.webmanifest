@@ -1,0 +1,27 @@
+{
+  "name": "Dylan Momplaisir",
+  "short_name": "Dylan M",
+  "description": "Full-stack engineer at The Atlantic. Building audio and content platforms that scale.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFFEF9",
+  "theme_color": "#900020",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

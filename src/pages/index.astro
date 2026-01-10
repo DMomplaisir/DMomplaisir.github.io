@@ -6,6 +6,7 @@
  */
 
 import { getCollection } from 'astro:content';
+import SEO from '../components/SEO.astro';
 import InteractiveLanding from '../components/InteractiveLanding.astro';
 import Footer from '../components/Footer.astro';
 
@@ -24,8 +25,8 @@ const featuredProjects = allProjects
   })
   .slice(0, 3);
 
-const pageTitle = "Dylan Momplaisir - Full-Stack Engineer at The Atlantic";
-const pageDescription = "Full-stack engineer building audio and content platforms at scale. 5+ years shipping products serving millions of readers.";
+const pageTitle = "Dylan Momplaisir - Full-Stack Engineer";
+const pageDescription = "Full-stack engineer at The Atlantic. Building audio and content platforms that scale—with the systems thinking of an urbanist.";
 ---
 
 <!DOCTYPE html>
@@ -33,8 +34,13 @@ const pageDescription = "Full-stack engineer building audio and content platform
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content={pageDescription}>
   <meta name="generator" content={Astro.generator}>
+
+  <SEO
+    title={pageTitle}
+    description={pageDescription}
+    type="website"
+  />
 
   <!-- Preconnect to fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -42,18 +48,10 @@ const pageDescription = "Full-stack engineer building audio and content platform
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-
-  <title>{pageTitle}</title>
-
-  <!-- Open Graph -->
-  <meta property="og:title" content={pageTitle}>
-  <meta property="og:description" content={pageDescription}>
-  <meta property="og:type" content="website">
-
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content={pageTitle}>
-  <meta name="twitter:description" content={pageDescription}>
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="Dylan Momplaisir - Projects" href="/rss.xml">
+  <meta name="theme-color" content="#900020">
 </head>
 
 <body>
@@ -71,10 +69,10 @@ const pageDescription = "Full-stack engineer building audio and content platform
       <h1 class="hero-name">Dylan Momplaisir</h1>
 
       <div class="hero-narrative">
-        <p class="narrative-line">Full-Stack Engineer at The Atlantic.</p>
-        <p class="narrative-line">Building audio and content platforms serving millions.</p>
-        <p class="narrative-line">100%+ increase in listener engagement.</p>
-        <p class="narrative-line">14M documents searchable. 5+ years shipping at scale.</p>
+        <p class="narrative-line">I think about software the way I used to think about cities:</p>
+        <p class="narrative-line">who moves through it, what breaks, what lasts.</p>
+        <p class="narrative-line">Currently building platforms at The Atlantic—</p>
+        <p class="narrative-line">audio systems, search infrastructure, tools that scale.</p>
       </div>
 
       <div class="hero-ctas">

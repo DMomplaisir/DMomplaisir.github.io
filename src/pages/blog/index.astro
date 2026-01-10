@@ -1,10 +1,10 @@
 ---
 /**
- * Projects Index Page - Masonry Grid
+ * Blog Index Page
  * Architectural aesthetic with warm minimalism
  */
 
-import { getAllProjects, getAllProjectTags } from '../../utils/content-helpers';
+import { getAllBlogPosts, getAllBlogTags, formatDate, calculateReadingTime } from '../../utils/content-helpers';
 import SEO from '../../components/SEO.astro';
 import Footer from '../../components/Footer.astro';
 
@@ -12,12 +12,12 @@ import Footer from '../../components/Footer.astro';
 import '../../styles/variables.css';
 import '../../styles/fonts.css';
 
-// Fetch all projects and tags at build time
-const projects = await getAllProjects();
-const tags = await getAllProjectTags();
+// Fetch all posts and tags at build time
+const posts = await getAllBlogPosts();
+const tags = await getAllBlogTags();
 
-const pageTitle = 'Projects - Dylan Momplaisir';
-const pageDescription = 'Case studies of products I\'ve built and shipped - from full-stack engineering to technical leadership.';
+const pageTitle = 'Blog - Dylan Momplaisir';
+const pageDescription = 'Thoughts on engineering, product development, and building software that matters.';
 ---
 
 <!DOCTYPE html>
@@ -32,7 +32,7 @@ const pageDescription = 'Case studies of products I\'ve built and shipped - from
     type="website"
     breadcrumbs={[
       { name: 'Home', url: '/' },
-      { name: 'Projects', url: '/projects' },
+      { name: 'Blog', url: '/blog' },
     ]}
   />
 
@@ -44,6 +44,7 @@ const pageDescription = 'Case studies of products I\'ve built and shipped - from
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="Dylan Momplaisir - Blog" href="/rss.xml">
   <meta name="theme-color" content="#900020">
 </head>
 
@@ -56,12 +57,12 @@ const pageDescription = 'Case studies of products I\'ve built and shipped - from
     <nav class="nav-breadcrumb">
       <a href="/" class="breadcrumb-link">Home</a>
       <span class="breadcrumb-separator">/</span>
-      <span class="breadcrumb-current">Projects</span>
+      <span class="breadcrumb-current">Blog</span>
     </nav>
 
     <div class="header-content">
-      <h1 class="page-title">Projects</h1>
-      <p class="page-subtitle">Case studies of products I've built and shipped</p>
+      <h1 class="page-title">Blog</h1>
+      <p class="page-subtitle">Thoughts on engineering, product, and building things that matter</p>
     </div>
 
     <!-- Tag Filter -->
@@ -69,9 +70,9 @@ const pageDescription = 'Case studies of products I\'ve built and shipped - from
       <div class="tag-filter">
         <label for="tag-select" class="filter-label">Filter</label>
         <select id="tag-select" class="tag-select">
-          <option value="">All Projects ({projects.length})</option>
+          <option value="">All Posts ({posts.length})</option>
           {tags.map(tag => {
-            const count = projects.filter(p => p.data.tags?.includes(tag)).length;
+            const count = posts.filter(p => p.data.tags?.includes(tag)).length;
             return <option value={tag}>{tag} ({count})</option>;
           })}
         </select>
@@ -79,66 +80,56 @@ const pageDescription = 'Case studies of products I\'ve built and shipped - from
     )}
   </header>
 
-  <!-- Projects Masonry Grid -->
-  <main class="projects-container">
-    <div class="masonry-grid" id="projects-grid">
-      {projects.map(project => (
-        <article class="masonry-item" data-tags={project.data.tags?.join(',') || ''}>
-          <a href={`/projects/${project.slug}/`} class="project-link">
-            <!-- Blueprint Overlay -->
-            <div class="blueprint-overlay" aria-hidden="true">
-              <svg class="blueprint-grid" width="100%" height="100%">
-                <defs>
-                  <pattern id={`grid-${project.slug}`} width="20" height="20" patternUnits="userSpaceOnUse">
-                    <path d="M 20 0 L 0 0 0 20" fill="none" stroke="var(--blueprint-line)" stroke-width="1"/>
-                  </pattern>
-                </defs>
-                <rect width="100%" height="100%" fill={`url(#grid-${project.slug})`} />
-              </svg>
-            </div>
+  <!-- Blog Posts List -->
+  <main class="posts-container">
+    {posts.length > 0 ? (
+      <div class="posts-list" id="posts-list">
+        {posts.map(post => (
+          <article class="post-card" data-tags={post.data.tags?.join(',') || ''}>
+            <a href={`/blog/${post.slug}/`} class="post-link">
+              <!-- Corner Accents -->
+              <div class="corner-accent corner-tl" aria-hidden="true"></div>
+              <div class="corner-accent corner-br" aria-hidden="true"></div>
 
-            <!-- Corner Accents -->
-            <div class="corner-accent corner-tl" aria-hidden="true"></div>
-            <div class="corner-accent corner-br" aria-hidden="true"></div>
-
-            <div class="project-content">
-              <!-- Year Badge (architectural style) -->
-              {project.data.date && (
-                <div class="year-badge" aria-label={`Year: ${new Date(project.data.date).getFullYear()}`}>
-                  {new Date(project.data.date).getFullYear()}
+              <div class="post-content">
+                <!-- Date and Reading Time -->
+                <div class="post-meta">
+                  <time datetime={post.data.date.toISOString().split('T')[0]} class="post-date">
+                    {formatDate(post.data.date)}
+                  </time>
+                  {post.data.reading_time && (
+                    <span class="reading-time">{post.data.reading_time} min read</span>
+                  )}
                 </div>
-              )}
 
-              <h2 class="project-title">{project.data.title}</h2>
-              <p class="project-description">{project.data.description}</p>
+                <h2 class="post-title">{post.data.title}</h2>
+                <p class="post-description">{post.data.description}</p>
 
-              <!-- Technical Specs -->
-              <div class="project-specs">
-                {project.data.tech_stack && project.data.tech_stack.length > 0 && (
-                  <div class="spec-item">
-                    <span class="spec-label">Tech</span>
-                    <span class="spec-value">{project.data.tech_stack.slice(0, 3).join(', ')}</span>
+                <!-- Tags -->
+                {post.data.tags && post.data.tags.length > 0 && (
+                  <div class="post-tags">
+                    {post.data.tags.slice(0, 3).map(tag => (
+                      <span class="tag-badge">{tag}</span>
+                    ))}
                   </div>
                 )}
-                {project.data.impact && (
-                  <div class="spec-item">
-                    <span class="spec-label">Impact</span>
-                    <span class="spec-value">{project.data.impact}</span>
-                  </div>
-                )}
+
+                <span class="read-more">Read Article →</span>
               </div>
-
-              <span class="view-link">View Case Study →</span>
-            </div>
-          </a>
-        </article>
-      ))}
-    </div>
-
-    <!-- Empty State -->
-    {projects.length === 0 && (
+            </a>
+          </article>
+        ))}
+      </div>
+    ) : (
       <div class="empty-state">
-        <p>No projects yet. Check back soon!</p>
+        <div class="empty-content">
+          <h2 class="empty-title">Coming Soon</h2>
+          <p class="empty-text">
+            I'm working on some articles about engineering, product development,
+            and lessons learned from building software. Check back soon!
+          </p>
+          <a href="/projects" class="empty-cta">View My Projects →</a>
+        </div>
       </div>
     )}
   </main>
@@ -155,9 +146,9 @@ const pageDescription = 'Case studies of products I\'ve built and shipped - from
   if (tagSelect) {
     tagSelect.addEventListener('change', (e) => {
       const selectedTag = (e.target as HTMLSelectElement).value;
-      const projectCards = document.querySelectorAll('.masonry-item') as NodeListOf<HTMLElement>;
+      const postCards = document.querySelectorAll('.post-card') as NodeListOf<HTMLElement>;
 
-      projectCards.forEach(card => {
+      postCards.forEach(card => {
         const cardTags = card.dataset.tags?.split(',') || [];
 
         if (!selectedTag || cardTags.includes(selectedTag)) {
@@ -214,7 +205,7 @@ const pageDescription = 'Case studies of products I\'ve built and shipped - from
   .page-header {
     position: relative;
     padding: var(--space-xxxl) var(--space-lg) var(--space-xl);
-    max-width: var(--width-content);
+    max-width: var(--width-narrow);
     margin: 0 auto;
     z-index: 1;
   }
@@ -304,53 +295,39 @@ const pageDescription = 'Case studies of products I\'ve built and shipped - from
     box-shadow: 0 0 0 3px rgba(144, 0, 32, 0.1);
   }
 
-  /* ==================== MASONRY GRID ==================== */
+  /* ==================== POSTS LIST ==================== */
 
-  .projects-container {
+  .posts-container {
     position: relative;
-    max-width: var(--width-content);
+    max-width: var(--width-narrow);
     margin: 0 auto;
     padding: 0 var(--space-lg) var(--space-xxl);
     z-index: 1;
   }
 
-  .masonry-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  .posts-list {
+    display: flex;
+    flex-direction: column;
     gap: var(--space-md);
   }
 
-  .masonry-item {
+  .post-card {
     position: relative;
     background: var(--warm-white);
     border: var(--border-thin) solid var(--warm-gray-200);
     border-radius: var(--radius-base);
     overflow: hidden;
     transition: all var(--transition-base);
-    display: flex;
-    flex-direction: column;
   }
 
-  .masonry-item:hover {
+  .post-card:hover {
     border-color: var(--burgundy-primary);
-    transform: translateY(-4px);
+    transform: translateY(-2px);
     box-shadow: var(--shadow-md);
   }
 
-  .masonry-item:hover .blueprint-overlay {
-    opacity: 1;
-  }
-
-  .blueprint-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    transition: opacity var(--transition-base);
-    pointer-events: none;
-    z-index: 1;
+  .post-card:hover .corner-accent {
+    opacity: 0.6;
   }
 
   .corner-accent {
@@ -361,10 +338,6 @@ const pageDescription = 'Case studies of products I\'ve built and shipped - from
     opacity: 0.2;
     transition: opacity var(--transition-base);
     z-index: 2;
-  }
-
-  .masonry-item:hover .corner-accent {
-    opacity: 0.6;
   }
 
   .corner-tl {
@@ -381,94 +354,87 @@ const pageDescription = 'Case studies of products I\'ve built and shipped - from
     border-top: none;
   }
 
-  .project-link {
-    display: flex;
-    flex-direction: column;
+  .post-link {
+    display: block;
     text-decoration: none;
     color: inherit;
-    flex: 1;
   }
 
-  .project-content {
+  .post-content {
     position: relative;
     padding: var(--space-lg);
     z-index: 3;
-    flex: 1;
+  }
+
+  /* ==================== POST CARD CONTENT ==================== */
+
+  .post-meta {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-sm);
   }
 
-  /* ==================== PROJECT CARD CONTENT ==================== */
-
-  .year-badge {
-    position: absolute;
-    top: var(--space-sm);
-    right: var(--space-md);
-    font-family: var(--font-display);
-    font-size: 2.5rem;
-    font-weight: var(--weight-light);
-    color: var(--warm-gray-200);
-    line-height: 1;
-    opacity: 0.3;
-    z-index: 1;
+  .post-date {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--concrete-400);
+    letter-spacing: var(--tracking-wide);
   }
 
-  .project-title {
+  .reading-time {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--concrete-400);
+    letter-spacing: var(--tracking-wide);
+  }
+
+  .reading-time::before {
+    content: '·';
+    margin-right: var(--space-sm);
+  }
+
+  .post-title {
     font-family: var(--font-display);
-    font-size: var(--text-xl);
+    font-size: var(--text-2xl);
     font-weight: var(--weight-regular);
     color: var(--concrete-900);
     margin-bottom: var(--space-sm);
     line-height: var(--leading-snug);
-    margin-top: var(--space-sm);
   }
 
-  .project-description {
-    font-size: var(--text-sm);
+  .post-description {
+    font-size: var(--text-base);
     color: var(--concrete-400);
-    line-height: var(--leading-normal);
-    margin-bottom: auto;
+    line-height: var(--leading-relaxed);
+    margin-bottom: var(--space-md);
   }
 
-  .project-specs {
+  .post-tags {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     gap: var(--space-xs);
-    margin-top: var(--space-md);
-    padding-top: var(--space-sm);
-    border-top: var(--border-thin) solid var(--warm-gray-200);
+    margin-bottom: var(--space-sm);
   }
 
-  .spec-item {
-    display: flex;
-    gap: var(--space-sm);
-    font-size: var(--text-sm);
-  }
-
-  .spec-label {
-    font-family: var(--font-mono);
+  .tag-badge {
+    padding: 2px var(--space-sm);
+    background: var(--cream);
+    border: var(--border-thin) solid var(--warm-gray-200);
+    border-radius: var(--radius-sm);
     font-size: var(--text-xs);
     color: var(--concrete-400);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wider);
-    min-width: 60px;
   }
 
-  .spec-value {
-    color: var(--concrete-900);
-    line-height: 1.4;
-  }
-
-  .view-link {
+  .read-more {
     color: var(--burgundy-primary);
     font-weight: var(--weight-medium);
     font-size: var(--text-sm);
     transition: transform var(--transition-fast);
     display: inline-block;
-    margin-top: var(--space-sm);
   }
 
-  .masonry-item:hover .view-link {
+  .post-card:hover .read-more {
     transform: translateX(4px);
   }
 
@@ -477,8 +443,47 @@ const pageDescription = 'Case studies of products I\'ve built and shipped - from
   .empty-state {
     text-align: center;
     padding: var(--space-xxxl) var(--space-lg);
+  }
+
+  .empty-content {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: var(--space-xxl);
+    background: var(--cream);
+    border: var(--border-thin) solid var(--warm-gray-200);
+    border-radius: var(--radius-lg);
+  }
+
+  .empty-title {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    font-weight: var(--weight-regular);
+    color: var(--concrete-900);
+    margin-bottom: var(--space-md);
+  }
+
+  .empty-text {
+    font-size: var(--text-base);
     color: var(--concrete-400);
-    font-size: var(--text-lg);
+    line-height: var(--leading-relaxed);
+    margin-bottom: var(--space-xl);
+  }
+
+  .empty-cta {
+    display: inline-block;
+    padding: calc(var(--space-sm) - 2px) var(--space-lg);
+    background: var(--burgundy-primary);
+    color: var(--warm-white);
+    text-decoration: none;
+    border-radius: var(--radius-base);
+    font-weight: var(--weight-medium);
+    transition: all var(--transition-base);
+  }
+
+  .empty-cta:hover {
+    background: var(--burgundy-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-burgundy);
   }
 
   /* ==================== RESPONSIVE ==================== */
@@ -488,23 +493,12 @@ const pageDescription = 'Case studies of products I\'ve built and shipped - from
       padding: var(--space-xxl) var(--space-md) var(--space-lg);
     }
 
-    .projects-container {
+    .posts-container {
       padding: 0 var(--space-md) var(--space-xl);
     }
 
-    .masonry-grid {
-      grid-template-columns: 1fr;
-      gap: var(--space-sm);
-    }
-
-    .project-content {
+    .post-content {
       padding: var(--space-md);
-    }
-
-    .year-badge {
-      font-size: 2rem;
-      top: var(--space-xs);
-      right: var(--space-sm);
     }
 
     .tag-filter {
@@ -515,6 +509,15 @@ const pageDescription = 'Case studies of products I\'ve built and shipped - from
 
     .tag-select {
       width: 100%;
+    }
+
+    .post-meta {
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+
+    .reading-time::before {
+      display: none;
     }
   }
 

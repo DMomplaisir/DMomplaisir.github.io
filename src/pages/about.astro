@@ -5,6 +5,7 @@
  * Architectural aesthetic with warm minimalism
  */
 
+import SEO from '../components/SEO.astro';
 import Footer from '../components/Footer.astro';
 
 // Import design system styles
@@ -20,8 +21,16 @@ const pageDescription = 'From urbanism to full-stack engineering—building digi
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content={pageDescription}>
-  <title>{pageTitle}</title>
+
+  <SEO
+    title={pageTitle}
+    description={pageDescription}
+    type="website"
+    breadcrumbs={[
+      { name: 'Home', url: '/' },
+      { name: 'About', url: '/about' },
+    ]}
+  />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,6 +38,9 @@ const pageDescription = 'From urbanism to full-stack engineering—building digi
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#900020">
 </head>
 
 <body>

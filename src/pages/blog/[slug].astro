@@ -1,11 +1,11 @@
 ---
 /**
- * Project Detail Template
- * Consistent architectural aesthetic for all case studies
+ * Blog Post Detail Template
+ * Consistent architectural aesthetic for all blog posts
  */
 
 import { getCollection, type CollectionEntry } from 'astro:content';
-import { getRelatedProjects, formatDate, formatDateISO } from '../../utils/content-helpers';
+import { getRelatedBlogPosts, formatDate, formatDateISO, calculateReadingTime } from '../../utils/content-helpers';
 import SEO from '../../components/SEO.astro';
 import Footer from '../../components/Footer.astro';
 
@@ -13,10 +13,10 @@ import Footer from '../../components/Footer.astro';
 import '../../styles/variables.css';
 import '../../styles/fonts.css';
 
-// Generate static paths for all projects at build time
-// Excludes draft projects in production builds
+// Generate static paths for all posts at build time
+// Excludes draft posts in production builds
 export async function getStaticPaths() {
-  const projects = await getCollection('projects', ({ data }) => {
+  const posts = await getCollection('blog', ({ data }) => {
     // In development, include drafts; in production, exclude them
     if (import.meta.env.DEV) {
       return true;
@@ -24,37 +24,37 @@ export async function getStaticPaths() {
     return data.draft !== true;
   });
 
-  return projects.map(project => ({
-    params: { slug: project.slug },
-    props: { project },
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
   }));
 }
 
 type Props = {
-  project: CollectionEntry<'projects'>;
+  post: CollectionEntry<'blog'>;
 };
 
-const { project } = Astro.props;
+const { post } = Astro.props;
 
 // Render markdown content
-const { Content } = await project.render();
+const { Content, remarkPluginFrontmatter } = await post.render();
 
-// Get related projects based on shared tags
-const relatedProjects = await getRelatedProjects(project, 3);
+// Get related posts based on shared tags
+const relatedPosts = await getRelatedBlogPosts(post, 3);
 
-// Destructure project data
+// Destructure post data
 const {
   title,
   description,
-  hero_image,
   date,
+  author,
   tags = [],
-  tech_stack,
-  role,
-  impact,
-  github_url,
-  live_url,
-} = project.data;
+  reading_time,
+  cover_image,
+} = post.data;
+
+// Calculate reading time if not provided
+const readingTime = reading_time || calculateReadingTime(post.body);
 ---
 
 <!DOCTYPE html>
@@ -68,11 +68,11 @@ const {
     description={description}
     type="article"
     publishedDate={date}
-    image={hero_image?.src}
+    image={cover_image?.src}
     breadcrumbs={[
       { name: 'Home', url: '/' },
-      { name: 'Projects', url: '/projects' },
-      { name: title, url: `/projects/${project.slug}` },
+      { name: 'Blog', url: '/blog' },
+      { name: title, url: `/blog/${post.slug}` },
     ]}
   />
 
@@ -91,97 +91,74 @@ const {
   <!-- Subtle Grid Background -->
   <div class="grid-background" aria-hidden="true"></div>
 
-  <article class="project-detail">
+  <article class="post-detail">
     <!-- Header with Breadcrumb -->
-    <header class="project-header">
+    <header class="post-header">
       <nav class="breadcrumb">
         <a href="/" class="breadcrumb-link">Home</a>
         <span class="breadcrumb-separator">/</span>
-        <a href="/projects" class="breadcrumb-link">Projects</a>
+        <a href="/blog" class="breadcrumb-link">Blog</a>
         <span class="breadcrumb-separator">/</span>
         <span class="breadcrumb-current">{title}</span>
       </nav>
 
       <div class="header-content">
-        <h1 class="project-title">{title}</h1>
-        <p class="project-subtitle">{description}</p>
+        <h1 class="post-title">{title}</h1>
+        <p class="post-subtitle">{description}</p>
 
-        <!-- Project Meta Grid -->
-        <div class="project-meta">
-          {role && (
+        <!-- Post Meta -->
+        <div class="post-meta">
+          <div class="meta-item">
+            <span class="meta-label">Published</span>
+            <time datetime={formatDateISO(date)} class="meta-value">
+              {formatDate(date)}
+            </time>
+          </div>
+
+          <div class="meta-item">
+            <span class="meta-label">Reading Time</span>
+            <span class="meta-value">{readingTime} min</span>
+          </div>
+
+          {author && author !== 'Dylan Momplaisir' && (
             <div class="meta-item">
-              <span class="meta-label">Role</span>
-              <span class="meta-value">{role}</span>
-            </div>
-          )}
-
-          {date && (
-            <div class="meta-item">
-              <span class="meta-label">Year</span>
-              <time datetime={formatDateISO(date)} class="meta-value">
-                {new Date(date).getFullYear()}
-              </time>
-            </div>
-          )}
-
-          {tech_stack && tech_stack.length > 0 && (
-            <div class="meta-item meta-item-full">
-              <span class="meta-label">Tech Stack</span>
-              <div class="tech-stack">
-                {tech_stack.map(tech => (
-                  <span class="tech-badge">{tech}</span>
-                ))}
-              </div>
+              <span class="meta-label">Author</span>
+              <span class="meta-value">{author}</span>
             </div>
           )}
         </div>
 
-        <!-- Impact Callout (if exists) -->
-        {impact && (
-          <div class="impact-callout">
-            <span class="impact-label">Impact</span>
-            <p class="impact-value">{impact}</p>
+        <!-- Tags -->
+        {tags && tags.length > 0 && (
+          <div class="post-tags">
+            {tags.map(tag => (
+              <span class="tag-badge">{tag}</span>
+            ))}
           </div>
         )}
-
-        <!-- Action Buttons -->
-        <div class="project-actions">
-          {live_url && (
-            <a href={live_url} class="btn btn-primary" target="_blank" rel="noopener">
-              View Live Project ↗
-            </a>
-          )}
-          {github_url && (
-            <a href={github_url} class="btn btn-secondary" target="_blank" rel="noopener">
-              View on GitHub ↗
-            </a>
-          )}
-        </div>
       </div>
     </header>
 
-    <!-- Project Content (Markdown) -->
-    <section class="project-content">
+    <!-- Post Content (Markdown) -->
+    <section class="post-content">
       <Content />
     </section>
 
-    <!-- Related Projects -->
-    {relatedProjects.length > 0 && (
+    <!-- Related Posts -->
+    {relatedPosts.length > 0 && (
       <aside class="related-section">
-        <h2 class="section-heading">Related Projects</h2>
+        <h2 class="section-heading">Related Posts</h2>
         <div class="related-grid">
-          {relatedProjects.map(related => (
+          {relatedPosts.map(related => (
             <article class="related-card">
-              <a href={`/projects/${related.slug}/`} class="related-link">
+              <a href={`/blog/${related.slug}/`} class="related-link">
                 <div class="corner-accent corner-tl" aria-hidden="true"></div>
                 <div class="corner-accent corner-br" aria-hidden="true"></div>
 
                 <div class="related-content">
-                  {related.data.date && (
-                    <span class="related-year">
-                      {new Date(related.data.date).getFullYear()}
-                    </span>
-                  )}
+                  <span class="related-date">
+                    {formatDate(related.data.date)}
+                  </span>
                   <h3 class="related-title">{related.data.title}</h3>
                   <p class="related-description">{related.data.description}</p>
                 </div>
@@ -194,7 +171,7 @@ const {
 
     <!-- Back Navigation -->
     <nav class="back-nav">
-      <a href="/projects" class="back-link">← All Projects</a>
+      <a href="/blog" class="back-link">← All Posts</a>
     </nav>
   </article>
 
@@ -242,14 +219,14 @@ const {
     z-index: 0;
   }
 
-  /* ==================== PROJECT HEADER ==================== */
+  /* ==================== POST HEADER ==================== */
 
-  .project-detail {
+  .post-detail {
     position: relative;
     z-index: 1;
   }
 
-  .project-header {
+  .post-header {
     max-width: var(--width-narrow);
     margin: 0 auto;
     padding: var(--space-xxxl) var(--space-lg) var(--space-xxl);
@@ -282,7 +259,7 @@ const {
     color: var(--concrete-900);
   }
 
-  .project-title {
+  .post-title {
     font-family: var(--font-display);
     font-size: clamp(2.5rem, 6vw, 4rem);
     font-weight: var(--weight-regular);
@@ -292,22 +269,22 @@ const {
     margin-bottom: var(--space-md);
   }
 
-  .project-subtitle {
+  .post-subtitle {
     font-size: var(--text-xl);
     color: var(--concrete-400);
     line-height: var(--leading-relaxed);
     margin-bottom: var(--space-xl);
   }
 
-  /* ==================== PROJECT META ==================== */
+  /* ==================== POST META ==================== */
 
-  .project-meta {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-md);
-    padding: var(--space-lg);
-    background: var(--cream);
-    border-radius: var(--radius-base);
+  .post-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-lg);
+    padding: var(--space-md) 0;
+    border-top: var(--border-thin) solid var(--warm-gray-200);
+    border-bottom: var(--border-thin) solid var(--warm-gray-200);
     margin-bottom: var(--space-lg);
   }
 
@@ -315,10 +292,6 @@ const {
     display: flex;
     flex-direction: column;
     gap: var(--space-xs);
-  }
-
-  .meta-item-full {
-    grid-column: 1 / -1;
   }
 
   .meta-label {
@@ -335,96 +308,24 @@ const {
     font-weight: var(--weight-medium);
   }
 
-  .tech-stack {
+  .post-tags {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-xs);
   }
 
-  .tech-badge {
+  .tag-badge {
     padding: 4px var(--space-sm);
-    background: var(--warm-white);
+    background: var(--cream);
     border: var(--border-thin) solid var(--warm-gray-200);
     border-radius: var(--radius-sm);
     font-size: var(--text-xs);
-    color: var(--concrete-900);
-    font-weight: var(--weight-medium);
+    color: var(--concrete-400);
   }
 
-  /* ==================== IMPACT CALLOUT ==================== */
+  /* ==================== POST CONTENT (MARKDOWN) ==================== */
 
-  .impact-callout {
-    padding: var(--space-lg);
-    background: var(--warm-white);
-    border-left: var(--border-thick) solid var(--burgundy-primary);
-    border-radius: var(--radius-base);
-    margin-bottom: var(--space-lg);
-  }
-
-  .impact-label {
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    color: var(--burgundy-primary);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wider);
-    margin-bottom: var(--space-xs);
-    display: block;
-  }
-
-  .impact-value {
-    font-size: var(--text-lg);
-    color: var(--concrete-900);
-    font-weight: var(--weight-medium);
-    line-height: var(--leading-relaxed);
-  }
-
-  /* ==================== ACTION BUTTONS ==================== */
-
-  .project-actions {
-    display: flex;
-    gap: var(--space-sm);
-    flex-wrap: wrap;
-  }
-
-  .btn {
-    padding: calc(var(--space-sm) - 2px) var(--space-lg);
-    text-decoration: none;
-    border-radius: var(--radius-base);
-    font-weight: var(--weight-medium);
-    font-size: var(--text-base);
-    transition: all var(--transition-base);
-    display: inline-block;
-    border: var(--border-thin) solid transparent;
-  }
-
-  .btn-primary {
-    background: var(--burgundy-primary);
-    color: var(--warm-white);
-    border-color: var(--burgundy-primary);
-  }
-
-  .btn-primary:hover {
-    background: var(--burgundy-hover);
-    border-color: var(--burgundy-hover);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-burgundy);
-  }
-
-  .btn-secondary {
-    background: transparent;
-    color: var(--concrete-900);
-    border-color: var(--concrete-300);
-  }
-
-  .btn-secondary:hover {
-    border-color: var(--burgundy-primary);
-    color: var(--burgundy-primary);
-    transform: translateY(-2px);
-  }
-
-  /* ==================== PROJECT CONTENT (MARKDOWN) ==================== */
-
-  .project-content {
+  .post-content {
     max-width: var(--width-text);
     margin: 0 auto;
     padding: 0 var(--space-lg) var(--space-xxxl);
@@ -432,7 +333,7 @@ const {
     line-height: var(--leading-relaxed);
   }
 
-  .project-content :global(h2) {
+  .post-content :global(h2) {
     font-family: var(--font-display);
     font-size: var(--text-3xl);
     font-weight: var(--weight-regular);
@@ -442,7 +343,7 @@ const {
     letter-spacing: var(--tracking-tight);
   }
 
-  .project-content :global(h3) {
+  .post-content :global(h3) {
     font-family: var(--font-display);
     font-size: var(--text-2xl);
     font-weight: var(--weight-regular);
@@ -451,7 +352,7 @@ const {
     margin-bottom: var(--space-sm);
   }
 
-  .project-content :global(h4) {
+  .post-content :global(h4) {
     font-size: var(--text-xl);
     font-weight: var(--weight-medium);
     color: var(--concrete-900);
@@ -459,34 +360,34 @@ const {
     margin-bottom: var(--space-sm);
   }
 
-  .project-content :global(p) {
+  .post-content :global(p) {
     margin-bottom: var(--space-md);
     color: var(--concrete-900);
   }
 
-  .project-content :global(ul),
-  .project-content :global(ol) {
+  .post-content :global(ul),
+  .post-content :global(ol) {
     margin-bottom: var(--space-md);
     padding-left: var(--space-lg);
   }
 
-  .project-content :global(li) {
+  .post-content :global(li) {
     margin-bottom: var(--space-sm);
     color: var(--concrete-900);
   }
 
-  .project-content :global(a) {
+  .post-content :global(a) {
     color: var(--burgundy-primary);
     text-decoration: none;
     border-bottom: var(--border-thin) solid rgba(144, 0, 32, 0.3);
     transition: border-color var(--transition-fast);
   }
 
-  .project-content :global(a:hover) {
+  .post-content :global(a:hover) {
     border-bottom-color: var(--burgundy-primary);
   }
 
-  .project-content :global(blockquote) {
+  .post-content :global(blockquote) {
     padding: var(--space-md) var(--space-lg);
     margin: var(--space-lg) 0;
     background: var(--cream);
@@ -496,7 +397,7 @@ const {
     border-radius: var(--radius-base);
   }
 
-  .project-content :global(pre) {
+  .post-content :global(pre) {
     padding: var(--space-md);
     background: var(--cream);
     border: var(--border-thin) solid var(--warm-gray-200);
@@ -505,29 +406,29 @@ const {
     margin-bottom: var(--space-md);
   }
 
-  .project-content :global(code) {
+  .post-content :global(code) {
     font-family: var(--font-mono);
     font-size: 0.9em;
     color: var(--burgundy-primary);
   }
 
-  .project-content :global(pre code) {
+  .post-content :global(pre code) {
     color: var(--concrete-900);
   }
 
-  .project-content :global(img) {
+  .post-content :global(img) {
     max-width: 100%;
     height: auto;
     border-radius: var(--radius-base);
     margin: var(--space-lg) 0;
   }
 
-  .project-content :global(strong) {
+  .post-content :global(strong) {
     font-weight: var(--weight-semibold);
     color: var(--concrete-900);
   }
 
-  /* ==================== RELATED PROJECTS ==================== */
+  /* ==================== RELATED POSTS ==================== */
 
   .related-section {
     max-width: var(--width-content);
@@ -607,7 +508,7 @@ const {
     z-index: 3;
   }
 
-  .related-year {
+  .related-date {
     font-family: var(--font-mono);
     font-size: var(--text-xs);
     color: var(--concrete-400);
@@ -660,27 +561,17 @@ const {
   /* ==================== RESPONSIVE ==================== */
 
   @media (max-width: 768px) {
-    .project-header {
+    .post-header {
       padding: var(--space-xxl) var(--space-md) var(--space-xl);
     }
 
-    .project-content {
+    .post-content {
       padding: 0 var(--space-md) var(--space-xxl);
       font-size: var(--text-base);
     }
 
-    .project-meta {
-      grid-template-columns: 1fr;
-      padding: var(--space-md);
-    }
-
-    .project-actions {
-      flex-direction: column;
-    }
-
-    .btn {
-      width: 100%;
-      text-align: center;
+    .post-meta {
+      gap: var(--space-md);
     }
 
     .related-section {

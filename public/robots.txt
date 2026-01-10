@@ -1,3 +1,7 @@
 User-agent: *
 Allow: /
-Sitemap: https://dmomplaisir.com/sitemap.xml 
+
+Sitemap: https://dmomplaisir.com/sitemap-index.xml
+
+# RSS Feed
+# https://dmomplaisir.com/rss.xml
