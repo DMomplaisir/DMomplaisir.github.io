@@ -5,6 +5,8 @@
  */
 
 import SEO from '../components/SEO.astro';
+import ViewTransitionsHead from '../components/ViewTransitionsHead.astro';
+import PageTransition from '../components/PageTransition.astro';
 import Footer from '../components/Footer.astro';
 
 // Import design system styles
@@ -37,9 +39,11 @@ const pageTitle = '404 - Page Not Found';
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
   <meta name="theme-color" content="#900020">
+  <ViewTransitionsHead />
 </head>
 
 <body>
+  <PageTransition>
   <!-- Grid Background -->
   <div class="grid-background" aria-hidden="true"></div>
 
@@ -62,6 +66,7 @@ const pageTitle = '404 - Page Not Found';
 
   <!-- Footer -->
   <Footer />
+  </PageTransition>
 </body>
 </html>
 

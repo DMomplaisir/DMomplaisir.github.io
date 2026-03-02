@@ -1,0 +1,35 @@
+---
+/**
+ * Wraps page content with elevation-style View Transition.
+ * Use transition:name so Astro matches content across navigations.
+ */
+import { elevationTransition } from '../utils/transitions';
+---
+
+<div class="page-transition" transition:name="page-content" transition:animate={elevationTransition}>
+  <slot />
+</div>
+
+<style is:global>
+  @keyframes elevation-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes elevation-out {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+  }
+</style>

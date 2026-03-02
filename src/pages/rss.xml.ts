@@ -1,32 +1,18 @@
 import rss from '@astrojs/rss';
-import { getCollection } from 'astro:content';
+import { getAllProjects, getAllBlogPosts } from '../utils/content-helpers';
 import type { APIContext } from 'astro';
 
 export async function GET(context: APIContext) {
-  // Get projects
-  const projects = await getCollection('projects', ({ data }) => {
-    if (import.meta.env.PROD) {
-      return data.draft !== true;
-    }
-    return true;
-  });
+  const [projects, posts] = await Promise.all([
+    getAllProjects(),
+    getAllBlogPosts(),
+  ]);
 
-  // Get blog posts
-  const posts = await getCollection('blog', ({ data }) => {
-    if (import.meta.env.PROD) {
-      return data.draft !== true;
-    }
-    return true;
-  });
-
-  // Combine and sort all items by date
-  const projectItems = projects
-    .filter(p => p.data.date)
-    .map(project => ({
+  const projectItems = projects.map(project => ({
       title: project.data.title,
       pubDate: project.data.date!,
       description: project.data.description,
-      link: `/projects/${project.slug}/`,
+      link: `/projects/${project.id}/`,
       categories: project.data.tags,
     }));
 
@@ -34,7 +20,7 @@ export async function GET(context: APIContext) {
     title: post.data.title,
     pubDate: post.data.date,
     description: post.data.description,
-    link: `/blog/${post.slug}/`,
+    link: `/blog/${post.id}/`,
     categories: post.data.tags,
   }));
 

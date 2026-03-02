@@ -5,25 +5,19 @@
  * Warm minimalism with architectural precision
  */
 
-import { getCollection } from 'astro:content';
+import { getFeaturedProjects } from '../utils/content-helpers';
 import SEO from '../components/SEO.astro';
+import ViewTransitionsHead from '../components/ViewTransitionsHead.astro';
+import PageTransition from '../components/PageTransition.astro';
+import Navigation from '../components/Navigation.astro';
 import InteractiveLanding from '../components/InteractiveLanding.astro';
+import BlueprintMap from '../components/BlueprintMap.astro';
 import Footer from '../components/Footer.astro';
 
-// Import design system styles
 import '../styles/variables.css';
 import '../styles/fonts.css';
 
-// Get featured projects
-const allProjects = await getCollection('projects');
-const featuredProjects = allProjects
-  .filter(p => p.data.featured)
-  .sort((a, b) => {
-    const dateA = a.data.date ? new Date(a.data.date).getTime() : 0;
-    const dateB = b.data.date ? new Date(b.data.date).getTime() : 0;
-    return dateB - dateA;
-  })
-  .slice(0, 3);
+const featuredProjects = (await getFeaturedProjects()).slice(0, 3);
 
 const pageTitle = "Dylan Momplaisir - Full-Stack Engineer";
 const pageDescription = "Full-stack engineer at The Atlantic. Building audio and content platforms that scale—with the systems thinking of an urbanist.";
@@ -52,45 +46,146 @@ const pageDescription = "Full-stack engineer at The Atlantic. Building audio and
   <link rel="manifest" href="/site.webmanifest">
   <link rel="alternate" type="application/rss+xml" title="Dylan Momplaisir - Projects" href="/rss.xml">
   <meta name="theme-color" content="#900020">
+  <ViewTransitionsHead />
 </head>
 
 <body>
+  <PageTransition>
   <!-- Subtle Grid Background (permanent, 2-3% opacity) -->
   <div class="grid-background" aria-hidden="true"></div>
+  <Navigation />
 
   <!-- Elevation 0.0m: Hero Section -->
   <section class="hero-section elevation-0" id="hero">
-    <div class="hero-container">
-      <div class="elevation-marker" aria-hidden="true">
-        <span class="marker-line"></span>
-        <span class="marker-label">0.0m</span>
+    <div class="hero-split">
+      <div class="hero-panel-text">
+        <div class="elevation-marker" aria-hidden="true">
+          <span class="marker-line"></span>
+          <span class="marker-label">0.0m</span>
+        </div>
+
+        <div class="hero-title-block" id="hero-title-block">
+          <div class="tb-section tb-header" data-reveal="0">
+            <span class="tb-dwg">DM-001</span>
+            <h1 class="tb-name">Dylan<br>Momplaisir</h1>
+          </div>
+          <div class="tb-rule" data-reveal="0" aria-hidden="true"></div>
+          <div class="tb-section tb-desc" data-reveal="1">
+            <p>I think about software the way I used to think about cities — who moves through it, what breaks, what lasts.</p>
+          </div>
+          <div class="tb-rule" data-reveal="1" aria-hidden="true"></div>
+          <div class="tb-section tb-role" data-reveal="2">
+            <p>Building platforms at <strong>The Atlantic</strong>: audio systems, search infrastructure, tools that scale.</p>
+          </div>
+          <div class="tb-rule" data-reveal="2" aria-hidden="true"></div>
+          <div class="tb-section tb-actions" data-reveal="3">
+            <a href="#work" class="tb-link">VIEW WORK</a>
+            <span class="tb-sep" aria-hidden="true">—</span>
+            <a href="/resume.pdf" class="tb-link">RESUME.PDF</a>
+          </div>
+        </div>
+
+        <a href="#work" class="scroll-indicator" aria-label="Scroll to view work">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="7 13 12 18 17 13"></polyline>
+            <polyline points="7 6 12 11 17 6"></polyline>
+          </svg>
+        </a>
       </div>
 
-      <h1 class="hero-name">Dylan Momplaisir</h1>
-
-      <div class="hero-narrative">
-        <p class="narrative-line">I think about software the way I used to think about cities:</p>
-        <p class="narrative-line">who moves through it, what breaks, what lasts.</p>
-        <p class="narrative-line">Currently building platforms at The Atlantic—</p>
-        <p class="narrative-line">audio systems, search infrastructure, tools that scale.</p>
+      <div class="hero-panel-map">
+        <BlueprintMap fullscreen={true} />
       </div>
-
-      <div class="hero-ctas">
-        <a href="#work" class="btn-primary">View Work</a>
-        <a href="/resume.pdf" class="btn-secondary">Download Resume</a>
-      </div>
-
-      <a href="#work" class="scroll-indicator" aria-label="Scroll to view work">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="7 13 12 18 17 13"></polyline>
-          <polyline points="7 6 12 11 17 6"></polyline>
-        </svg>
-      </a>
     </div>
+
+    <!-- Hero reveal is driven by BlueprintMap's timeline via custom event.
+         Section reveals + scroll indicator are handled in the unified script below. -->
+    <script>
+      import { gsap } from 'gsap';
+
+      (function heroReveal() {
+        const block = document.getElementById('hero-title-block');
+        if (!block) return;
+        const sections = block.querySelectorAll<HTMLElement>('[data-reveal]');
+        const hero = document.getElementById('hero');
+        if (!hero) return;
+        const indicator = hero.querySelector<HTMLElement>('.scroll-indicator');
+
+        const revealByViewport = (isMobile: boolean) => {
+          sections.forEach(el => {
+            const idx = parseInt(el.dataset.reveal || '0', 10);
+            const show = !isMobile || idx <= 1;
+            gsap.set(el, {
+              clipPath: show ? 'inset(0 0% 0 0)' : 'inset(0 100% 0 0)',
+              opacity: show ? 1 : 0,
+              y: show ? 0 : 14,
+            });
+          });
+          if (indicator) gsap.set(indicator, { opacity: 1 });
+        };
+
+        gsap.set(sections, { clipPath: 'inset(0 100% 0 0)', opacity: 0, y: 14, willChange: 'clip-path, opacity, transform' });
+        if (indicator) gsap.set(indicator, { opacity: 0 });
+
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          revealByViewport(window.matchMedia('(max-width: 768px)').matches);
+          return;
+        }
+
+        let resolved = false;
+
+        const DESKTOP_POSITIONS = [2.0, 2.15, 2.3, 2.45];
+        const MOBILE_POSITIONS  = [0.8, 0.9];
+
+        window.addEventListener('blueprint:timeline-ready', ((e: CustomEvent) => {
+          if (resolved) return;
+          resolved = true;
+
+          const tl = e.detail.timeline as gsap.core.Timeline | null;
+          const isMobile: boolean = e.detail.isMobile;
+
+          if (!tl) {
+            revealByViewport(isMobile);
+            return;
+          }
+
+          sections.forEach(el => {
+            const idx = parseInt(el.dataset.reveal || '0', 10);
+            if (isMobile && idx > 1) return;
+            const pos = isMobile
+              ? (MOBILE_POSITIONS[idx] ?? 0.9)
+              : (DESKTOP_POSITIONS[idx] ?? 2.6);
+            tl.to(el, {
+              clipPath: 'inset(0 0% 0 0)',
+              opacity: 1,
+              y: 0,
+              duration: 0.5,
+              ease: 'power4.out',
+            }, pos);
+          });
+
+          if (indicator) {
+            tl.to(indicator, {
+              opacity: 1,
+              duration: 0.6,
+              ease: 'power2.out',
+            }, isMobile ? 1.0 : 2.65);
+          }
+        }) as EventListener, { once: true });
+
+        gsap.delayedCall(5, () => {
+          if (!resolved) {
+            revealByViewport(window.matchMedia('(max-width: 768px)').matches);
+            resolved = true;
+          }
+        });
+      })();
+    </script>
   </section>
 
-  <!-- Elevation +2.4m: Featured Work -->
+  <!-- Elevation +2.4m: Featured Work (scroll through stacked cards) -->
   <section class="featured-work elevation-24" id="work">
+    <div class="featured-work-inner">
     <div class="container">
       <div class="elevation-marker" aria-hidden="true">
         <span class="marker-line"></span>
@@ -100,12 +195,12 @@ const pageDescription = "Full-stack engineer at The Atlantic. Building audio and
       <h2 class="section-heading">Selected Work</h2>
       <p class="section-subtitle">Featured projects spanning full-stack engineering, product development, and technical leadership.</p>
 
-      <!-- Stacked Papers Slider -->
+      <!-- Stacked cards: each card is sticky with incremental top so they stack as you scroll (CSS-Tricks style) -->
       <div class="project-stack-container">
-        <div class="project-stack">
+        <div class="project-stack project-stack--scrollstack">
           {featuredProjects.map((project, index) => (
-            <article class="project-card" data-index={index} data-stack-position={index}>
-              <a href={`/projects/${project.slug}/`} class="card-link">
+            <article class="project-card" id={`work-card-${index}`} data-index={index}>
+              <a href={`/projects/${project.id}/`} class="card-link">
                 <!-- Paper texture overlay -->
                 <div class="paper-texture" aria-hidden="true"></div>
 
@@ -113,11 +208,11 @@ const pageDescription = "Full-stack engineer at The Atlantic. Building audio and
                 <div class="blueprint-overlay" aria-hidden="true">
                   <svg class="blueprint-grid" width="100%" height="100%">
                     <defs>
-                      <pattern id={`grid-${project.slug}`} width="20" height="20" patternUnits="userSpaceOnUse">
+                      <pattern id={`grid-${project.id.replace(/\//g, '-')}`} width="20" height="20" patternUnits="userSpaceOnUse">
                         <path d="M 20 0 L 0 0 0 20" fill="none" stroke="var(--blueprint-line)" stroke-width="1"/>
                       </pattern>
                     </defs>
-                    <rect width="100%" height="100%" fill={`url(#grid-${project.slug})`} />
+                    <rect width="100%" height="100%" fill={`url(#grid-${project.id.replace(/\//g, '-')})`} />
                   </svg>
                 </div>
 
@@ -159,29 +254,8 @@ const pageDescription = "Full-stack engineer at The Atlantic. Building audio and
           ))}
         </div>
 
-        <!-- Stack Navigation -->
-        <div class="stack-nav">
-          <button class="stack-btn stack-prev" aria-label="Previous project">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="15 18 9 12 15 6"></polyline>
-            </svg>
-          </button>
-
-          <div class="stack-indicators">
-            {featuredProjects.map((_, index) => (
-              <button class="stack-indicator" data-index={index} aria-label={`Go to project ${index + 1}`}></button>
-            ))}
-          </div>
-
-          <button class="stack-btn stack-next" aria-label="Next project">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="9 18 15 12 9 6"></polyline>
-            </svg>
-          </button>
-        </div>
-      </div>
-
       <a href="/projects" class="view-all">View All Projects →</a>
+    </div>
     </div>
   </section>
 
@@ -216,346 +290,98 @@ const pageDescription = "Full-stack engineer at The Atlantic. Building audio and
   <!-- Interactive Features -->
   <InteractiveLanding />
 
+  </PageTransition>
+
+  <!-- Scroll-triggered section reveals (unified gsap.context) -->
   <script>
-    // Stacked Papers Functionality with Swipe Gestures
-    const cards = document.querySelectorAll('.project-card') as NodeListOf<HTMLElement>;
-    const prevBtn = document.querySelector('.stack-prev');
-    const nextBtn = document.querySelector('.stack-next');
-    const indicators = document.querySelectorAll('.stack-indicator');
-    const stackContainer = document.querySelector('.project-stack-container');
+    import { gsap } from 'gsap';
+    import { ScrollTrigger } from 'gsap/ScrollTrigger';
+    gsap.registerPlugin(ScrollTrigger);
 
-    let currentIndex = 0;
-    const totalCards = cards.length;
-    let autoplayInterval: number;
-    let isAnimating = false;
+    const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia();
 
-    // Swipe/Drag state
-    let isDragging = false;
-    let startX = 0;
-    let startY = 0;
-    let currentX = 0;
-    let dragDistance = 0;
-    let dragStartTime = 0;
+      mm.add(
+        {
+          isDesktop: '(min-width: 769px)',
+          isMobile: '(max-width: 768px)',
+          isReduced: '(prefers-reduced-motion: reduce)',
+        },
+        (context) => {
+          const { isReduced } = context.conditions!;
+          if (isReduced) return;
 
-    // Thresholds
-    const SWIPE_THRESHOLD = 80; // Minimum distance to trigger swipe
-    const VELOCITY_THRESHOLD = 0.5; // Minimum velocity for quick swipe
-    const MAX_ROTATION = 15; // Maximum rotation during drag (degrees)
+          // ── Batched section reveals ──
+          ScrollTrigger.batch(
+            '.featured-work .section-heading, .featured-work .section-subtitle, .project-stack-container, .featured-work .view-all',
+            {
+              start: 'top 60%',
+              onEnter: (batch) => {
+                gsap.from(batch, {
+                  y: 24,
+                  opacity: 0,
+                  duration: 0.55,
+                  ease: 'power3.out',
+                  stagger: 0.08,
+                  overwrite: true,
+                });
+              },
+              once: true,
+            },
+          );
 
-    function updateStack() {
-      cards.forEach((card, index) => {
-        const position = (index - currentIndex + totalCards) % totalCards;
-        card.setAttribute('data-stack-position', position.toString());
+          ScrollTrigger.batch(
+            '.about-preview .section-heading, .about-content .large-text, .about-content .body-text, .about-preview .learn-more',
+            {
+              start: 'top 55%',
+              onEnter: (batch) => {
+                gsap.from(batch, {
+                  y: 20,
+                  opacity: 0,
+                  duration: 0.5,
+                  ease: 'power3.out',
+                  stagger: 0.1,
+                  overwrite: true,
+                });
+              },
+              once: true,
+            },
+          );
 
-        if (position > 2) {
-          card.style.display = 'none';
-        } else {
-          card.style.display = 'block';
-        }
+          // ── Card stacking (scrub-driven, per-card trigger) ──
+          const projectCards = gsap.utils.toArray<HTMLElement>('.project-card');
+          projectCards.forEach((card, i) => {
+            const nextCard = projectCards[i + 1];
+            if (!nextCard) return;
+            gsap.to(card, {
+              scale: 0.94,
+              opacity: 0.4,
+              scrollTrigger: {
+                trigger: nextCard,
+                start: 'top 85%',
+                end: 'top 180px',
+                scrub: true,
+              },
+            });
+          });
 
-        // Reset any inline transforms from dragging
-        if (!isDragging) {
-          card.style.transform = '';
-        }
-      });
-
-      indicators.forEach((indicator, index) => {
-        indicator.classList.toggle('active', index === currentIndex);
-      });
-    }
-
-    function getTopCard(): HTMLElement | null {
-      return document.querySelector('.project-card[data-stack-position="0"]') as HTMLElement;
-    }
-
-    function animateCardOut(direction: 'left' | 'right') {
-      if (isAnimating) return;
-      isAnimating = true;
-
-      const topCard = getTopCard();
-      if (!topCard) {
-        isAnimating = false;
-        return;
-      }
-
-      // Set custom property for direction
-      const exitX = direction === 'right' ? 120 : -120;
-      const exitRotation = direction === 'right' ? 18 : -18;
-
-      topCard.style.setProperty('--exit-x', `${exitX}%`);
-      topCard.style.setProperty('--exit-rotation', `${exitRotation}deg`);
-      topCard.classList.add('removing');
-
-      // Animate cards beneath rising up
-      const secondCard = document.querySelector('.project-card[data-stack-position="1"]') as HTMLElement;
-      const thirdCard = document.querySelector('.project-card[data-stack-position="2"]') as HTMLElement;
-
-      if (secondCard) secondCard.classList.add('rising');
-      if (thirdCard) thirdCard.classList.add('rising');
-
-      setTimeout(() => {
-        topCard.classList.remove('removing');
-        topCard.style.removeProperty('--exit-x');
-        topCard.style.removeProperty('--exit-rotation');
-
-        if (secondCard) secondCard.classList.remove('rising');
-        if (thirdCard) thirdCard.classList.remove('rising');
-
-        currentIndex = (currentIndex + 1) % totalCards;
-        updateStack();
-        isAnimating = false;
-      }, 500);
-    }
-
-    function nextCard() {
-      animateCardOut('right');
-    }
-
-    function prevCard() {
-      if (isAnimating) return;
-      isAnimating = true;
-
-      // Bring previous card from left
-      currentIndex = (currentIndex - 1 + totalCards) % totalCards;
-      updateStack();
-
-      const topCard = getTopCard();
-      if (topCard) {
-        topCard.classList.add('entering-left');
-        setTimeout(() => {
-          topCard.classList.remove('entering-left');
-          isAnimating = false;
-        }, 450);
-      } else {
-        isAnimating = false;
-      }
-    }
-
-    function goToCard(index: number) {
-      if (index === currentIndex || isAnimating) return;
-      const direction = index > currentIndex ? 'right' : 'left';
-      animateCardOut(direction);
-    }
-
-    // Drag/Swipe Handlers
-    function handleDragStart(e: TouchEvent | MouseEvent) {
-      if (isAnimating) return;
-
-      const topCard = getTopCard();
-      if (!topCard) return;
-
-      // Check if we're clicking on the top card
-      const target = e.target as HTMLElement;
-      if (!topCard.contains(target)) return;
-
-      isDragging = true;
-      dragStartTime = Date.now();
-
-      if (e instanceof TouchEvent) {
-        startX = e.touches[0].clientX;
-        startY = e.touches[0].clientY;
-      } else {
-        startX = e.clientX;
-        startY = e.clientY;
-        e.preventDefault();
-      }
-
-      currentX = startX;
-      dragDistance = 0;
-
-      topCard.classList.add('dragging');
-      stopAutoplay();
-    }
-
-    function handleDragMove(e: TouchEvent | MouseEvent) {
-      if (!isDragging) return;
-
-      const topCard = getTopCard();
-      if (!topCard) return;
-
-      let clientX: number;
-      let clientY: number;
-
-      if (e instanceof TouchEvent) {
-        clientX = e.touches[0].clientX;
-        clientY = e.touches[0].clientY;
-      } else {
-        clientX = e.clientX;
-        clientY = e.clientY;
-      }
-
-      // Check if vertical scroll is dominant (for mobile)
-      const deltaX = clientX - startX;
-      const deltaY = clientY - startY;
-
-      if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaX) < 10) {
-        return; // Let vertical scroll happen
-      }
-
-      if (e instanceof TouchEvent && Math.abs(deltaX) > 10) {
-        e.preventDefault();
-      }
-
-      currentX = clientX;
-      dragDistance = currentX - startX;
-
-      // Calculate rotation based on drag distance
-      const rotation = (dragDistance / window.innerWidth) * MAX_ROTATION * 2;
-      const clampedRotation = Math.max(-MAX_ROTATION, Math.min(MAX_ROTATION, rotation));
-
-      // Calculate opacity for feedback
-      const progress = Math.min(Math.abs(dragDistance) / SWIPE_THRESHOLD, 1);
-      const scale = 1 - (progress * 0.02);
-
-      // Apply transform
-      topCard.style.transform = `
-        translateX(${dragDistance}px)
-        rotate(${clampedRotation}deg)
-        scale(${scale})
-      `;
-
-      // Visual feedback: tilt shadow
-      const shadowOpacity = 0.08 + (progress * 0.08);
-      const shadowBlur = 40 + (progress * 20);
-      topCard.style.boxShadow = `
-        ${dragDistance * 0.1}px ${12 + progress * 8}px ${shadowBlur}px rgba(144, 0, 32, ${shadowOpacity}),
-        0 6px 20px rgba(0, 0, 0, 0.12)
-      `;
-    }
-
-    function handleDragEnd(e: TouchEvent | MouseEvent) {
-      if (!isDragging) return;
-
-      const topCard = getTopCard();
-      isDragging = false;
-
-      if (topCard) {
-        topCard.classList.remove('dragging');
-      }
-
-      // Calculate velocity
-      const dragDuration = Date.now() - dragStartTime;
-      const velocity = Math.abs(dragDistance) / dragDuration;
-
-      // Determine if swipe should complete
-      const shouldSwipe = Math.abs(dragDistance) > SWIPE_THRESHOLD || velocity > VELOCITY_THRESHOLD;
-
-      if (shouldSwipe && topCard) {
-        // Complete the swipe
-        const direction = dragDistance > 0 ? 'right' : 'left';
-
-        // Reset inline styles before animation
-        topCard.style.transform = '';
-        topCard.style.boxShadow = '';
-
-        animateCardOut(direction);
-      } else if (topCard) {
-        // Snap back with spring animation
-        topCard.classList.add('snapping-back');
-        topCard.style.transform = '';
-        topCard.style.boxShadow = '';
-
-        setTimeout(() => {
-          topCard.classList.remove('snapping-back');
-        }, 400);
-      }
-
-      startAutoplay();
-    }
-
-    // Event Listeners
-    if (prevBtn) {
-      prevBtn.addEventListener('click', () => {
-        stopAutoplay();
-        prevCard();
-        startAutoplay();
-      });
-    }
-
-    if (nextBtn) {
-      nextBtn.addEventListener('click', () => {
-        stopAutoplay();
-        nextCard();
-        startAutoplay();
-      });
-    }
-
-    indicators.forEach((indicator, index) => {
-      indicator.addEventListener('click', () => {
-        stopAutoplay();
-        goToCard(index);
-        startAutoplay();
-      });
+          // ── Scroll indicator fade (single owner) ──
+          gsap.to('.hero-section .scroll-indicator', {
+            opacity: 0,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: '#hero',
+              start: 'top top',
+              end: '15% top',
+              scrub: true,
+            },
+          });
+        },
+      );
     });
 
-    // Touch events for swipe
-    if (stackContainer) {
-      stackContainer.addEventListener('touchstart', handleDragStart, { passive: true });
-      stackContainer.addEventListener('touchmove', handleDragMove, { passive: false });
-      stackContainer.addEventListener('touchend', handleDragEnd);
-      stackContainer.addEventListener('touchcancel', handleDragEnd);
-
-      // Mouse events for desktop drag
-      stackContainer.addEventListener('mousedown', handleDragStart);
-
-      stackContainer.addEventListener('mouseenter', stopAutoplay);
-      stackContainer.addEventListener('mouseleave', () => {
-        if (isDragging) {
-          handleDragEnd(new MouseEvent('mouseup'));
-        }
-        startAutoplay();
-      });
-    }
-
-    document.addEventListener('mousemove', handleDragMove);
-    document.addEventListener('mouseup', handleDragEnd);
-
-    // Keyboard navigation
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowLeft') {
-        stopAutoplay();
-        prevCard();
-        startAutoplay();
-      } else if (e.key === 'ArrowRight') {
-        stopAutoplay();
-        nextCard();
-        startAutoplay();
-      }
-    });
-
-    // Handle clicks on top card (navigate to project)
-    cards.forEach(card => {
-      card.addEventListener('click', (e) => {
-        // Only navigate if not dragging and card is on top
-        if (card.getAttribute('data-stack-position') === '0' && !isDragging && dragDistance === 0) {
-          // Let the link handle it naturally
-        } else if (card.getAttribute('data-stack-position') !== '0') {
-          e.preventDefault();
-        }
-      });
-    });
-
-    function startAutoplay() {
-      stopAutoplay();
-      autoplayInterval = window.setInterval(nextCard, 7000);
-    }
-
-    function stopAutoplay() {
-      clearInterval(autoplayInterval);
-    }
-
-    // Initialize
-    updateStack();
-    startAutoplay();
-
-    // Pause autoplay when page is hidden
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) {
-        stopAutoplay();
-      } else {
-        startAutoplay();
-      }
-    });
+    // Cleanup on Astro page transitions (View Transitions API)
+    document.addEventListener('astro:before-swap', () => ctx.revert());
   </script>
 </body>
 </html>
@@ -577,6 +403,9 @@ const pageDescription = "Full-stack engineer at The Atlantic. Building audio and
     font-family: var(--font-body);
     color: var(--text-primary);
     background-color: var(--warm-white);
+    background-image:
+      repeating-linear-gradient(0deg, rgba(144, 0, 32, 0.018) 0 1px, transparent 1px 60px),
+      repeating-linear-gradient(90deg, rgba(144, 0, 32, 0.018) 0 1px, transparent 1px 60px);
     line-height: var(--leading-normal);
     overflow-x: hidden;
     position: relative;
@@ -608,6 +437,18 @@ const pageDescription = "Full-stack engineer at The Atlantic. Building audio and
     opacity: 0.5;
     pointer-events: none;
     z-index: 0;
+  }
+
+  /* Footer scrolls on top of stacked sections */
+  .site-footer {
+    position: relative;
+    z-index: 10;
+  }
+
+  .hero-section,
+  .featured-work,
+  .about-preview {
+    scroll-margin-top: calc(var(--header-height-collapsed) + var(--space-sm));
   }
 
   /* ==================== ELEVATION MARKERS ==================== */
@@ -642,133 +483,151 @@ const pageDescription = "Full-stack engineer at The Atlantic. Building audio and
   /* ==================== HERO SECTION (Elevation 0.0m) ==================== */
 
   .hero-section {
-    position: relative;
+    position: sticky;
+    top: 0;
     min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--space-xxl) var(--space-lg);
+    height: 100vh;
     z-index: 1;
-  }
-
-  .hero-section .elevation-marker {
-    top: var(--space-xxl);
-  }
-
-  .hero-container {
-    max-width: var(--width-text);
-    text-align: center;
-    animation: heroFadeIn var(--duration-slower) var(--ease-smooth) forwards;
-  }
-
-  @keyframes heroFadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .hero-name {
-    font-family: var(--font-display);
-    font-size: clamp(3rem, 8vw, 6rem);
-    font-weight: var(--weight-regular);
-    font-variation-settings: 'wdth' 75; /* Narrow Editorial Old */
     color: var(--concrete-900);
-    letter-spacing: var(--tracking-tight);
-    line-height: var(--leading-tight);
-    margin-bottom: var(--space-xl);
   }
 
-  .hero-narrative {
-    margin-bottom: var(--space-xl);
-    animation: narrativeFadeIn var(--duration-slower) var(--ease-smooth) 300ms forwards;
-    opacity: 0;
-  }
-
-  @keyframes narrativeFadeIn {
-    to { opacity: 1; }
-  }
-
-  .narrative-line {
-    font-family: var(--font-body);
-    font-size: var(--text-lg);
-    color: var(--concrete-400);
-    line-height: var(--leading-relaxed);
-    margin-bottom: var(--space-xs);
-  }
-
-  .narrative-line:last-child {
-    margin-bottom: 0;
-  }
-
-  .hero-ctas {
+  .hero-split {
+    position: sticky;
+    top: 0;
+    height: 100vh;
     display: flex;
-    gap: var(--space-sm);
+  }
+
+  /* ── Left panel: text ── */
+
+  .hero-panel-text {
+    position: relative;
+    width: 38%;
+    min-width: 320px;
+    max-width: 440px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
-    flex-wrap: wrap;
-    animation: ctasFadeIn var(--duration-slower) var(--ease-smooth) 600ms forwards;
-    opacity: 0;
+    padding: var(--space-xxl) var(--space-xl);
+    background: var(--warm-white);
+    border-right: 1px solid rgba(144, 0, 32, 0.1);
+    z-index: 2;
   }
 
-  @keyframes ctasFadeIn {
-    to { opacity: 1; }
+  .hero-panel-text .elevation-marker {
+    top: var(--space-xl);
+    opacity: 0.6;
   }
 
-  .btn-primary,
-  .btn-secondary {
-    padding: calc(var(--space-sm) - 2px) var(--space-lg);
-    text-decoration: none;
-    border-radius: var(--radius-base);
-    font-weight: var(--weight-medium);
-    font-size: var(--text-base);
-    transition: all var(--transition-base);
-    display: inline-block;
-    border: var(--border-thin) solid transparent;
+  .hero-panel-text .marker-label {
+    color: var(--concrete-400);
   }
 
-  .btn-primary {
-    background: var(--burgundy-primary);
-    color: var(--warm-white);
-    border-color: var(--burgundy-primary);
+  .hero-panel-text .marker-line {
+    background: var(--concrete-400);
   }
 
-  .btn-primary:hover {
-    background: var(--burgundy-hover);
-    border-color: var(--burgundy-hover);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-burgundy);
-  }
-
-  .btn-secondary {
-    background: transparent;
-    color: var(--concrete-900);
-    border-color: var(--concrete-300);
-  }
-
-  .btn-secondary:hover {
-    border-color: var(--burgundy-primary);
-    color: var(--burgundy-primary);
-    transform: translateY(-2px);
-  }
-
-  .scroll-indicator {
+  .hero-panel-text .scroll-indicator {
     position: absolute;
     bottom: var(--space-lg);
     left: 50%;
     transform: translateX(-50%);
-    color: var(--concrete-400);
-    animation: scrollBounce 2s ease-in-out infinite;
-    opacity: 0.6;
-    transition: opacity var(--transition-base);
+    color: rgba(144, 0, 32, 0.4);
+    animation: scrollBounce 2.5s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+    opacity: 0;
+    pointer-events: auto;
   }
 
-  .scroll-indicator:hover {
-    opacity: 1;
+  .hero-panel-text .scroll-indicator:hover {
+    color: var(--burgundy-primary);
   }
+
+  /* ── Right panel: map ── */
+
+  .hero-panel-map {
+    flex: 1;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ── Architectural Title Block ── */
+
+  .hero-title-block {
+    border: 1px solid rgba(144, 0, 32, 0.18);
+    font-family: var(--font-mono);
+    width: 100%;
+  }
+
+  .tb-section {
+    padding: 12px 18px;
+  }
+
+  .tb-rule {
+    height: 1px;
+    background: rgba(144, 0, 32, 0.12);
+    margin: 0;
+  }
+
+  .tb-dwg {
+    display: block;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: rgba(144, 0, 32, 0.45);
+    margin-bottom: 8px;
+  }
+
+  .tb-name {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: var(--weight-regular);
+    font-variation-settings: 'wdth' 75;
+    color: var(--concrete-900);
+    letter-spacing: var(--tracking-tight);
+    line-height: 1.05;
+    margin: 0;
+  }
+
+  .tb-desc p,
+  .tb-role p {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.65;
+    color: var(--concrete-600, #555);
+    margin: 0;
+  }
+
+  .tb-role strong {
+    color: var(--concrete-900);
+    font-weight: 600;
+  }
+
+  .tb-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .tb-link {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--burgundy-primary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.15s ease;
+  }
+
+  .tb-link:hover {
+    color: var(--burgundy-hover);
+  }
+
+  .tb-sep {
+    font-size: 10px;
+    color: rgba(144, 0, 32, 0.25);
+  }
+
+  /* Reveal state is set via JS + GSAP timeline */
 
   @keyframes scrollBounce {
     0%, 100% { transform: translateX(-50%) translateY(0); }
@@ -779,16 +638,29 @@ const pageDescription = "Full-stack engineer at The Atlantic. Building audio and
 
   .featured-work {
     position: relative;
-    padding: var(--space-xxxl) var(--space-lg);
+    min-height: 100vh;
+    overflow: visible;
+    padding: 0;
     background: var(--cream);
-    z-index: 1;
+    z-index: 2;
+    box-shadow: 0 -1px 0 var(--warm-gray-200), 0 -4px 24px rgba(0, 0, 0, 0.04);
+  }
+
+  .featured-work-inner {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: clamp(var(--space-xl), 5vh, var(--space-xxl)) var(--space-lg) clamp(var(--space-xl), 5vh, var(--space-xxl));
   }
 
   .featured-work .elevation-marker {
-    top: calc(var(--space-xxxl) + var(--space-sm));
+    top: clamp(var(--space-lg), 4vh, var(--space-xxl));
   }
 
   .container {
+    width: 100%;
     max-width: var(--width-narrow);
     margin: 0 auto;
   }
@@ -806,7 +678,7 @@ const pageDescription = "Full-stack engineer at The Atlantic. Building audio and
   .section-subtitle {
     font-size: var(--text-lg);
     color: var(--concrete-400);
-    margin-bottom: var(--space-xl);
+    margin-bottom: clamp(var(--space-lg), 4vh, var(--space-xl));
     max-width: 60ch;
   }
 
@@ -814,170 +686,80 @@ const pageDescription = "Full-stack engineer at The Atlantic. Building audio and
 
   .project-stack-container {
     position: relative;
-    margin-bottom: var(--space-xxl);
-    perspective: 1800px;
-    padding: var(--space-lg) 0;
+    overflow: visible;
+    margin-bottom: clamp(var(--space-lg), 3vh, var(--space-xl));
+    padding: var(--space-md) 0;
   }
 
   .project-stack {
     position: relative;
+    overflow: visible;
     width: 100%;
-    max-width: var(--width-narrow);
+    max-width: 760px;
     margin: 0 auto;
-    min-height: 480px;
+  }
+
+  /* True sticky stack: cards naturally stack in-flow while scrolling down and up. */
+  .project-stack--scrollstack {
+    position: relative;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .project-stack--scrollstack .project-card {
+    position: sticky;
+    width: 100%;
+    margin-bottom: 60vh; /* Creates scroll space between cards */
+    transition:
+      box-shadow 0.35s ease-out,
+      border-color 0.25s ease-out;
+    box-shadow: var(--shadow-md);
+    background: var(--warm-white);
+  }
+
+  .project-stack--scrollstack .project-card:last-child {
+    margin-bottom: 25vh; /* Space before View All link */
+  }
+
+  /* Staggered sticky tops and increasing z-index for stacking on top */
+  .project-stack--scrollstack .project-card:nth-child(1) {
+    top: 80px;
+    z-index: 10;
+  }
+
+  .project-stack--scrollstack .project-card:nth-child(2) {
+    top: 110px;
+    z-index: 20;
+  }
+
+  .project-stack--scrollstack .project-card:nth-child(3) {
+    top: 140px;
+    z-index: 30;
   }
 
   .project-card {
-    position: absolute;
+    position: relative;
     width: 100%;
-    background: var(--warm-white);
     border: 1px solid rgba(0, 0, 0, 0.08);
-    border-radius: 6px;
+    border-radius: 8px;
     overflow: hidden;
-    transition:
-      transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
-      opacity 0.4s ease-out,
-      box-shadow 0.3s ease-out,
-      border-color 0.2s ease-out;
     cursor: pointer;
     will-change: transform, opacity;
-    touch-action: pan-y pinch-zoom;
-    user-select: none;
-    -webkit-user-select: none;
   }
 
-  /* Dragging state - immediate response, no transition */
-  .project-card.dragging {
-    transition: none !important;
-    cursor: grabbing;
+  .project-card:hover {
+    border-left: 3px solid var(--burgundy-primary);
+    box-shadow: var(--shadow-lg);
   }
 
-  /* Snapping back with spring */
-  .project-card.snapping-back {
-    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-                box-shadow 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
-  }
-
-  /* Stack positioning - refined depth with crisp shadows */
-  .project-card[data-stack-position="0"] {
-    transform: translateY(0) translateZ(0) rotate(0deg) scale(1);
-    z-index: 3;
-    box-shadow:
-      0 1px 2px rgba(0, 0, 0, 0.04),
-      0 4px 16px rgba(0, 0, 0, 0.08),
-      0 12px 32px rgba(144, 0, 32, 0.06);
-  }
-
-  .project-card[data-stack-position="1"] {
-    transform: translateY(12px) translateZ(-40px) rotate(-1.5deg) scale(0.96);
-    z-index: 2;
-    opacity: 0.92;
-    box-shadow:
-      0 2px 8px rgba(0, 0, 0, 0.06),
-      0 6px 20px rgba(0, 0, 0, 0.08);
-  }
-
-  .project-card[data-stack-position="2"] {
-    transform: translateY(24px) translateZ(-80px) rotate(2deg) scale(0.92);
-    z-index: 1;
-    opacity: 0.78;
-    box-shadow:
-      0 2px 6px rgba(0, 0, 0, 0.04),
-      0 4px 12px rgba(0, 0, 0, 0.06);
-  }
-
-  /* Cards rising up when top card is removed */
-  .project-card[data-stack-position="1"].rising {
-    animation: riseToTop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-  }
-
-  .project-card[data-stack-position="2"].rising {
-    animation: riseToSecond 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-  }
-
-  @keyframes riseToTop {
-    0% {
-      transform: translateY(12px) translateZ(-40px) rotate(-1.5deg) scale(0.96);
-      opacity: 0.92;
-    }
-    100% {
-      transform: translateY(0) translateZ(0) rotate(0deg) scale(1);
-      opacity: 1;
-    }
-  }
-
-  @keyframes riseToSecond {
-    0% {
-      transform: translateY(24px) translateZ(-80px) rotate(2deg) scale(0.92);
-      opacity: 0.78;
-    }
-    100% {
-      transform: translateY(12px) translateZ(-40px) rotate(-1.5deg) scale(0.96);
-      opacity: 0.92;
-    }
-  }
-
-  /* Card being removed - uses CSS custom properties for direction */
-  .project-card.removing {
-    --exit-x: 120%;
-    --exit-rotation: 18deg;
-    animation: slideOutCard 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  }
-
-  @keyframes slideOutCard {
-    0% {
-      transform: translateX(0) translateY(0) rotate(0deg) scale(1);
-      opacity: 1;
-    }
-    30% {
-      transform: translateX(calc(var(--exit-x) * 0.15)) translateY(-8px) rotate(calc(var(--exit-rotation) * 0.4)) scale(1.02);
-      opacity: 1;
-    }
-    100% {
-      transform: translateX(var(--exit-x)) translateY(-16px) rotate(var(--exit-rotation)) scale(0.92);
-      opacity: 0;
-    }
-  }
-
-  /* Card entering from left (prev button) */
-  .project-card.entering-left {
-    animation: enterFromLeft 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-  }
-
-  @keyframes enterFromLeft {
-    0% {
-      transform: translateX(-100%) translateY(-10px) rotate(-12deg) scale(0.9);
-      opacity: 0;
-    }
-    100% {
-      transform: translateX(0) translateY(0) rotate(0deg) scale(1);
-      opacity: 1;
-    }
-  }
-
-  /* Top card hover effect */
-  .project-card[data-stack-position="0"]:not(.dragging):not(.removing):hover {
-    border-color: rgba(144, 0, 32, 0.2);
-    box-shadow:
-      0 1px 2px rgba(0, 0, 0, 0.04),
-      0 8px 24px rgba(0, 0, 0, 0.1),
-      0 16px 40px rgba(144, 0, 32, 0.08);
-    transform: translateY(-4px) translateZ(10px) rotate(0deg) scale(1);
-  }
-
-  .project-card[data-stack-position="0"]:hover .blueprint-overlay {
+  .project-card:hover .blueprint-overlay,
+  .project-card:hover .corner-accent {
     opacity: 0.6;
   }
 
-  .project-card[data-stack-position="0"]:hover .corner-accent {
-    opacity: 0.6;
-  }
-
-  .project-card[data-stack-position="0"]:active {
-    transform: translateY(-2px) translateZ(5px) rotate(0deg) scale(0.99);
+  .project-card:active {
+    transform: translateY(-2px) scale(0.99);
   }
 
   /* Paper texture */
@@ -1007,7 +789,7 @@ const pageDescription = "Full-stack engineer at The Atlantic. Building audio and
     width: 100%;
     height: 100%;
     opacity: 0;
-    transition: opacity var(--transition-base);
+    transition: opacity 0.35s var(--ease-smooth) 0.08s;
     pointer-events: none;
     z-index: 2;
   }
@@ -1129,74 +911,8 @@ const pageDescription = "Full-stack engineer at The Atlantic. Building audio and
     transition: gap var(--transition-fast);
   }
 
-  .project-card[data-stack-position="0"]:hover .view-project {
+  .project-card:hover .view-project {
     gap: 10px;
-  }
-
-  /* ==================== STACK NAVIGATION ==================== */
-
-  .stack-nav {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-xl);
-    margin-top: var(--space-xl);
-    padding: var(--space-md);
-  }
-
-  .stack-btn {
-    background: var(--cream);
-    border: var(--border-thin) solid var(--warm-gray-200);
-    border-radius: 50%;
-    width: 48px;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all var(--transition-base);
-    color: var(--concrete-900);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  }
-
-  .stack-btn:hover {
-    background: var(--burgundy-primary);
-    border-color: var(--burgundy-primary);
-    color: var(--warm-white);
-    transform: scale(1.08);
-    box-shadow: 0 4px 12px rgba(144, 0, 32, 0.15);
-  }
-
-  .stack-btn:active {
-    transform: scale(0.95);
-  }
-
-  .stack-indicators {
-    display: flex;
-    gap: var(--space-sm);
-    align-items: center;
-  }
-
-  .stack-indicator {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--warm-gray-200);
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s var(--ease-smooth);
-  }
-
-  .stack-indicator:hover {
-    background: var(--concrete-400);
-    transform: scale(1.4);
-  }
-
-  .stack-indicator.active {
-    background: var(--burgundy-primary);
-    width: 24px;
-    height: 8px;
-    border-radius: 4px;
   }
 
   .view-all {
@@ -1205,20 +921,30 @@ const pageDescription = "Full-stack engineer at The Atlantic. Building audio and
     font-weight: var(--weight-medium);
     font-size: var(--text-lg);
     text-decoration: none;
-    transition: transform var(--transition-base);
+    text-underline-offset: 4px;
+    transition: transform var(--transition-base), color var(--transition-fast);
+    margin-top: var(--space-xl);
   }
 
   .view-all:hover {
     transform: translateX(4px);
+    color: var(--burgundy-hover);
   }
 
   /* ==================== ABOUT PREVIEW (Elevation +4.8m) ==================== */
 
   .about-preview {
-    position: relative;
+    position: sticky;
+    top: 0;
+    min-height: 100vh;
     padding: var(--space-xxxl) var(--space-lg);
-    background: var(--warm-white);
-    z-index: 1;
+    background: var(--warm-gray-50);
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* Layer cue: top edge + slightly deeper shadow for topmost sheet */
+    box-shadow: 0 -1px 0 var(--warm-gray-200), 0 -8px 32px rgba(0, 0, 0, 0.06);
   }
 
   .about-preview .elevation-marker {
@@ -1268,28 +994,70 @@ const pageDescription = "Full-stack engineer at The Atlantic. Building audio and
 
   /* ==================== RESPONSIVE ADJUSTMENTS ==================== */
 
+  @media (max-width: 1024px) {
+    .hero-panel-text {
+      width: 45%;
+    }
+  }
+
   @media (max-width: 768px) {
     .hero-section,
-    .featured-work,
+    .featured-work-inner,
     .about-preview {
       padding-left: var(--space-md);
       padding-right: var(--space-md);
     }
 
+    .hero-section {
+      min-height: 100vh;
+      height: 100vh;
+    }
+
+    .hero-split {
+      position: sticky;
+      top: 0;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    .hero-panel-map {
+      flex: 1;
+      height: auto;
+    }
+
+    .hero-panel-text {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      min-width: 0;
+      max-width: none;
+      height: auto;
+      border-right: none;
+      border-top: 1px solid rgba(144, 0, 32, 0.1);
+      padding: var(--space-md) var(--space-md);
+      background: var(--warm-white);
+      z-index: 5;
+    }
+
+    .hero-panel-text .scroll-indicator {
+      display: none;
+    }
+
+    .tb-name {
+      font-size: clamp(1.6rem, 7vw, 2.2rem);
+    }
+
+    .tb-desc p,
+    .tb-role p {
+      font-size: 11px;
+    }
+
+    /* Reveal state handled by GSAP matchMedia */
+
     .elevation-marker {
       left: var(--space-md);
-    }
-
-    .hero-name {
-      margin-bottom: var(--space-lg);
-    }
-
-    .hero-narrative {
-      margin-bottom: var(--space-lg);
-    }
-
-    .narrative-line {
-      font-size: var(--text-base);
     }
 
     .card-content {
@@ -1303,198 +1071,31 @@ const pageDescription = "Full-stack engineer at The Atlantic. Building audio and
       right: var(--space-md);
     }
 
-    .project-stack {
-      min-height: 440px;
+    /* Sticky stack adjustments for mobile */
+    .project-stack--scrollstack .project-card {
+      margin-bottom: 45vh;
     }
 
-    /* Touch-friendly navigation buttons */
-    .stack-btn {
-      width: 44px;
-      height: 44px;
+    .project-stack--scrollstack .project-card:last-child {
+      margin-bottom: 15vh;
     }
 
-    .stack-nav {
-      gap: var(--space-lg);
-      margin-top: var(--space-lg);
-    }
+    .project-stack--scrollstack .project-card:nth-child(1) { top: 60px; }
+    .project-stack--scrollstack .project-card:nth-child(2) { top: 75px; }
+    .project-stack--scrollstack .project-card:nth-child(3) { top: 90px; }
 
-    .project-card[data-stack-position="1"] {
-      transform: translateY(10px) translateZ(-35px) rotate(-1.2deg) scale(0.97);
-    }
-
-    .project-card[data-stack-position="2"] {
-      transform: translateY(20px) translateZ(-70px) rotate(1.5deg) scale(0.94);
-    }
-
-    /* Mobile rising animations - adjusted values */
-    @keyframes riseToTop {
-      0% {
-        transform: translateY(10px) translateZ(-35px) rotate(-1.2deg) scale(0.97);
-        opacity: 0.92;
-      }
-      100% {
-        transform: translateY(0) translateZ(0) rotate(0deg) scale(1);
-        opacity: 1;
-      }
-    }
-
-    @keyframes riseToSecond {
-      0% {
-        transform: translateY(20px) translateZ(-70px) rotate(1.5deg) scale(0.94);
-        opacity: 0.78;
-      }
-      100% {
-        transform: translateY(10px) translateZ(-35px) rotate(-1.2deg) scale(0.97);
-        opacity: 0.92;
-      }
-    }
-
-    .hero-ctas {
+    .tb-actions {
       flex-direction: column;
-      align-items: center;
-    }
-
-    .btn-primary,
-    .btn-secondary {
-      width: 100%;
-      max-width: 280px;
-      text-align: center;
-    }
-
-    /* Swipe hint on mobile */
-    .project-stack-container::after {
-      content: '';
-      position: absolute;
-      bottom: -8px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 40px;
-      height: 4px;
-      background: var(--warm-gray-200);
-      border-radius: 2px;
-      opacity: 0.6;
+      align-items: flex-start;
+      gap: var(--space-sm);
     }
   }
 
   @media (max-width: 480px) {
-    .featured-work,
+    .featured-work-inner,
     .about-preview {
-      padding-top: var(--space-xxl);
-      padding-bottom: var(--space-xxl);
-    }
-
-    .card-content {
-      padding: var(--space-md) var(--space-md);
-      min-height: 340px;
-    }
-
-    .year-badge {
-      font-size: 3rem;
-      top: var(--space-xs);
-      right: var(--space-sm);
-      opacity: 0.1;
-    }
-
-    .elevation-marker {
-      left: var(--space-sm);
-    }
-
-    .project-title {
-      font-size: clamp(1.35rem, 5vw, 1.75rem);
-      max-width: 100%;
-      margin-bottom: var(--space-xs);
-    }
-
-    .project-description {
-      font-size: var(--text-sm);
-      margin-bottom: var(--space-md);
-      line-height: 1.5;
-    }
-
-    .project-meta {
-      gap: 6px;
-      padding-top: var(--space-sm);
-    }
-
-    .meta-item {
-      gap: var(--space-xs);
-    }
-
-    .meta-label {
-      width: 48px;
-      font-size: 9px;
-    }
-
-    .meta-value {
-      font-size: var(--text-xs);
-    }
-
-    .view-project {
-      font-size: var(--text-xs);
-      margin-top: var(--space-sm);
-    }
-
-    .project-stack {
-      min-height: 400px;
-    }
-
-    .project-stack-container {
-      padding: var(--space-md) 0;
-      margin-left: calc(-1 * var(--space-sm));
-      margin-right: calc(-1 * var(--space-sm));
-      padding-left: var(--space-sm);
-      padding-right: var(--space-sm);
-    }
-
-    /* Larger touch targets on small screens */
-    .stack-btn {
-      width: 40px;
-      height: 40px;
-    }
-
-    .stack-nav {
-      gap: var(--space-md);
-    }
-
-    .stack-indicator {
-      width: 10px;
-      height: 10px;
-    }
-
-    .stack-indicator.active {
-      width: 28px;
-      height: 10px;
-    }
-
-    .project-card[data-stack-position="1"] {
-      transform: translateY(8px) translateZ(-25px) rotate(-1deg) scale(0.97);
-    }
-
-    .project-card[data-stack-position="2"] {
-      transform: translateY(16px) translateZ(-50px) rotate(1.2deg) scale(0.94);
-    }
-
-    /* Mobile rising animations - 480px values */
-    @keyframes riseToTop {
-      0% {
-        transform: translateY(8px) translateZ(-25px) rotate(-1deg) scale(0.97);
-        opacity: 0.92;
-      }
-      100% {
-        transform: translateY(0) translateZ(0) rotate(0deg) scale(1);
-        opacity: 1;
-      }
-    }
-
-    @keyframes riseToSecond {
-      0% {
-        transform: translateY(16px) translateZ(-50px) rotate(1.2deg) scale(0.94);
-        opacity: 0.78;
-      }
-      100% {
-        transform: translateY(8px) translateZ(-25px) rotate(-1deg) scale(0.97);
-        opacity: 0.92;
-      }
+      padding-top: var(--space-xl);
+      padding-bottom: var(--space-xl);
     }
   }
 
@@ -1505,35 +1106,24 @@ const pageDescription = "Full-stack engineer at The Atlantic. Building audio and
     }
 
     /* Remove hover effects on touch devices */
-    .project-card[data-stack-position="0"]:not(.dragging):not(.removing):hover {
-      transform: translateY(0) translateZ(0) rotate(0deg) scale(1);
+    .project-card:hover {
       border-color: rgba(0, 0, 0, 0.08);
-      box-shadow:
-        0 1px 2px rgba(0, 0, 0, 0.04),
-        0 4px 16px rgba(0, 0, 0, 0.08),
-        0 12px 32px rgba(144, 0, 32, 0.06);
+      box-shadow: var(--shadow-md);
     }
 
-    .project-card[data-stack-position="0"]:hover .blueprint-overlay,
-    .project-card[data-stack-position="0"]:hover .corner-accent {
+    .project-card:hover .blueprint-overlay,
+    .project-card:hover .corner-accent {
       opacity: 0;
     }
 
-    .project-card[data-stack-position="0"]:hover .view-project {
+    .project-card:hover .view-project {
       gap: 6px;
     }
 
     /* Active state for touch feedback */
-    .project-card[data-stack-position="0"]:active:not(.dragging) {
+    .project-card:active {
       transform: scale(0.985);
       transition: transform 0.1s ease-out;
-    }
-
-    .stack-btn:active {
-      transform: scale(0.92);
-      background: var(--burgundy-primary);
-      border-color: var(--burgundy-primary);
-      color: var(--warm-white);
     }
   }
 </style>

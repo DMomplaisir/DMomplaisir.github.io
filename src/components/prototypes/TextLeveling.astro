@@ -1,0 +1,151 @@
+---
+/**
+ * Text Leveling - #18
+ * Characters "rise" into view with staggered timing
+ * Creates a construction/building metaphor for text appearance
+ */
+
+interface Props {
+  text: string;
+  class?: string;
+}
+
+const { text, class: className } = Astro.props;
+---
+
+<div class={`text-leveling-container ${className || ''}`}>
+  <h2 class="leveling-text" data-text={text}>
+    {text}
+  </h2>
+</div>
+
+<style>
+  .text-leveling-container {
+    width: 100%;
+  }
+
+  .leveling-text {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    line-height: var(--leading-tight);
+    overflow: hidden;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3em;
+    justify-content: center;
+    color: var(--concrete-900);
+  }
+
+  .leveling-word {
+    display: inline-flex;
+    overflow: hidden;
+  }
+
+  .leveling-char {
+    display: inline-block;
+    transform: translateY(120%);
+    transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  /* Trigger animation on intersection or hover */
+  .text-leveling-container.in-view .leveling-char,
+  .text-leveling-container:hover .leveling-char {
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .leveling-char {
+      transform: translateY(0);
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  /**
+   * Splits text into words and characters for staggered animation
+   * Uses Intersection Observer for scroll-triggered reveal
+   */
+  class TextLeveling {
+    container: HTMLElement;
+    textElement: HTMLElement;
+    observer: IntersectionObserver | null = null;
+
+    constructor(container: HTMLElement) {
+      this.container = container;
+      const textEl = container.querySelector('.leveling-text');
+      
+      if (!textEl || !(textEl instanceof HTMLElement)) {
+        console.warn('TextLeveling: .leveling-text element not found');
+        return;
+      }
+
+      this.textElement = textEl;
+      this.init();
+    }
+
+    init() {
+      const text = this.textElement.getAttribute('data-text') || this.textElement.innerText;
+      this.textElement.innerHTML = '';
+
+      const words = text.trim().split(/\s+/);
+      
+      words.forEach((word, wordIndex) => {
+        const wordSpan = document.createElement('span');
+        wordSpan.className = 'leveling-word';
+        
+        const chars = word.split('');
+        chars.forEach((char, charIndex) => {
+          const charSpan = document.createElement('span');
+          charSpan.className = 'leveling-char';
+          charSpan.textContent = char;
+          
+          // Stagger delays: words cascade, then characters within words
+          const delay = (wordIndex * 150) + (charIndex * 40);
+          charSpan.style.transitionDelay = `${delay}ms`;
+          
+          wordSpan.appendChild(charSpan);
+        });
+        
+        this.textElement.appendChild(wordSpan);
+      });
+
+      // Setup intersection observer for scroll reveal
+      this.setupObserver();
+    }
+
+    setupObserver() {
+      this.observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              this.container.classList.add('in-view');
+            } else {
+              // Remove class to re-trigger when scrolled back into view
+              this.container.classList.remove('in-view');
+            }
+          });
+        },
+        { threshold: 0.3 }
+      );
+
+      this.observer.observe(this.container);
+    }
+
+    destroy() {
+      if (this.observer) {
+        this.observer.disconnect();
+      }
+    }
+  }
+
+  // Initialize all text leveling components
+  document.addEventListener('astro:page-load', () => {
+    const containers = document.querySelectorAll('.text-leveling-container');
+    containers.forEach((container) => {
+      if (container instanceof HTMLElement) {
+        new TextLeveling(container);
+      }
+    });
+  });
+</script>

@@ -1,0 +1,153 @@
+---
+/**
+ * Variable Font Animation - #17
+ * Interactive variable font that responds to hover and scroll position
+ * Demonstrates fluid typography with weight and width axes
+ */
+
+interface Props {
+  text: string;
+  class?: string;
+  showHint?: boolean;
+}
+
+const { text, class: className, showHint = true } = Astro.props;
+---
+
+<div class={`variable-font-container ${className || ''}`}>
+  <div class="variable-text" data-text={text}>
+    {text}
+  </div>
+  {showHint && (
+    <p class="interaction-hint">Hover or scroll to interact</p>
+  )}
+</div>
+
+<style>
+  .variable-font-container {
+    text-align: center;
+    width: 100%;
+  }
+
+  .variable-text {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 10vw, 7rem);
+    line-height: var(--leading-tight);
+    font-variation-settings: 'wght' 300, 'wdth' 100;
+    transition: font-variation-settings 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: default;
+    color: var(--concrete-900);
+    user-select: none;
+  }
+
+  .variable-text:hover {
+    font-variation-settings: 'wght' 800, 'wdth' 75;
+  }
+
+  .interaction-hint {
+    margin-top: var(--space-md);
+    color: var(--concrete-400);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    opacity: 0.7;
+    transition: opacity var(--transition-base);
+  }
+
+  .variable-font-container:hover .interaction-hint {
+    opacity: 0.3;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .variable-text {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  /**
+   * Animates variable font properties based on scroll position
+   * Maximum effect when element is centered in viewport
+   */
+  class VariableFontController {
+    element: HTMLElement;
+    isHovered = false;
+    rafId: number | null = null;
+
+    constructor(element: HTMLElement) {
+      this.element = element;
+      this.init();
+    }
+
+    init() {
+      // Track hover state
+      this.element.addEventListener('mouseenter', () => {
+        this.isHovered = true;
+      });
+
+      this.element.addEventListener('mouseleave', () => {
+        this.isHovered = false;
+      });
+
+      // Scroll-based animation
+      this.setupScrollAnimation();
+    }
+
+    setupScrollAnimation() {
+      const handleScroll = () => {
+        if (this.rafId) {
+          cancelAnimationFrame(this.rafId);
+        }
+
+        this.rafId = requestAnimationFrame(() => {
+          // Only apply scroll effect if not hovered
+          if (!this.isHovered) {
+            this.updateFontByScroll();
+          }
+        });
+      };
+
+      window.addEventListener('scroll', handleScroll, { passive: true });
+    }
+
+    updateFontByScroll() {
+      const rect = this.element.getBoundingClientRect();
+      const winHeight = window.innerHeight;
+      
+      // Calculate distance from viewport center
+      const viewportCenter = winHeight / 2;
+      const elementCenter = rect.top + (rect.height / 2);
+      const distance = Math.abs(viewportCenter - elementCenter);
+      
+      // Maximum distance (when element is at screen edge)
+      const maxDistance = winHeight / 2 + rect.height / 2;
+      
+      // Progress: 0 when far, 1 when centered
+      const progress = Math.max(0, Math.min(1, 1 - (distance / maxDistance)));
+      
+      // Map progress to font variation settings
+      // Weight: 300 (light) to 700 (bold)
+      // Width: 100 (normal) to 85 (slightly condensed)
+      const weight = 300 + (progress * 400);
+      const width = 100 - (progress * 15);
+      
+      this.element.style.fontVariationSettings = `'wght' ${weight}, 'wdth' ${width}`;
+    }
+
+    destroy() {
+      if (this.rafId) {
+        cancelAnimationFrame(this.rafId);
+      }
+    }
+  }
+
+  // Initialize all variable font elements
+  document.addEventListener('astro:page-load', () => {
+    const elements = document.querySelectorAll('.variable-text');
+    elements.forEach((element) => {
+      if (element instanceof HTMLElement) {
+        new VariableFontController(element);
+      }
+    });
+  });
+</script>

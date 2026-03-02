@@ -1,0 +1,271 @@
+---
+/**
+ * Skills Graph - #6
+ * Interactive skill network with dynamic connection visualization
+ * Hover over skills to reveal relationships
+ */
+
+interface Props {
+  class?: string;
+}
+
+interface Skill {
+  name: string;
+  related: string[];
+}
+
+const { class: className } = Astro.props;
+
+// Define skills and their relationships
+const skills: Skill[] = [
+  { name: 'React', related: ['TypeScript', 'Next.js', 'Frontend'] },
+  { name: 'TypeScript', related: ['React', 'Node.js', 'Astro'] },
+  { name: 'Node.js', related: ['TypeScript', 'Backend', 'API'] },
+  { name: 'Astro', related: ['React', 'TypeScript', 'Frontend'] },
+  { name: 'Backend', related: ['Node.js', 'Database', 'API'] },
+  { name: 'Frontend', related: ['React', 'Astro', 'Design'] },
+  { name: 'Design', related: ['Frontend', 'UI/UX'] },
+  { name: 'API', related: ['Node.js', 'Backend'] },
+  { name: 'Database', related: ['Backend', 'PostgreSQL'] },
+  { name: 'PostgreSQL', related: ['Database', 'Backend'] },
+  { name: 'Next.js', related: ['React', 'TypeScript', 'Frontend'] },
+  { name: 'UI/UX', related: ['Design', 'Frontend'] },
+];
+---
+
+<div class={`skills-graph-container ${className || ''}`}>
+  <svg class="connections-svg" aria-hidden="true"></svg>
+  
+  <div class="skills-grid">
+    {skills.map((skill) => (
+      <button
+        class="skill-item"
+        data-skill={skill.name}
+        data-related={skill.related.join(',')}
+        type="button"
+      >
+        {skill.name}
+      </button>
+    ))}
+  </div>
+</div>
+
+<style>
+  .skills-graph-container {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .connections-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: visible;
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: var(--space-lg);
+    position: relative;
+    z-index: 2;
+  }
+
+  .skill-item {
+    padding: var(--space-md);
+    background: var(--warm-white);
+    border: 1px solid var(--warm-gray-200);
+    border-radius: var(--radius-sm);
+    text-align: center;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    color: var(--concrete-900);
+    transition: all var(--transition-base);
+    position: relative;
+  }
+
+  .skill-item:hover {
+    border-color: var(--blueprint-blue);
+    color: var(--blueprint-blue);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    background: var(--blueprint-blue-faint);
+  }
+
+  .skill-item:focus-visible {
+    outline: 2px solid var(--blueprint-blue);
+    outline-offset: 2px;
+  }
+
+  .connection-line {
+    fill: none;
+    stroke: var(--blueprint-blue);
+    stroke-width: 1.5;
+    opacity: 0;
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    transition: 
+      stroke-dashoffset 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.3s ease;
+  }
+
+  .connection-line.active {
+    opacity: 0.5;
+    stroke-dashoffset: 0;
+  }
+
+  @media (max-width: 768px) {
+    .skills-grid {
+      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+      gap: var(--space-md);
+    }
+
+    .skill-item {
+      padding: var(--space-sm);
+      font-size: var(--text-xs);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .connection-line {
+      transition: opacity 0.1s ease;
+    }
+
+    .skill-item {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  /**
+   * Manages skill graph interactions and connection visualization
+   * Draws SVG lines between related skills on hover
+   */
+  class SkillsGraph {
+    container: HTMLElement;
+    grid: HTMLElement;
+    svg: SVGElement;
+    skills: HTMLElement[];
+    activeLines: SVGLineElement[] = [];
+
+    constructor(container: HTMLElement) {
+      this.container = container;
+      
+      const grid = container.querySelector('.skills-grid');
+      const svg = container.querySelector('.connections-svg');
+      
+      if (!grid || !svg || !(grid instanceof HTMLElement) || !(svg instanceof SVGElement)) {
+        console.warn('SkillsGraph: Required elements not found');
+        return;
+      }
+
+      this.grid = grid;
+      this.svg = svg;
+      this.skills = Array.from(this.grid.querySelectorAll('.skill-item')) as HTMLElement[];
+      
+      this.init();
+    }
+
+    init() {
+      // Attach event listeners to each skill
+      this.skills.forEach((skill) => {
+        skill.addEventListener('mouseenter', () => this.showConnections(skill));
+        skill.addEventListener('mouseleave', () => this.hideConnections());
+        skill.addEventListener('focus', () => this.showConnections(skill));
+        skill.addEventListener('blur', () => this.hideConnections());
+      });
+
+      // Update SVG size on resize
+      const resizeObserver = new ResizeObserver(() => this.updateSVGSize());
+      resizeObserver.observe(this.grid);
+    }
+
+    updateSVGSize() {
+      const rect = this.grid.getBoundingClientRect();
+      this.svg.setAttribute('width', rect.width.toString());
+      this.svg.setAttribute('height', rect.height.toString());
+    }
+
+    showConnections(skill: HTMLElement) {
+      const relatedNames = (skill.getAttribute('data-related') || '').split(',');
+      const skillRect = skill.getBoundingClientRect();
+      const gridRect = this.grid.getBoundingClientRect();
+      
+      // Clear previous connections
+      this.hideConnections();
+      
+      // Calculate center point of current skill
+      const startX = skillRect.left - gridRect.left + (skillRect.width / 2);
+      const startY = skillRect.top - gridRect.top + (skillRect.height / 2);
+      
+      // Draw line to each related skill
+      relatedNames.forEach((name) => {
+        const relatedSkill = this.skills.find(
+          (s) => s.getAttribute('data-skill') === name.trim()
+        );
+        
+        if (relatedSkill) {
+          const targetRect = relatedSkill.getBoundingClientRect();
+          const endX = targetRect.left - gridRect.left + (targetRect.width / 2);
+          const endY = targetRect.top - gridRect.top + (targetRect.height / 2);
+          
+          const line = this.createConnectionLine(startX, startY, endX, endY);
+          this.svg.appendChild(line);
+          this.activeLines.push(line);
+          
+          // Trigger animation
+          requestAnimationFrame(() => {
+            line.classList.add('active');
+          });
+        }
+      });
+    }
+
+    hideConnections() {
+      // Fade out and remove lines
+      this.activeLines.forEach((line) => {
+        line.classList.remove('active');
+      });
+      
+      setTimeout(() => {
+        this.activeLines.forEach((line) => line.remove());
+        this.activeLines = [];
+      }, 600);
+    }
+
+    createConnectionLine(x1: number, y1: number, x2: number, y2: number): SVGLineElement {
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', x1.toString());
+      line.setAttribute('y1', y1.toString());
+      line.setAttribute('x2', x2.toString());
+      line.setAttribute('y2', y2.toString());
+      line.classList.add('connection-line');
+      
+      // Calculate line length for dash animation
+      const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+      line.style.strokeDasharray = length.toString();
+      line.style.strokeDashoffset = length.toString();
+      
+      return line;
+    }
+  }
+
+  // Initialize all skill graphs
+  document.addEventListener('astro:page-load', () => {
+    const containers = document.querySelectorAll('.skills-graph-container');
+    containers.forEach((container) => {
+      if (container instanceof HTMLElement) {
+        new SkillsGraph(container);
+      }
+    });
+  });
+</script>

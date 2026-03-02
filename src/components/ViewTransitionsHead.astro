@@ -1,0 +1,17 @@
+---
+/**
+ * Enables View Transitions for client-side navigation.
+ * Add to <head> on every page for smooth animated transitions.
+ * - fallback="swap": instant swap in unsupported browsers
+ * - Scroll to top on navigation for consistent UX
+ */
+import { ClientRouter } from 'astro:transitions';
+---
+
+<ClientRouter fallback="swap" />
+
+<script>
+  document.addEventListener('astro:after-swap', () => {
+    window.scrollTo({ left: 0, top: 0, behavior: 'instant' });
+  });
+</script>

@@ -1,0 +1,103 @@
+---
+import SEO from '../components/SEO.astro';
+import Footer from '../components/Footer.astro';
+import ViewTransitionsHead from '../components/ViewTransitionsHead.astro';
+import PageTransition from '../components/PageTransition.astro';
+import type { BreadcrumbItem } from '../components/SEO.astro';
+
+import '../styles/variables.css';
+import '../styles/fonts.css';
+
+interface Props {
+  title: string;
+  description: string;
+  type?: 'website' | 'article';
+  image?: string;
+  imageAlt?: string;
+  publishedDate?: Date;
+  modifiedDate?: Date;
+  noindex?: boolean;
+  breadcrumbs?: BreadcrumbItem[];
+  includeGenerator?: boolean;
+  includeRssFeed?: boolean;
+  showGridBackground?: boolean;
+  showFooter?: boolean;
+}
+
+const {
+  title,
+  description,
+  type = 'website',
+  image,
+  imageAlt,
+  publishedDate,
+  modifiedDate,
+  noindex,
+  breadcrumbs,
+  includeGenerator = false,
+  includeRssFeed = false,
+  showGridBackground = true,
+  showFooter = true,
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {includeGenerator && <meta name="generator" content={Astro.generator}>}
+
+  <SEO
+    title={title}
+    description={description}
+    type={type}
+    image={image}
+    imageAlt={imageAlt}
+    publishedDate={publishedDate}
+    modifiedDate={modifiedDate}
+    noindex={noindex}
+    breadcrumbs={breadcrumbs}
+  />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  {includeRssFeed && <link rel="alternate" type="application/rss+xml" title="Dylan Momplaisir" href="/rss.xml">}
+  <meta name="theme-color" content="#900020">
+
+  <ViewTransitionsHead />
+  <slot name="head" />
+</head>
+
+<body>
+  {showGridBackground && <div class="grid-background" aria-hidden="true"></div>}
+
+  <PageTransition>
+    <slot />
+  </PageTransition>
+
+  {showFooter && <Footer />}
+</body>
+</html>
+
+<style>
+  .grid-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+      linear-gradient(var(--blueprint-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--blueprint-line) 1px, transparent 1px);
+    background-size: var(--grid-unit) var(--grid-unit);
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 0;
+  }
+</style>

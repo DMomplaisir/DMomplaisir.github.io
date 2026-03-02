@@ -1,0 +1,496 @@
+---
+import SEO from '../components/SEO.astro';
+import ViewTransitionsHead from '../components/ViewTransitionsHead.astro';
+import PageTransition from '../components/PageTransition.astro';
+import '../styles/variables.css';
+import '../styles/fonts.css';
+import '../styles/global.css';
+
+import TextLeveling from '../components/prototypes/TextLeveling.astro';
+import VariableFont from '../components/prototypes/VariableFont.astro';
+import HiddenLayers from '../components/prototypes/HiddenLayers.astro';
+import SkillsGraph from '../components/prototypes/SkillsGraph.astro';
+import BlueprintLines from '../components/prototypes/BlueprintLines.astro';
+import SolariBoard from '../components/prototypes/SolariBoard.astro';
+
+const pageTitle = "Interaction Playground";
+const pageDescription = "Experimental interaction patterns and visual concepts exploring the intersection of engineering and design.";
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <SEO
+    title={`${pageTitle} - Dylan Momplaisir`}
+    description={pageDescription}
+    type="website"
+    breadcrumbs={[
+      { name: 'Home', url: '/' },
+      { name: 'Playground', url: '/playground' },
+    ]}
+  />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#900020">
+  <ViewTransitionsHead />
+</head>
+
+<body>
+  <PageTransition>
+  <!-- Header -->
+  <header class="playground-header">
+    <a href="/" class="back-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      <span>Back to Home</span>
+    </a>
+    <h1 class="playground-title">{pageTitle}</h1>
+    <div class="header-spacer" aria-hidden="true"></div>
+  </header>
+
+  <main class="playground-main">
+    <!-- Prototype 1: Text Leveling -->
+    <section class="prototype-section" id="text-leveling">
+      <div class="grid-background" aria-hidden="true"></div>
+      <div class="prototype-label">#18 Text Leveling</div>
+      
+      <div class="prototype-container">
+        <TextLeveling text="Structural Integrity" />
+        <p class="prototype-description">
+          Text characters rise into view with staggered timing, creating a construction metaphor. 
+          Scroll or hover to trigger the animation.
+        </p>
+      </div>
+    </section>
+
+    <!-- Prototype 2: Variable Font -->
+    <section class="prototype-section" id="variable-font">
+      <div class="prototype-label">#17 Variable Fonts</div>
+      
+      <div class="prototype-container">
+        <VariableFont text="Fluidity" />
+        <p class="prototype-description">
+          Variable font weight and width respond dynamically to scroll position and hover state. 
+          Typography that breathes with interaction.
+        </p>
+      </div>
+    </section>
+
+    <!-- Prototype 3: Hidden Layers -->
+    <section class="prototype-section cream-bg" id="hidden-layers">
+      <div class="prototype-label">#20 Hidden Layers</div>
+      
+      <div class="prototype-container">
+        <HiddenLayers />
+        <p class="prototype-description">
+          Hover to reveal technical annotations and metadata. 
+          Simulates architectural markup with hidden information layers.
+        </p>
+      </div>
+    </section>
+
+    <!-- Prototype 4: Skills Graph -->
+    <section class="prototype-section" id="skills-graph">
+      <div class="grid-background" aria-hidden="true"></div>
+      <div class="prototype-label">#6 Skills Graph</div>
+      
+      <div class="prototype-container">
+        <SkillsGraph />
+        <p class="prototype-description">
+          Hover over skills to visualize relationships and connections. 
+          An interactive network showing how technologies relate.
+        </p>
+      </div>
+    </section>
+
+    <!-- Prototype 5: Blueprint Lines -->
+    <section class="prototype-section" id="blueprint-lines">
+      <div class="prototype-label">#3 Blueprint Lines</div>
+      
+      <div class="prototype-container">
+        <BlueprintLines>
+          <h3>Technical Specifications</h3>
+          <p>
+            The component utilizes a modular architecture with strict boundary enforcement. 
+            All state transitions are managed via a finite state machine to prevent illegal operations.
+          </p>
+          <div class="dimensions">
+            <span class="dimension">W: 100%</span>
+            <span class="dimension">H: AUTO</span>
+            <span class="dimension">R: 4px</span>
+          </div>
+        </BlueprintLines>
+        <p class="prototype-description">
+          SVG borders draw themselves in like architectural blueprints. 
+          Technical aesthetic with precision and intent.
+        </p>
+      </div>
+    </section>
+
+    <!-- Prototype 6: Solari Board -->
+    <section class="prototype-section dark-bg" id="solari-board">
+      <div class="prototype-label dark">#4 Solari Board</div>
+      
+      <div class="prototype-container">
+        <SolariBoard initialValue="2026" />
+        <p class="prototype-description dark">
+          Split-flap display animation inspired by classic airport departure boards. 
+          Mechanical typography with satisfying flip transitions.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer note -->
+  <footer class="playground-footer">
+    <p>
+      These prototypes explore interaction patterns and visual concepts. 
+      Some may evolve into full features, others remain experiments.
+    </p>
+    <p>
+      Built with <a href="https://astro.build" target="_blank" rel="noopener">Astro</a> • 
+      View source on <a href="https://github.com/DMomplaisir/DMomplaisir.github.io" target="_blank" rel="noopener">GitHub</a>
+    </p>
+  </footer>
+  </PageTransition>
+</body>
+</html>
+
+<style>
+  /* ==================== LAYOUT ==================== */
+  
+  body {
+    background: var(--warm-white);
+    color: var(--concrete-900);
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Header */
+  .playground-header {
+    padding: var(--space-lg) var(--space-xl);
+    border-bottom: 1px solid var(--warm-gray-200);
+    background: var(--warm-white);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-md);
+    backdrop-filter: blur(8px);
+    background: rgba(255, 254, 249, 0.95);
+  }
+
+  .back-link {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--burgundy-primary);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    transition: all var(--transition-base);
+    white-space: nowrap;
+  }
+
+  .back-link:hover {
+    color: var(--burgundy-hover);
+    transform: translateX(-2px);
+  }
+
+  .back-link:focus-visible {
+    outline: 2px solid var(--burgundy-primary);
+    outline-offset: 4px;
+  }
+
+  .playground-title {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: var(--weight-regular);
+    color: var(--concrete-900);
+    margin: 0;
+    flex: 1;
+    text-align: center;
+  }
+
+  .header-spacer {
+    width: 100px; /* Balance the back link */
+  }
+
+  /* Main content */
+  .playground-main {
+    position: relative;
+  }
+
+  /* Prototype sections */
+  .prototype-section {
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: var(--space-xxl) var(--space-lg);
+    border-bottom: 1px solid var(--warm-gray-200);
+    overflow: hidden;
+    transition: background var(--transition-base);
+  }
+
+  .prototype-section.cream-bg {
+    background: var(--cream);
+  }
+
+  .prototype-section.dark-bg {
+    background: #0f0f0f;
+    color: #f0f0f0;
+    border-bottom-color: #2a2a2a;
+  }
+
+  /* Grid background overlay */
+  .grid-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+      linear-gradient(var(--blueprint-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--blueprint-line) 1px, transparent 1px);
+    background-size: 24px 24px;
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Prototype label */
+  .prototype-label {
+    position: absolute;
+    top: var(--space-lg);
+    left: var(--space-lg);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--concrete-400);
+    border: 1px solid var(--concrete-300);
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(4px);
+  }
+
+  .prototype-label.dark {
+    color: #888;
+    border-color: #444;
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  /* Prototype container */
+  .prototype-container {
+    width: 100%;
+    max-width: var(--width-text);
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-lg);
+  }
+
+  .prototype-description {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    line-height: var(--leading-relaxed);
+    color: var(--concrete-500);
+    text-align: center;
+    max-width: 500px;
+    margin: 0;
+  }
+
+  .prototype-description.dark {
+    color: #999;
+  }
+
+  /* Footer */
+  .playground-footer {
+    padding: var(--space-xl);
+    text-align: center;
+    border-top: 1px solid var(--warm-gray-200);
+    background: var(--cream);
+  }
+
+  .playground-footer p {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    color: var(--concrete-500);
+    line-height: var(--leading-relaxed);
+    margin: var(--space-sm) 0;
+  }
+
+  .playground-footer a {
+    color: var(--burgundy-primary);
+    text-decoration: none;
+    transition: color var(--transition-base);
+  }
+
+  .playground-footer a:hover {
+    color: var(--burgundy-hover);
+    text-decoration: underline;
+  }
+
+  /* Blueprint card dimensions from component slot */
+  .dimensions {
+    display: flex;
+    gap: var(--space-md);
+    margin-top: var(--space-lg);
+  }
+
+  .dimension {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--concrete-400);
+    padding: 4px 8px;
+    background: rgba(189, 189, 189, 0.06);
+    border: 1px solid var(--warm-gray-200);
+    border-radius: var(--radius-sm);
+  }
+
+  /* ==================== RESPONSIVE ==================== */
+
+  @media (max-width: 768px) {
+    .playground-header {
+      padding: var(--space-md);
+    }
+
+    .playground-title {
+      font-size: var(--text-lg);
+    }
+
+    .header-spacer {
+      width: 60px;
+    }
+
+    .prototype-section {
+      min-height: 60vh;
+      padding: var(--space-xl) var(--space-md);
+    }
+
+    .prototype-label {
+      font-size: 0.65rem;
+      padding: 4px 8px;
+    }
+
+    .prototype-description {
+      font-size: var(--text-xs);
+    }
+
+    .dimensions {
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      justify-content: center;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .back-link span {
+      display: none;
+    }
+
+    .playground-title {
+      font-size: var(--text-base);
+    }
+  }
+
+  /* ==================== ACCESSIBILITY ==================== */
+
+  @media (prefers-reduced-motion: reduce) {
+    .back-link,
+    .prototype-section {
+      transition: none;
+    }
+  }
+
+  /* Focus styles */
+  :focus-visible {
+    outline: 2px solid var(--burgundy-primary);
+    outline-offset: 2px;
+  }
+</style>
+
+  <script>
+    import { gsap } from 'gsap';
+    import { ScrollTrigger } from 'gsap/ScrollTrigger';
+    gsap.registerPlugin(ScrollTrigger);
+
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      // Prototype sections reveal
+      const sections = gsap.utils.toArray('.prototype-section') as HTMLElement[];
+      sections.forEach(section => {
+        const container = section.querySelector('.prototype-container');
+        const label = section.querySelector('.prototype-label');
+        
+        if (container) {
+          gsap.from(container, {
+            y: 20,
+            opacity: 0,
+            duration: 0.8,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: section,
+              start: 'top 75%',
+            }
+          });
+        }
+        
+        if (label) {
+          gsap.from(label, {
+            x: -10,
+            opacity: 0,
+            duration: 0.6,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: section,
+              start: 'top 80%',
+            }
+          });
+        }
+      });
+    }
+
+    /**
+     * Smooth scroll behavior for anchor links
+     * Could be enhanced with View Transitions API in the future
+     */
+    document.addEventListener('astro:page-load', () => {
+      // Smooth scroll for hash links
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const href = (this as HTMLAnchorElement).getAttribute('href');
+          if (href) {
+            const target = document.querySelector(href);
+            if (target) {
+              target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start',
+              });
+            }
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

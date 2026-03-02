@@ -1,0 +1,185 @@
+---
+/**
+ * Hidden Layers - #20
+ * Technical annotations revealed on hover
+ * Simulates architectural markup with hidden metadata layers
+ */
+
+interface Props {
+  class?: string;
+}
+
+interface Annotation {
+  text: string;
+  position: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
+  offset?: { x?: string; y?: string };
+}
+
+const { class: className } = Astro.props;
+
+// Default content - can be customized via slots
+const annotations: Annotation[] = [
+  { text: 'Scale: 10k req/s', position: 'top-right', offset: { x: '-15%', y: '10%' } },
+  { text: 'Redis Caching Layer', position: 'top-left', offset: { x: '-18%', y: '30%' } },
+  { text: '< 50ms Latency', position: 'bottom-right', offset: { x: '-12%', y: '20%' } },
+  { text: 'Async Workers', position: 'bottom-left', offset: { x: '-16%', y: '40%' } },
+];
+---
+
+<div class={`hidden-layers-container ${className || ''}`}>
+  <div class="main-text">
+    <slot>
+      <p>
+        The architecture of the system is designed to handle high-throughput 
+        audio ingestion while maintaining consistent latency.
+      </p>
+      <p style="margin-top: 1em;">
+        By decoupling the processing pipeline from the user-facing API, 
+        we ensure that spikes in traffic don't degrade the listening experience.
+      </p>
+    </slot>
+  </div>
+  
+  <div class="annotation-layer" aria-hidden="true">
+    {annotations.map((annotation) => (
+      <div 
+        class={`annotation ${annotation.position}`}
+        style={`
+          ${annotation.position.includes('top') ? 'top' : 'bottom'}: ${annotation.offset?.y || '0'};
+          ${annotation.position.includes('right') ? 'right' : 'left'}: ${annotation.offset?.x || '0'};
+        `}
+      >
+        {annotation.text}
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .hidden-layers-container {
+    position: relative;
+    padding: var(--space-xl);
+    max-width: var(--width-text);
+    margin: 0 auto;
+    transition: all var(--transition-slow);
+  }
+
+  .main-text {
+    font-family: var(--font-body);
+    font-size: var(--text-lg);
+    line-height: var(--leading-relaxed);
+    color: var(--concrete-900);
+    position: relative;
+    z-index: 2;
+  }
+
+  .main-text p {
+    margin: 0;
+  }
+
+  .annotation-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+  }
+
+  .hidden-layers-container:hover .annotation-layer {
+    opacity: 1;
+  }
+
+  .annotation {
+    position: absolute;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--burgundy-primary);
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    white-space: nowrap;
+    animation: fadeSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+  }
+
+  /* Leader lines pointing to text */
+  .annotation::before,
+  .annotation::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background-color: var(--burgundy-primary);
+    opacity: 0.6;
+  }
+
+  /* Left annotations: line on right */
+  .annotation.top-left::before,
+  .annotation.bottom-left::before {
+    display: none;
+  }
+
+  /* Right annotations: line on left */
+  .annotation.top-right::after,
+  .annotation.bottom-right::after {
+    display: none;
+  }
+
+  /* Stagger annotation reveals */
+  .annotation:nth-child(1) { animation-delay: 0.05s; }
+  .annotation:nth-child(2) { animation-delay: 0.1s; }
+  .annotation:nth-child(3) { animation-delay: 0.15s; }
+  .annotation:nth-child(4) { animation-delay: 0.2s; }
+
+  @keyframes fadeSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Mobile adjustments */
+  @media (max-width: 768px) {
+    .hidden-layers-container {
+      padding: var(--space-md);
+    }
+
+    .annotation {
+      font-size: 0.65rem;
+      gap: 4px;
+    }
+
+    .annotation::before,
+    .annotation::after {
+      width: 20px;
+    }
+
+    /* Stack annotations vertically on mobile */
+    .annotation.top-left,
+    .annotation.bottom-left {
+      left: 0 !important;
+    }
+
+    .annotation.top-right,
+    .annotation.bottom-right {
+      right: 0 !important;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .annotation {
+      animation: none;
+    }
+
+    .annotation-layer {
+      transition: none;
+    }
+  }
+</style>

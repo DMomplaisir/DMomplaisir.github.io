@@ -1,0 +1,317 @@
+---
+/**
+ * Solari Board - #4
+ * Split-flap display animation inspired by airport departure boards
+ * Mechanical typography with satisfying flip transitions
+ */
+
+interface Props {
+  initialValue?: string;
+  class?: string;
+  showButton?: boolean;
+}
+
+const { 
+  initialValue = '2026', 
+  class: className,
+  showButton = true 
+} = Astro.props;
+
+const digits = initialValue.split('');
+---
+
+<div class={`solari-board-container ${className || ''}`}>
+  <div class="solari-board">
+    {digits.map((digit) => (
+      <div class="solari-digit" data-value={digit}>
+        <div class="solari-top">{digit}</div>
+        <div class="solari-bottom">{digit}</div>
+      </div>
+    ))}
+  </div>
+  
+  {showButton && (
+    <button class="update-button" type="button">
+      <span class="button-text">UPDATE DISPLAY</span>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+      </svg>
+    </button>
+  )}
+</div>
+
+<style>
+  .solari-board-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-lg);
+  }
+
+  .solari-board {
+    display: flex;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-weight: var(--weight-bold);
+    perspective: 1000px;
+  }
+
+  .solari-digit {
+    position: relative;
+    width: 0.7em;
+    height: 1.2em;
+    font-size: clamp(3rem, 8vw, 5rem);
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+    border-radius: 6px;
+    box-shadow: 
+      0 4px 8px rgba(0, 0, 0, 0.3),
+      inset 0 1px 2px rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+  }
+
+  .solari-top,
+  .solari-bottom {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    overflow: hidden;
+    background-color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+
+  .solari-top {
+    top: 0;
+    border-radius: 6px 6px 0 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+    align-items: flex-end;
+    padding-bottom: 0.05em;
+  }
+
+  .solari-bottom {
+    bottom: 0;
+    border-radius: 0 0 6px 6px;
+    align-items: flex-start;
+    padding-top: 0.05em;
+  }
+
+  .solari-flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background-color: #1a1a1a;
+    border-radius: 6px 6px 0 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+    transform-origin: bottom center;
+    z-index: 10;
+    backface-visibility: hidden;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 0.05em;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .solari-flap.flipping {
+    animation: flipDown 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+  }
+
+  @keyframes flipDown {
+    0% {
+      transform: rotateX(0deg);
+    }
+    100% {
+      transform: rotateX(-180deg);
+      opacity: 0;
+    }
+  }
+
+  .update-button {
+    background: transparent;
+    border: 1px solid #444;
+    color: #888;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    transition: all var(--transition-base);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+  }
+
+  .update-button:hover {
+    border-color: #666;
+    color: #aaa;
+    transform: translateY(-1px);
+  }
+
+  .update-button:active {
+    transform: translateY(0);
+  }
+
+  .update-button:focus-visible {
+    outline: 2px solid #666;
+    outline-offset: 2px;
+  }
+
+  .update-button svg {
+    transition: transform 0.3s ease;
+  }
+
+  .update-button:hover svg {
+    transform: rotate(90deg);
+  }
+
+  @media (max-width: 768px) {
+    .solari-board {
+      gap: 4px;
+    }
+
+    .solari-digit {
+      border-radius: 4px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .solari-flap.flipping {
+      animation: none;
+      display: none;
+    }
+
+    .update-button svg {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  /**
+   * Controls split-flap digit animations
+   * Each digit flips independently with staggered timing
+   */
+  class SolariDigit {
+    element: HTMLElement;
+    value: string;
+
+    constructor(element: HTMLElement) {
+      this.element = element;
+      this.value = element.getAttribute('data-value') || '0';
+    }
+
+    update(newValue: string) {
+      if (newValue === this.value) return;
+
+      const currentValue = this.value;
+      this.value = newValue;
+
+      // Create animated flap showing old value
+      const flap = document.createElement('div');
+      flap.className = 'solari-flap';
+      flap.textContent = currentValue;
+      
+      // Update bottom half to new value (revealed after flip)
+      const bottomHalf = this.element.querySelector('.solari-bottom');
+      if (bottomHalf) {
+        bottomHalf.textContent = newValue;
+      }
+
+      // Add flap and trigger animation
+      this.element.appendChild(flap);
+      
+      requestAnimationFrame(() => {
+        flap.classList.add('flipping');
+      });
+
+      // Clean up after animation completes
+      setTimeout(() => {
+        flap.remove();
+        
+        // Update top half
+        const topHalf = this.element.querySelector('.solari-top');
+        if (topHalf) {
+          topHalf.textContent = newValue;
+        }
+      }, 600);
+    }
+  }
+
+  /**
+   * Manages the entire Solari board display
+   */
+  class SolariBoard {
+    container: HTMLElement;
+    digits: SolariDigit[] = [];
+    button: HTMLButtonElement | null = null;
+
+    constructor(container: HTMLElement) {
+      this.container = container;
+      this.init();
+    }
+
+    init() {
+      const board = this.container.querySelector('.solari-board');
+      if (!board) return;
+
+      // Initialize all digit controllers
+      const digitElements = board.querySelectorAll('.solari-digit');
+      this.digits = Array.from(digitElements).map(
+        (el) => new SolariDigit(el as HTMLElement)
+      );
+
+      // Setup update button
+      this.button = this.container.querySelector('.update-button');
+      if (this.button) {
+        this.button.addEventListener('click', () => this.randomUpdate());
+      }
+    }
+
+    randomUpdate() {
+      // Generate random 4-digit year between 1990 and 2030
+      const year = Math.floor(Math.random() * (2030 - 1990 + 1) + 1990);
+      const yearString = year.toString();
+
+      // Update each digit with staggered timing
+      this.digits.forEach((digit, index) => {
+        setTimeout(() => {
+          digit.update(yearString[index] || '0');
+        }, index * 120);
+      });
+    }
+
+    updateValue(value: string) {
+      const digits = value.padStart(4, '0').split('').slice(0, 4);
+      
+      this.digits.forEach((digit, index) => {
+        setTimeout(() => {
+          digit.update(digits[index] || '0');
+        }, index * 120);
+      });
+    }
+  }
+
+  // Initialize all Solari boards
+  document.addEventListener('astro:page-load', () => {
+    const containers = document.querySelectorAll('.solari-board-container');
+    containers.forEach((container) => {
+      if (container instanceof HTMLElement) {
+        new SolariBoard(container);
+      }
+    });
+  });
+
+  // Export for programmatic control
+  if (typeof window !== 'undefined') {
+    (window as any).SolariBoard = SolariBoard;
+  }
+</script>

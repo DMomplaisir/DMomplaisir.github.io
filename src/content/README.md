@@ -10,7 +10,6 @@ Content Collections provide type-safe content management with automatic validati
 
 ```
 src/content/
-├── config.ts                    # Collection schemas and validation
 ├── projects/                    # Portfolio projects
 │   ├── amhstudent-case-study.md
 │   └── images/                  # Project images
@@ -119,9 +118,9 @@ const featured = await getCollection('projects', ({ data }) => {
   return data.featured === true;
 });
 
-// Get specific project
+// Get specific project (use entry id, derived from filename)
 import { getEntry } from 'astro:content';
-const project = await getEntry('projects', 'amhstudent-case-study');
+const project = await getEntry('projects', 'amherst-student-redesign');
 ```
 
 ### Using Helper Functions
@@ -149,10 +148,11 @@ const uxProjects = await getProjectsByTag('UX Design');
 
 ```astro
 ---
-import { getEntry } from 'astro:content';
+import { getEntry, render } from 'astro:content';
 
-const project = await getEntry('projects', 'amhstudent-case-study');
-const { Content } = await project.render();
+const project = await getEntry('projects', 'amherst-student-redesign');
+if (!project) return Astro.redirect('/404');
+const { Content } = await render(project);
 ---
 
 <article>
@@ -168,7 +168,7 @@ Images are automatically optimized by Astro:
 
 ```astro
 ---
-const project = await getEntry('projects', 'amhstudent-case-study');
+const project = await getEntry('projects', 'amherst-student-redesign');
 ---
 
 <!-- Astro optimizes images automatically -->
@@ -233,7 +233,7 @@ type Project = CollectionEntry<'projects'>;
 type BlogPost = CollectionEntry<'blog'>;
 
 // Access typed data
-const project: Project = await getEntry('projects', 'example');
+const project: Project = await getEntry('projects', 'atlantic-audio-platform');
 project.data.title; // string
 project.data.featured; // boolean
 project.data.date; // Date | undefined
@@ -257,6 +257,6 @@ project.data.date; // Date | undefined
 
 ## Related Files
 
-- `/src/content/config.ts` - Schema definitions
+- `/src/content.config.ts` - Schema definitions (Content Layer API)
 - `/src/utils/content-helpers.ts` - Helper functions for querying content
 - `/src/pages/projects/index.astro` - Example usage in projects listing page

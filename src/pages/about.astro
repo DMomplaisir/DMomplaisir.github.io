@@ -6,6 +6,8 @@
  */
 
 import SEO from '../components/SEO.astro';
+import ViewTransitionsHead from '../components/ViewTransitionsHead.astro';
+import PageTransition from '../components/PageTransition.astro';
 import Footer from '../components/Footer.astro';
 
 // Import design system styles
@@ -41,9 +43,11 @@ const pageDescription = 'From urbanism to full-stack engineering—building digi
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
   <meta name="theme-color" content="#900020">
+  <ViewTransitionsHead />
 </head>
 
 <body>
+  <PageTransition>
   <!-- Subtle Grid Background -->
   <div class="grid-background" aria-hidden="true"></div>
 
@@ -221,6 +225,71 @@ const pageDescription = 'From urbanism to full-stack engineering—building digi
 
   <!-- Footer -->
   <Footer />
+  </PageTransition>
+
+  <script>
+    import { gsap } from 'gsap';
+    import { ScrollTrigger } from 'gsap/ScrollTrigger';
+    gsap.registerPlugin(ScrollTrigger);
+
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      // Fade in sections
+      const sections = gsap.utils.toArray('section') as HTMLElement[];
+      sections.forEach(section => {
+        gsap.from(section, {
+          y: 24,
+          opacity: 0,
+          duration: 0.8,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 85%',
+          }
+        });
+      });
+
+      // Philosophy cards staggered
+      gsap.from('.philosophy-card', {
+        y: 20,
+        opacity: 0,
+        duration: 0.6,
+        stagger: 0.1,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '.philosophy-grid',
+          start: 'top 80%',
+        }
+      });
+
+      // Timeline items reveal
+      const timelineItems = gsap.utils.toArray('.timeline-item') as HTMLElement[];
+      timelineItems.forEach(item => {
+        gsap.from(item, {
+          x: -20,
+          opacity: 0,
+          duration: 0.8,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: item,
+            start: 'top 85%',
+          }
+        });
+      });
+
+      // Skills categories staggered
+      gsap.from('.skill-category', {
+        scale: 0.98,
+        opacity: 0,
+        duration: 0.5,
+        stagger: 0.08,
+        ease: 'power1.out',
+        scrollTrigger: {
+          trigger: '.skills-grid',
+          start: 'top 85%',
+        }
+      });
+    }
+  </script>
 </body>
 </html>
 

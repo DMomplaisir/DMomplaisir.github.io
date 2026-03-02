@@ -1,0 +1,286 @@
+---
+import SEO from '../components/SEO.astro';
+import ViewTransitionsHead from '../components/ViewTransitionsHead.astro';
+import PageTransition from '../components/PageTransition.astro';
+import '../styles/variables.css';
+import '../styles/fonts.css';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <SEO
+    title="Map Prototype - Dylan Momplaisir"
+    description="NYC topology and transit system blueprint visualization prototype."
+    type="website"
+    breadcrumbs={[
+      { name: 'Home', url: '/' },
+      { name: 'Map Prototype', url: '/prototype-map' },
+    ]}
+  />
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--warm-white);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      font-family: var(--font-mono);
+    }
+
+    #map-container {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    /* Minimalist dot matrix overlay to give it a technical feel */
+    .dot-matrix {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: radial-gradient(var(--blueprint-line) 1px, transparent 1px);
+      background-size: 24px 24px;
+      z-index: 0;
+      opacity: 0.5;
+    }
+  </style>
+  <ViewTransitionsHead />
+</head>
+<body>
+  <PageTransition>
+  <div id="map-container">
+    <div class="dot-matrix"></div>
+    <canvas id="blueprint-canvas"></canvas>
+  </div>
+  </PageTransition>
+
+  <script>
+    const canvas = document.getElementById('blueprint-canvas');
+    const ctx = canvas.getContext('2d', { alpha: true });
+
+    let width, height;
+    
+    // Aesthetic Settings based on design system
+    const COLORS = {
+      water: 'rgba(14, 165, 233, 0.03)', // Very faint blueprint blue
+      landOutline: 'rgba(14, 165, 233, 0.3)', // Solid blueprint line
+      transitLine: 'rgba(14, 165, 233, 0.6)', 
+      transitNode: 'rgba(144, 0, 32, 0.8)', // Burgundy primary
+      transitPulse: 'rgba(144, 0, 32, 0.3)',
+      grid: 'rgba(14, 165, 233, 0.1)'
+    };
+
+    // We'll generate procedural paths that *look* like NYC's geography
+    // Manhattan island shape
+    const manhattanPoints = [
+      {x: 0.45, y: 0.9}, // Battery park
+      {x: 0.5, y: 0.8},
+      {x: 0.55, y: 0.6},
+      {x: 0.6, y: 0.4},
+      {x: 0.65, y: 0.2}, // Inwood
+      {x: 0.62, y: 0.1}, // Tip
+      {x: 0.55, y: 0.15},
+      {x: 0.5, y: 0.3},
+      {x: 0.45, y: 0.5},
+      {x: 0.4, y: 0.7}
+    ];
+
+    // Brooklyn/Queens shape
+    const brooklynPoints = [
+      {x: 0.6, y: 1.0},
+      {x: 0.65, y: 0.85}, // Dumbo area
+      {x: 0.7, y: 0.7}, // Williamsburg
+      {x: 0.75, y: 0.55}, // LIC
+      {x: 0.85, y: 0.4}, // Astoria
+      {x: 0.95, y: 0.35},
+      {x: 1.0, y: 0.35},
+      {x: 1.0, y: 1.0}
+    ];
+
+    // Transit lines (Subway-like routes)
+    const transitLines = [
+      // Line 1 (Red line equivalent)
+      {
+        points: [
+          {x: 0.45, y: 0.9}, {x: 0.48, y: 0.75}, {x: 0.52, y: 0.55}, {x: 0.58, y: 0.35}, {x: 0.62, y: 0.15}
+        ],
+        speed: 0.001,
+        trains: [{progress: 0.1}, {progress: 0.6}]
+      },
+      // Line 2 (Blue line equivalent)
+      {
+        points: [
+          {x: 0.65, y: 0.85}, {x: 0.6, y: 0.75}, {x: 0.55, y: 0.6}, {x: 0.58, y: 0.4}, {x: 0.64, y: 0.2}
+        ],
+        speed: 0.0015,
+        trains: [{progress: 0.3}, {progress: 0.8}]
+      },
+      // Line 3 (Cross-town / L train)
+      {
+        points: [
+          {x: 0.42, y: 0.65}, {x: 0.5, y: 0.6}, {x: 0.6, y: 0.62}, {x: 0.7, y: 0.65}, {x: 0.8, y: 0.6}
+        ],
+        speed: 0.0012,
+        trains: [{progress: 0.5}]
+      }
+    ];
+
+    function resize() {
+      // Handle high DPI displays
+      const dpr = window.devicePixelRatio || 1;
+      width = window.innerWidth;
+      height = window.innerHeight;
+      
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      
+      ctx.scale(dpr, dpr);
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+    }
+
+    function drawPath(points, close = false, isFilled = false, strokeColor, fillColor) {
+      if (points.length === 0) return;
+
+      ctx.beginPath();
+      
+      // Use bezier curves for smooth geographical edges
+      ctx.moveTo(points[0].x * width, points[0].y * height);
+      
+      for (let i = 1; i < points.length - 2; i++) {
+        const xc = (points[i].x * width + points[i + 1].x * width) / 2;
+        const yc = (points[i].y * height + points[i + 1].y * height) / 2;
+        ctx.quadraticCurveTo(points[i].x * width, points[i].y * height, xc, yc);
+      }
+      
+      // Curve through the last two points
+      if (points.length > 2) {
+        ctx.quadraticCurveTo(
+          points[points.length - 2].x * width, 
+          points[points.length - 2].y * height, 
+          points[points.length - 1].x * width, 
+          points[points.length - 1].y * height
+        );
+      } else if (points.length === 2) {
+        ctx.lineTo(points[1].x * width, points[1].y * height);
+      }
+
+      if (close) ctx.closePath();
+
+      if (isFilled && fillColor) {
+        ctx.fillStyle = fillColor;
+        ctx.fill();
+      }
+
+      if (strokeColor) {
+        ctx.strokeStyle = strokeColor;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+    }
+
+    function getPointOnCurve(points, t) {
+      // Simplified interpolation for trains moving along lines
+      if (points.length < 2) return points[0];
+      
+      const segments = points.length - 1;
+      const scaledT = t * segments;
+      const index = Math.floor(scaledT);
+      
+      if (index >= segments) return points[points.length - 1];
+      
+      const segmentT = scaledT - index;
+      
+      const p1 = points[index];
+      const p2 = points[index + 1];
+      
+      return {
+        x: p1.x + (p2.x - p1.x) * segmentT,
+        y: p1.y + (p2.y - p1.y) * segmentT
+      };
+    }
+
+    // Animation state
+    let time = 0;
+
+    function render() {
+      ctx.clearRect(0, 0, width, height);
+
+      // Draw Geography
+      // Manhattan
+      drawPath(manhattanPoints, true, true, COLORS.landOutline, COLORS.water);
+      // Brooklyn/Queens
+      drawPath(brooklynPoints, true, true, COLORS.landOutline, COLORS.water);
+
+      // Draw Transit Lines
+      transitLines.forEach(line => {
+        // Base line
+        ctx.setLineDash([4, 4]); // Dashed blueprint style
+        drawPath(line.points, false, false, COLORS.transitLine, null);
+        ctx.setLineDash([]); // Reset
+
+        // Draw Nodes (stations)
+        line.points.forEach(p => {
+          ctx.beginPath();
+          ctx.arc(p.x * width, p.y * height, 3, 0, Math.PI * 2);
+          ctx.fillStyle = COLORS.warmWhite;
+          ctx.fill();
+          ctx.strokeStyle = COLORS.transitLine;
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+        });
+
+        // Update and draw trains
+        line.trains.forEach(train => {
+          train.progress += line.speed;
+          if (train.progress > 1) train.progress = 0;
+
+          const pos = getPointOnCurve(line.points, train.progress);
+          
+          // Train dot
+          ctx.beginPath();
+          ctx.arc(pos.x * width, pos.y * height, 4, 0, Math.PI * 2);
+          ctx.fillStyle = COLORS.transitNode;
+          ctx.fill();
+
+          // Pulsing effect
+          const pulseSize = 4 + Math.sin(time * 0.05 + train.progress * 10) * 4;
+          ctx.beginPath();
+          ctx.arc(pos.x * width, pos.y * height, pulseSize, 0, Math.PI * 2);
+          ctx.strokeStyle = COLORS.transitPulse;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        });
+      });
+
+      time++;
+      requestAnimationFrame(render);
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+    render();
+  </script>
+</body>
+</html>

@@ -108,6 +108,44 @@
   margin: 0 auto;
 }
 
+/* ==================== CUSTOM SCROLLBAR ==================== */
+
+/* Width and height */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--warm-white);
+  border-left: 1px solid var(--warm-gray-200);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--warm-gray-200);
+  border: 2px solid var(--warm-white);
+  border-radius: 10px;
+  transition: background var(--transition-base);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--concrete-300);
+}
+
+/* Handle on active */
+::-webkit-scrollbar-thumb:active {
+  background: var(--burgundy-primary);
+}
+
+/* Firefox support */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--warm-gray-200) var(--warm-white);
+}
+
 /* ==================== ACCESSIBILITY ==================== */
 
 @media (prefers-reduced-motion: reduce) {

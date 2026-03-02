@@ -1,0 +1,228 @@
+---
+/**
+ * Blueprint Lines - #3
+ * Animated SVG border that draws itself in like architectural blueprints
+ * Technical aesthetic with dimension annotations
+ */
+
+interface Props {
+  class?: string;
+  label?: string;
+}
+
+const { class: className, label = 'FIG 2.4 - COMPONENT SPEC' } = Astro.props;
+---
+
+<div class={`blueprint-card ${className || ''}`}>
+  <svg class="blueprint-svg" aria-hidden="true">
+    <!-- Main border rectangle -->
+    <rect 
+      x="8" 
+      y="8" 
+      width="calc(100% - 16px)" 
+      height="calc(100% - 16px)" 
+      class="blueprint-border" 
+      rx="4" 
+    />
+    
+    <!-- Technical annotation lines (top-left corner) -->
+    <line x1="0" y1="24" x2="24" y2="24" class="annotation-line" />
+    <line x1="24" y1="0" x2="24" y2="24" class="annotation-line" />
+    
+    <!-- Dimension markers -->
+    <circle cx="24" cy="24" r="2" class="dimension-point" />
+  </svg>
+  
+  <div class="blueprint-content">
+    <span class="blueprint-label">{label}</span>
+    <slot>
+      <h3>Technical Specifications</h3>
+      <p>
+        The component utilizes a modular architecture with strict boundary enforcement. 
+        All state transitions are managed via a finite state machine to prevent illegal operations.
+      </p>
+      <div class="dimensions">
+        <span class="dimension">W: 100%</span>
+        <span class="dimension">H: AUTO</span>
+        <span class="dimension">R: 4px</span>
+      </div>
+    </slot>
+  </div>
+</div>
+
+<style>
+  .blueprint-card {
+    position: relative;
+    padding: var(--space-xl);
+    background: linear-gradient(
+      135deg,
+      rgba(14, 165, 233, 0.02) 0%,
+      rgba(14, 165, 233, 0.01) 100%
+    );
+    max-width: 600px;
+    margin: 0 auto;
+    transition: background var(--transition-base);
+  }
+
+  .blueprint-card:hover {
+    background: linear-gradient(
+      135deg,
+      rgba(14, 165, 233, 0.04) 0%,
+      rgba(14, 165, 233, 0.02) 100%
+    );
+  }
+
+  .blueprint-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: visible;
+  }
+
+  .blueprint-border {
+    fill: none;
+    stroke: var(--blueprint-blue);
+    stroke-width: 1;
+    stroke-dasharray: 2000;
+    stroke-dashoffset: 2000;
+    transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .blueprint-card.in-view .blueprint-border,
+  .blueprint-card:hover .blueprint-border {
+    stroke-dashoffset: 0;
+  }
+
+  .annotation-line {
+    stroke: var(--blueprint-blue);
+    stroke-width: 0.5;
+    opacity: 0;
+    transition: opacity 0.4s ease 1s;
+  }
+
+  .blueprint-card.in-view .annotation-line,
+  .blueprint-card:hover .annotation-line {
+    opacity: 0.4;
+  }
+
+  .dimension-point {
+    fill: var(--blueprint-blue);
+    opacity: 0;
+    transition: opacity 0.3s ease 1.2s;
+  }
+
+  .blueprint-card.in-view .dimension-point,
+  .blueprint-card:hover .dimension-point {
+    opacity: 0.6;
+  }
+
+  .blueprint-content {
+    position: relative;
+    z-index: 2;
+  }
+
+  .blueprint-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--blueprint-blue);
+    margin-bottom: var(--space-sm);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    opacity: 0.8;
+  }
+
+  .blueprint-content h3 {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    line-height: var(--leading-tight);
+    color: var(--concrete-900);
+    margin: 0 0 var(--space-md) 0;
+  }
+
+  .blueprint-content p {
+    color: var(--concrete-500);
+    line-height: var(--leading-relaxed);
+    margin: 0;
+  }
+
+  .dimensions {
+    display: flex;
+    gap: var(--space-md);
+    margin-top: var(--space-lg);
+  }
+
+  .dimension {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--concrete-400);
+    padding: 4px 8px;
+    background: rgba(189, 189, 189, 0.06);
+    border: 1px solid var(--warm-gray-200);
+    border-radius: var(--radius-sm);
+  }
+
+  @media (max-width: 768px) {
+    .blueprint-card {
+      padding: var(--space-md);
+    }
+
+    .blueprint-content h3 {
+      font-size: var(--text-xl);
+    }
+
+    .dimensions {
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .blueprint-border,
+    .annotation-line,
+    .dimension-point {
+      transition: none;
+    }
+
+    .blueprint-card.in-view .blueprint-border {
+      stroke-dashoffset: 0;
+    }
+
+    .blueprint-card.in-view .annotation-line {
+      opacity: 0.4;
+    }
+
+    .blueprint-card.in-view .dimension-point {
+      opacity: 0.6;
+    }
+  }
+</style>
+
+<script>
+  /**
+   * Triggers blueprint border animation on scroll into view
+   */
+  document.addEventListener('astro:page-load', () => {
+    const cards = document.querySelectorAll('.blueprint-card');
+    
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+          } else {
+            // Remove to re-trigger animation when scrolling back
+            entry.target.classList.remove('in-view');
+          }
+        });
+      },
+      { threshold: 0.4 }
+    );
+
+    cards.forEach((card) => observer.observe(card));
+  });
+</script>
