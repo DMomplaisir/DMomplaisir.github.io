@@ -1,7 +1,10 @@
 ---
 /*
  * Top Navigation Bar
- * Sticky header with blur effect
+ * Drawing-sheet strip: solid paper, hairline cells, engraved double rule.
+ * The brand cell shares --sheet-col with the hero text panel so their rules line up.
+ * The nav cell is a size container: links show when they fit it, otherwise the
+ * menu button does, so there is no viewport breakpoint to keep in sync with content.
  */
 const navItems = [
   { href: '/#work', label: 'Work' },
@@ -11,33 +14,36 @@ const navItems = [
   { href: '/playground', label: 'Playground' },
   { href: '/contact', label: 'Contact' },
 ];
+
+const isCurrent = (href: string) => !href.includes('#') && Astro.url.pathname.startsWith(href);
 ---
 
 <header class="site-header" id="site-header">
   <div class="header-container">
     <a href="/" class="logo" aria-label="Dylan Momplaisir Home">
-      DM
+      <span class="logo-mark">DM</span>
+      <span class="logo-name" aria-hidden="true">Dylan Momplaisir</span>
     </a>
 
     <nav class="main-nav" aria-label="Main navigation">
       <ul class="nav-list">
         {navItems.map((item) => (
-          <li><a href={item.href} class="nav-link">{item.label}</a></li>
+          <li><a href={item.href} class="nav-link" aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a></li>
         ))}
       </ul>
+
+      <button
+        class="mobile-menu-btn"
+        aria-label="Toggle menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+      >
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
     </nav>
-    
-    <!-- Mobile Menu Button (Hamburger) -->
-    <button
-      class="mobile-menu-btn"
-      aria-label="Toggle menu"
-      aria-expanded="false"
-      aria-controls="mobile-menu"
-    >
-      <span class="hamburger-line"></span>
-      <span class="hamburger-line"></span>
-      <span class="hamburger-line"></span>
-    </button>
+
+    <a href="/resume.pdf" class="resume-link">Resume <span aria-hidden="true">↗</span></a>
   </div>
 
   <!-- Mobile Menu Overlay -->
@@ -45,7 +51,7 @@ const navItems = [
     <nav class="mobile-nav">
       <ul class="mobile-nav-list">
         {navItems.map((item) => (
-          <li><a href={item.href} class="mobile-nav-link">{item.label}</a></li>
+          <li><a href={item.href} class="mobile-nav-link" aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a></li>
         ))}
         <li><a href="/resume.pdf" class="mobile-nav-link highlight">Resume</a></li>
       </ul>
@@ -55,66 +61,144 @@ const navItems = [
 
 <style>
   .site-header {
+    --rule: rgba(144, 0, 32, 0.18);
+    --cell-rule: rgba(144, 0, 32, 0.1);
+
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     z-index: var(--z-sticky);
-    background: rgba(255, 254, 249, 0.85); /* var(--warm-white) with opacity */
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    transition: all var(--transition-base);
+    background: var(--warm-white);
+    border-bottom: 1px solid var(--rule);
+    transition: border-color var(--transition-base);
+  }
+
+  /* Engraved double rule: a fainter hairline 2px under the main one */
+  .site-header::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -4px;
+    height: 3px;
+    background: var(--warm-white);
+    border-bottom: 1px solid var(--cell-rule);
+    pointer-events: none;
   }
 
   .site-header.scrolled {
-    box-shadow: var(--shadow-sm);
-    background: rgba(255, 254, 249, 0.95);
+    --rule: rgba(144, 0, 32, 0.32);
   }
 
   .header-container {
-    max-width: var(--width-wide);
-    margin: 0 auto;
-    padding: 0 var(--space-lg);
+    display: grid;
+    grid-template-columns: var(--sheet-col) minmax(0, 1fr) auto;
     height: var(--header-height-collapsed);
+  }
+
+  .logo,
+  .main-nav,
+  .resume-link {
+    box-sizing: border-box;
     display: flex;
     align-items: center;
-    justify-content: space-between;
   }
 
   .logo {
-    font-family: var(--font-display);
-    font-size: var(--text-xl);
-    font-weight: var(--weight-bold);
+    gap: var(--space-sm);
+    padding: 0 var(--space-xl);
+    border-right: 1px solid var(--cell-rule);
     color: var(--concrete-900);
     text-decoration: none;
-    letter-spacing: -0.02em;
-    position: relative;
-    z-index: var(--z-modal); /* Above mobile menu */
+  }
+
+  .logo-mark {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    font-weight: var(--weight-regular);
+    letter-spacing: 0.01em;
+    line-height: 1;
+  }
+
+  /* Its rule lives here so hiding the name on tiny screens takes the rule too */
+  .logo-name {
+    padding-left: var(--space-sm);
+    border-left: 1px solid var(--rule);
+    line-height: 24px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--concrete-400);
+    transition: color var(--transition-fast);
+  }
+
+  .logo:hover .logo-name {
+    color: var(--burgundy-primary);
+  }
+
+  .main-nav {
+    container: nav / inline-size;
+    justify-content: flex-end;
+    padding: 0 clamp(var(--space-xs), 2.5vw, var(--space-lg));
   }
 
   .nav-list {
-    display: flex;
-    gap: var(--space-lg);
+    display: none;
+    align-items: center;
     list-style: none;
+    margin: 0;
+    padding: 0;
+    white-space: nowrap;
+  }
+
+  /* Measured: the six links need ~470px at the tightest tick spacing */
+  @container nav (min-width: 480px) {
+    .main-nav .nav-list {
+      display: flex;
+      margin-right: auto;
+    }
+
+    .main-nav .mobile-menu-btn {
+      display: none;
+    }
+  }
+
+  /* Short vertical ticks between items, like cell divisions on a title block */
+  .nav-list li + li::before {
+    content: '';
+    display: inline-block;
+    width: 1px;
+    height: 9px;
+    margin: 0 clamp(14px, 2.4cqi, 22px);
+    background: var(--rule);
+    vertical-align: middle;
+  }
+
+  .nav-link,
+  .resume-link {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: var(--weight-medium);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: color var(--transition-fast);
   }
 
   .nav-link {
-    font-family: var(--font-sans);
-    font-size: var(--text-sm);
-    font-weight: var(--weight-medium);
-    color: var(--concrete-400);
-    text-decoration: none;
-    transition: color var(--transition-fast);
+    color: var(--concrete-900);
     position: relative;
+    vertical-align: middle;
   }
 
   .nav-link::after {
     content: '';
     position: absolute;
-    bottom: -4px;
+    bottom: -6px;
     left: 0;
-    width: 100%;
+    right: 0.14em; /* drop the trailing letter-spacing */
     height: 1px;
     background: var(--burgundy-primary);
     transform: scaleX(0);
@@ -123,44 +207,63 @@ const navItems = [
   }
 
   .nav-link:hover,
-  .nav-link.active {
+  .nav-link[aria-current='page'] {
     color: var(--burgundy-primary);
   }
 
   .nav-link:hover::after,
-  .nav-link.active::after {
+  .nav-link[aria-current='page']::after {
     transform: scaleX(1);
     transform-origin: left;
   }
 
+  .resume-link {
+    gap: 6px;
+    padding: 0 var(--space-xl);
+    border-left: 1px solid var(--cell-rule);
+    color: var(--burgundy-primary);
+  }
+
+  .resume-link span {
+    display: inline-block;
+    transition: transform var(--transition-base);
+  }
+
+  .resume-link:hover span {
+    transform: translate(2px, -2px);
+  }
+
   /* Mobile Menu Styles */
   .mobile-menu-btn {
-    display: none;
+    display: flex;
     background: none;
     border: none;
     cursor: pointer;
-    width: 32px;
-    height: 32px;
-    position: relative;
-    z-index: var(--z-modal);
+    width: 44px;
+    height: 44px;
     padding: 0;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
   }
 
   .hamburger-line {
     display: block;
-    width: 24px;
-    height: 2px;
+    width: 22px;
+    height: 1px;
     background: var(--concrete-900);
-    margin: 6px auto;
-    transition: all var(--transition-base);
+    margin: 0 auto;
+    transition: transform var(--transition-base);
   }
 
+  /* Opens under the double rule so the header (brand, close button) stays put */
   .mobile-menu {
     position: fixed;
-    top: 0;
+    top: calc(var(--header-height-collapsed) + 4px);
     left: 0;
     width: 100%;
-    height: 100vh;
+    height: calc(100dvh - var(--header-height-collapsed) - 4px);
+    overflow-y: auto;
     background: var(--warm-white);
     z-index: var(--z-modal-backdrop);
     display: flex;
@@ -178,21 +281,25 @@ const navItems = [
 
   .mobile-nav-list {
     list-style: none;
+    margin: 0;
+    padding: 0;
     text-align: center;
     display: flex;
     flex-direction: column;
-    gap: var(--space-xl);
+    gap: clamp(var(--space-sm), 4dvh, var(--space-xl));
+    padding: var(--space-md) 0;
   }
 
   .mobile-nav-link {
     font-family: var(--font-display);
-    font-size: var(--text-3xl);
+    font-size: clamp(1.75rem, 5.5dvh, 2.5rem);
     color: var(--concrete-900);
     text-decoration: none;
     transition: color var(--transition-base);
   }
 
-  .mobile-nav-link:hover {
+  .mobile-nav-link:hover,
+  .mobile-nav-link[aria-current='page'] {
     color: var(--burgundy-primary);
   }
 
@@ -201,30 +308,34 @@ const navItems = [
     font-style: italic;
   }
 
-  /* Hamburger Animation */
+  /* Hamburger Animation: two hairlines cross into an X */
   .mobile-menu-btn.open .hamburger-line:nth-child(1) {
-    transform: translateY(8px) rotate(45deg);
+    transform: translateY(3.5px) rotate(45deg);
   }
 
   .mobile-menu-btn.open .hamburger-line:nth-child(2) {
-    opacity: 0;
+    transform: translateY(-3.5px) rotate(-45deg);
   }
 
-  .mobile-menu-btn.open .hamburger-line:nth-child(3) {
-    transform: translateY(-8px) rotate(-45deg);
-  }
-
+  /* Stacked hero: the brand cell no longer tracks a sheet column */
   @media (max-width: 768px) {
-    .main-nav {
+    .header-container {
+      grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    .logo {
+      padding: 0 var(--space-md);
+      border-right: none;
+    }
+
+    .resume-link {
       display: none;
     }
+  }
 
-    .mobile-menu-btn {
-      display: block;
-    }
-    
-    .header-container {
-      padding: 0 var(--space-md);
+  @media (max-width: 359px) {
+    .logo-name {
+      display: none;
     }
   }
 </style>
@@ -276,8 +387,9 @@ const navItems = [
       if (event.target === mobileMenu) closeMenu();
     });
 
-    window.matchMedia('(min-width: 769px)').addEventListener('change', (e) => {
-      if (e.matches) closeMenu();
+    // The nav cell's container query decides when the button exists; close if it goes away.
+    window.addEventListener('resize', () => {
+      if (menuBtn && menuBtn.offsetParent === null) closeMenu();
     });
 
     const handleScroll = () => {

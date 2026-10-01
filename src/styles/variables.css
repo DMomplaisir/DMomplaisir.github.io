@@ -143,6 +143,10 @@
   --grid-color: var(--blueprint-line);
   --grid-opacity: 0.15;
 
+  /* Hero text panel width; the header's brand cell reuses it so their rules line up.
+     Percent resolves against each full-width container, so both agree at any viewport. */
+  --sheet-col: clamp(320px, calc(30% + 120px), 440px);
+
   /* Header Heights */
   --header-height-expanded: 80px;
   --header-height-collapsed: 64px;
