@@ -1,7 +1,7 @@
 ---
 /*
  * BlueprintMap Component — Burgundy Blueprint on Warm White
- * Performance: static layers (grid, hatching, boroughs, topo) rendered once to
+ * Performance: static layers (water lining, grid, boroughs, transit) rendered once to
  * an OffscreenCanvas and cached as an ImageBitmap. Only dynamic elements
  * (trains, crosshair, hover) redraw each frame. ~60 fps on integrated GPUs.
  */
@@ -87,6 +87,7 @@ const { fullscreen = false } = Astro.props;
 
     private staticCache: ImageBitmap | null = null;
     private staticDirty = true;
+    private water: OffscreenCanvas | null = null;
 
     // Routes are line segments stitched end-to-end; cum (px along the route per
     // vertex) and stops (px offsets of stations on it) are rebuilt on resize.
@@ -99,7 +100,6 @@ const { fullscreen = false } = Astro.props;
     private layers = {
       grid:     { alpha: 0, extentH: 0, extentV: 0 },
       water:    { alpha: 0 },
-      topo:     { alpha: 0 },
       borough:  { alpha: 0, strokeProgress: 0 },
       transit:  { alpha: 0, drawProgress: 0 },
       stations: { alpha: 0 },
@@ -111,15 +111,15 @@ const { fullscreen = false } = Astro.props;
     private transitSegLengths: number[] = [];
     private boroughPerimeters: number[] = [];
 
+    // Ground (grid, water, shore) is warm graphite; burgundy is reserved for the
+    // subway and trains so the subject leads.
     private C = {
       bg:        '#FFFEF9',
-      hatch:     'rgba(144,0,32,0.08)',
-      topo:      'rgba(144,0,32,0.10)',
       land:      '#FFFEF9',
-      shore:     'rgba(144,0,32,0.30)',
-      grid:      'rgba(144,0,32,0.05)',
-      transit:   'rgba(144,0,32,0.40)',
-      node:      'rgba(144,0,32,0.6)',
+      shore:     'rgba(52,46,40,0.55)',
+      grid:      'rgba(52,46,40,0.045)',
+      transit:   'rgba(144,0,32,0.5)',
+      node:      'rgba(144,0,32,0.65)',
       train:     '#900020',
       hover:     '#212121',
       cross:     'rgba(144,0,32,0.25)',
@@ -254,9 +254,8 @@ const { fullscreen = false } = Astro.props;
       // Grid extends from edges (plotter establishing coordinates)
       tl.to(this.layers.grid, { extentH: 1, extentV: 1, duration: 0.6, ease: 'power2.out' }, 0);
 
-      // Water hatching + topo fade in behind grid
+      // Water lining fades in behind grid
       tl.to(this.layers.water, { alpha: 1, duration: 0.7, ease: 'power2.inOut' }, 0.2);
-      tl.to(this.layers.topo, { alpha: 1, duration: 0.7, ease: 'power2.inOut' }, 0.2);
 
       // Borough fill masks hatching, coastline strokes itself
       tl.to(this.layers.borough, { alpha: 1, duration: 0.6, ease: 'power2.inOut' }, 0.6);
@@ -294,7 +293,6 @@ const { fullscreen = false } = Astro.props;
       // Faster, simpler: alpha fades only
       tl.to(this.layers.grid, { alpha: 1, extentH: 1, extentV: 1, duration: 0.3 }, 0);
       tl.to(this.layers.water, { alpha: 1, duration: 0.3 }, 0.1);
-      tl.to(this.layers.topo, { alpha: 1, duration: 0.3 }, 0.1);
       tl.to(this.layers.borough, { alpha: 1, strokeProgress: 1, duration: 0.4 }, 0.2);
       tl.to(this.layers.transit, { alpha: 1, drawProgress: 1, duration: 0.4 }, 0.4);
       // Skip station stagger on mobile — single alpha
@@ -315,7 +313,6 @@ const { fullscreen = false } = Astro.props;
     private setAllLayersFinal() {
       this.layers.grid = { alpha: 1, extentH: 1, extentV: 1 };
       this.layers.water = { alpha: 1 };
-      this.layers.topo = { alpha: 1 };
       this.layers.borough = { alpha: 1, strokeProgress: 1 };
       this.layers.transit = { alpha: 1, drawProgress: 1 };
       this.layers.stations = { alpha: 1 };
@@ -375,6 +372,7 @@ const { fullscreen = false } = Astro.props;
       this.oy = Math.min(0, Math.max(this.vh - this.h, this.vh / 2 - FOCUS[1] * this.h));
       this.ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
       this.staticDirty = true;
+      this.water = null;
     }
 
     private computeSegLengths() {
@@ -502,6 +500,46 @@ const { fullscreen = false } = Astro.props;
       return colors[route] || '#808183';
     }
 
+    /* ── Water lining: the engraved-map treatment, cached per size ──
+       Hairlines trace every shore at widening spacing and fade offshore. Each ring
+       is a wide graphite stroke of the land outline with a slightly narrower paper
+       stroke on top; drawing outermost first lets nearer rings cut farther ones,
+       leaving lines at a fixed distance from the nearest shore. Opaque paper base,
+       so it is the bottom layer for both the intro and the static cache. */
+    private waterLayer(): OffscreenCanvas {
+      if (this.water) return this.water;
+      const off = new OffscreenCanvas(Math.max(1, this.vw * this.dpr), Math.max(1, this.vh * this.dpr));
+      const c = off.getContext('2d')!;
+      c.scale(this.dpr, this.dpr);
+      c.fillStyle = this.C.bg;
+      c.fillRect(0, 0, this.vw, this.vh);
+      c.translate(this.ox, this.oy);
+
+      const land = new Path2D();
+      for (const b of this.data.boroughs) {
+        for (const ring of b.rings) {
+          if (!ring.length) continue;
+          land.moveTo(ring[0][0] * this.w, ring[0][1] * this.h);
+          for (let i = 1; i < ring.length; i++) land.lineTo(ring[i][0] * this.w, ring[i][1] * this.h);
+          land.closePath();
+        }
+      }
+
+      const RINGS = [5, 9, 14, 20, 28, 38]; // px offshore; spacing widens like hand-ruled lining
+      c.lineJoin = 'round';
+      for (let i = RINGS.length - 1; i >= 0; i--) {
+        c.strokeStyle = `rgba(52,46,40,${0.2 - i * 0.028})`;
+        c.lineWidth = RINGS[i] * 2 + 0.5;
+        c.stroke(land);
+        c.strokeStyle = this.C.bg;
+        c.lineWidth = RINGS[i] * 2 - 0.5;
+        c.stroke(land);
+      }
+      c.fillStyle = this.C.land;
+      c.fill(land);
+      return (this.water = off);
+    }
+
     /* ── Static layer: rendered once post-intro, cached as bitmap ── */
     private async buildStatic() {
       // A stacked hero on a short landscape phone can squeeze the box to nothing;
@@ -511,8 +549,7 @@ const { fullscreen = false } = Astro.props;
       const c = off.getContext('2d')!;
       c.scale(this.dpr, this.dpr);
 
-      c.fillStyle = this.C.bg;
-      c.fillRect(0, 0, this.vw, this.vh);
+      c.drawImage(this.waterLayer(), 0, 0, this.vw, this.vh);
       c.translate(this.ox, this.oy);
 
       // Grid
@@ -523,31 +560,11 @@ const { fullscreen = false } = Astro.props;
       for (let y = 0; y <= this.h; y += 60) { c.moveTo(0, y); c.lineTo(this.w, y); }
       c.stroke();
 
-      // Water hatching
-      c.strokeStyle = this.C.hatch;
-      c.lineWidth = 0.5;
-      c.beginPath();
-      for (let i = -this.h; i < this.w + this.h; i += 10) { c.moveTo(i, 0); c.lineTo(i - this.h, this.h); }
-      c.stroke();
-
-      // Topo contours
-      c.strokeStyle = this.C.topo;
-      c.lineWidth = 1;
-      c.beginPath();
-      for (let i = 0; i < 14; i++) {
-        const yBase = (i / 11) * this.h - this.h * 0.15;
-        c.moveTo(0, yBase);
-        for (let x = 0; x <= this.w; x += 20) {
-          c.lineTo(x, yBase + Math.sin(x*0.003+i*0.4)*35 + Math.sin(x*0.008-i*0.2)*12 + Math.cos(x*0.015+i)*8);
-        }
-      }
-      c.stroke();
-
       // Boroughs
       if (this.data?.boroughs) {
         c.fillStyle = this.C.land;
         c.strokeStyle = this.C.shore;
-        c.lineWidth = 1.5;
+        c.lineWidth = 0.75;
         for (const b of this.data.boroughs) {
           c.beginPath();
           for (const ring of b.rings) {
@@ -563,7 +580,7 @@ const { fullscreen = false } = Astro.props;
       // Transit lines (dashed) — batched into single path
       if (this.data?.subwayLines) {
         c.strokeStyle = this.C.transit;
-        c.lineWidth = 1.5;
+        c.lineWidth = 1.25;
         c.setLineDash([3, 5]);
         c.beginPath();
         for (const line of this.data.subwayLines) {
@@ -605,6 +622,14 @@ const { fullscreen = false } = Astro.props;
 
       ctx.fillStyle = this.C.bg;
       ctx.fillRect(0, 0, this.vw, this.vh);
+
+      // Water lining
+      if (L.water.alpha > 0) {
+        ctx.globalAlpha = L.water.alpha;
+        ctx.drawImage(this.waterLayer(), 0, 0, this.vw, this.vh);
+        ctx.globalAlpha = 1;
+      }
+
       ctx.save();
       ctx.translate(this.ox, this.oy);
 
@@ -630,34 +655,6 @@ const { fullscreen = false } = Astro.props;
         ctx.globalAlpha = 1;
       }
 
-      // Water hatching
-      if (L.water.alpha > 0) {
-        ctx.globalAlpha = L.water.alpha;
-        ctx.strokeStyle = this.C.hatch;
-        ctx.lineWidth = 0.5;
-        ctx.beginPath();
-        for (let i = -this.h; i < this.w + this.h; i += 10) { ctx.moveTo(i, 0); ctx.lineTo(i - this.h, this.h); }
-        ctx.stroke();
-        ctx.globalAlpha = 1;
-      }
-
-      // Topo contours
-      if (L.topo.alpha > 0) {
-        ctx.globalAlpha = L.topo.alpha;
-        ctx.strokeStyle = this.C.topo;
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        for (let j = 0; j < 14; j++) {
-          const yBase = (j / 11) * this.h - this.h * 0.15;
-          ctx.moveTo(0, yBase);
-          for (let x = 0; x <= this.w; x += 20) {
-            ctx.lineTo(x, yBase + Math.sin(x*0.003+j*0.4)*35 + Math.sin(x*0.008-j*0.2)*12 + Math.cos(x*0.015+j)*8);
-          }
-        }
-        ctx.stroke();
-        ctx.globalAlpha = 1;
-      }
-
       // Boroughs — fill fades, coastline strokes progressively
       if (L.borough.alpha > 0 && this.data.boroughs) {
         for (let bi = 0; bi < this.data.boroughs.length; bi++) {
@@ -674,7 +671,7 @@ const { fullscreen = false } = Astro.props;
           // Progressive stroke
           const perim = this.boroughPerimeters[bi] || 1000;
           ctx.strokeStyle = this.C.shore;
-          ctx.lineWidth = 1.5;
+          ctx.lineWidth = 0.75;
           ctx.globalAlpha = L.borough.alpha;
           ctx.setLineDash([perim, perim]);
           ctx.lineDashOffset = perim * (1 - L.borough.strokeProgress);
@@ -689,7 +686,7 @@ const { fullscreen = false } = Astro.props;
       if (L.transit.alpha > 0 && this.data.subwayLines) {
         ctx.globalAlpha = L.transit.alpha;
         ctx.strokeStyle = this.C.transit;
-        ctx.lineWidth = 1.5;
+        ctx.lineWidth = 1.25;
         let segIdx = 0;
         for (const line of this.data.subwayLines) {
           for (const seg of line.segments) {
@@ -929,7 +926,7 @@ const { fullscreen = false } = Astro.props;
     justify-content: space-around;
     font-size: 9px;
     letter-spacing: 0.1em;
-    color: rgba(144, 0, 32, 0.25);
+    color: rgba(52, 46, 40, 0.3);
   }
 
   .grid-refs.top {
@@ -964,19 +961,19 @@ const { fullscreen = false } = Astro.props;
   }
 
   .tb-label {
-    color: rgba(144, 0, 32, 0.35);
+    color: rgba(52, 46, 40, 0.4);
     min-width: 70px;
   }
 
   .tb-value {
-    color: rgba(144, 0, 32, 0.6);
+    color: rgba(52, 46, 40, 0.65);
   }
 
   .north-arrow {
     position: absolute;
     top: 20px;
     right: 20px;
-    color: rgba(144, 0, 32, 0.3);
+    color: rgba(52, 46, 40, 0.35);
   }
 
   .station-tooltip {
